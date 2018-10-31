@@ -30,11 +30,11 @@ allprojects {
 and change library version:
 
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.1.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.2.0-SNAPSHOT'
 ```
 If you need altitude helpers observables add this as well:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.1.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.2.0-SNAPSHOT'
 ```
 
 License
