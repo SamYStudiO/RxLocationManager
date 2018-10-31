@@ -28,3 +28,5 @@ dependencies {
     testImplementation "junit:junit:$versions.junit"
     testImplementation "org.mockito:mockito-core:$versions.mockito"
 }
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
