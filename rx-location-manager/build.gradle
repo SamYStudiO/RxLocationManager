@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+    libraryVariants.all {
+        it.generateBuildConfig.enabled = false
+    }
+}
+
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+    api "androidx.annotation:annotation:$versions.annotation"
+    api "io.reactivex.rxjava2:rxjava:$versions.rxjava"
+    api "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
+    testImplementation "junit:junit:$versions.junit"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
+}

@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+    libraryVariants.all {
+        it.generateBuildConfig.enabled = false
+    }
+}
+
+dependencies {
+    implementation project(':rx-location-manager')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+    testImplementation "junit:junit:$versions.junit"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    testImplementation "org.robolectric:robolectric:$versions.robolectric"
+}
