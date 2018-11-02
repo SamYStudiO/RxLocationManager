@@ -365,8 +365,13 @@ object RxLocationManager {
         ).filter { t -> t is LocationUpdatesState.StateProviderDisabled }
             .map { t -> (t as LocationUpdatesState.StateProviderDisabled) }
 
+    /**
+     * [LocationManager.NETWORK_PROVIDER]
+     * [LocationManager.GPS_PROVIDER]
+     * [LocationManager.PASSIVE_PROVIDER]
+     */
     enum class Provider {
-        NETWORK, GPS, PASSIVE, FUSED
+        NETWORK, GPS, PASSIVE
     }
 
     @VisibleForTesting
