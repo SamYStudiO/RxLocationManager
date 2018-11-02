@@ -194,7 +194,7 @@ object RxLocationManager {
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
     fun observeLocationUpdatesState(
-        provider: String,
+        provider: Provider,
         minTime: Long,
         minDistance: Float
     ): Observable<LocationUpdatesState> =
@@ -226,7 +226,7 @@ object RxLocationManager {
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
     fun observeLocationChanged(
-        provider: String,
+        provider: Provider,
         minTime: Long,
         minDistance: Float
     ): Observable<Location> =
@@ -265,7 +265,7 @@ object RxLocationManager {
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
     fun observeLocationStatusChanged(
-        provider: String,
+        provider: Provider,
         minTime: Long,
         minDistance: Float
     ): Observable<LocationUpdatesState.StateStatusChanged> =
@@ -300,7 +300,7 @@ object RxLocationManager {
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
     fun observeLocationProviderEnabled(
-        provider: String,
+        provider: Provider,
         minTime: Long,
         minDistance: Float
     ): Observable<LocationUpdatesState.StateProviderEnabled> =
@@ -336,7 +336,7 @@ object RxLocationManager {
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
     fun observeLocationProviderDisabled(
-        provider: String,
+        provider: Provider,
         minTime: Long,
         minDistance: Float
     ): Observable<LocationUpdatesState.StateProviderDisabled> =
@@ -364,6 +364,10 @@ object RxLocationManager {
             minDistance
         ).filter { t -> t is LocationUpdatesState.StateProviderDisabled }
             .map { t -> (t as LocationUpdatesState.StateProviderDisabled) }
+
+    enum class Provider {
+        NETWORK, GPS, PASSIVE, FUSED
+    }
 
     @VisibleForTesting
     internal class GpsStatusObservable(private val locationManager: LocationManager?) :
@@ -491,7 +495,6 @@ object RxLocationManager {
         }
     }
 
-
     @VisibleForTesting
     @TargetApi(Build.VERSION_CODES.N)
     internal class GnssStatusObservable(private val locationManager: LocationManager?) :
@@ -535,7 +538,7 @@ object RxLocationManager {
         private val locationManager: LocationManager?,
         private val minTime: Long,
         private val minDistance: Float,
-        private val provider: String? = null,
+        private val provider: Provider? = null,
         private val criteria: Criteria? = null
     ) : Observable<LocationUpdatesState>() {
         constructor(
@@ -547,7 +550,7 @@ object RxLocationManager {
 
         constructor(
             locationManager: LocationManager?,
-            provider: String,
+            provider: Provider,
             minTime: Long,
             minDistance: Float
         ) : this(locationManager, minTime, minDistance, provider = provider)
@@ -558,7 +561,7 @@ object RxLocationManager {
 
             provider?.let {
                 locationManager?.requestLocationUpdates(
-                    it,
+                    it.name.toLowerCase(),
                     minTime,
                     minDistance,
                     listener
