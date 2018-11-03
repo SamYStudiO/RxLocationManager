@@ -1,4 +1,4 @@
-@file:Suppress("unused", "DEPRECATION", "MissingPermission")
+@file:Suppress("unused", "DEPRECATION", "MissingPermission", "MemberVisibilityCanBePrivate")
 
 package net.samystudio.rxlocationmanager
 
@@ -21,7 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  * A reactive wrapper for [LocationManager] callbacks.
  */
 object RxLocationManager {
-    private val locationManager by lazy {
+    @JvmStatic
+    val locationManager by lazy {
         ContextProvider.applicationContext.getSystemService(
             Context.LOCATION_SERVICE
         ) as LocationManager
