@@ -20,8 +20,11 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A reactive wrapper for [LocationManager] callbacks.
+ *
  * Note there is no [LocationManager.addGpsStatusListener] observable, you can use
  * [observeGnssStatus] instead.
+ * Note you can achieve [LocationManager.requestSingleUpdate] easily using [Observable.first]:
+ * <pre>RxLocationManager.observeLocationUpdatesState(...).first().subscribe(...)</pre>
  */
 object RxLocationManager {
     @JvmStatic
