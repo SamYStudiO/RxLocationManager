@@ -1,8 +1,12 @@
 package net.samystudio.rxlocationmanager
 
 import android.location.Location
+import android.location.LocationListener
 import android.os.Bundle
 
+/**
+ * [LocationListener]
+ */
 sealed class LocationUpdatesState {
     data class StateProviderEnabled(val provider: Provider) : LocationUpdatesState()
     data class StateProviderDisabled(val provider: Provider) : LocationUpdatesState()

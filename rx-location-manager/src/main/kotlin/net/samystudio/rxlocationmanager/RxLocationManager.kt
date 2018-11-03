@@ -23,8 +23,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * Note there is no [LocationManager.addGpsStatusListener] observable, you can use
  * [observeGnssStatus] instead.
- * Note you can achieve [LocationManager.requestSingleUpdate] easily using [Observable.first]:
- * <pre>RxLocationManager.observeLocationUpdatesState(...).first().subscribe(...)</pre>
+ * Note you can achieve [LocationManager.requestSingleUpdate] easily using [Observable.first],
+ * [Observable.firstElement] or [Observable.firstOrError]:
+ * <pre>RxLocationManager.observeLocationUpdatesState(...).firstOrError().subscribe(...)</pre>
  */
 object RxLocationManager {
     /**
@@ -38,7 +39,6 @@ object RxLocationManager {
     }
 
     /**
-     * [NmeaEvent]
      * [LocationManager.addNmeaListener]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
@@ -189,7 +189,7 @@ object RxLocationManager {
 
     /**
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
-     * to fetch a [Location]
+     * to fetch a [Location].
      *
      * [LocationManager.requestLocationUpdates] (String, Long, Float)
      * [LocationUpdatesState]
@@ -205,7 +205,7 @@ object RxLocationManager {
 
     /**
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
-     * to fetch a [Location]
+     * to fetch a [Location].
      *
      * [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
      * [LocationUpdatesState]
@@ -221,7 +221,7 @@ object RxLocationManager {
 
     /**
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
-     * to fetch a [Location]
+     * to fetch a [Location].
      *
      * [LocationManager.requestLocationUpdates] (String, Long, Float)
      * [LocationUpdatesState.StateLocationChanged]
@@ -242,7 +242,7 @@ object RxLocationManager {
 
     /**
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
-     * to fetch a [Location]
+     * to fetch a [Location].
      *
      * [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
      * [LocationUpdatesState.StateLocationChanged]

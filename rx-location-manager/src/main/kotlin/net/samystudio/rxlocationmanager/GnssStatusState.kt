@@ -2,6 +2,9 @@ package net.samystudio.rxlocationmanager
 
 import android.location.GnssStatus
 
+/**
+ * [GnssStatus.Callback]
+ */
 sealed class GnssStatusState {
     object StateStarted : GnssStatusState()
     object StateStopped : GnssStatusState()
