@@ -14,7 +14,6 @@ import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Single
-import io.reactivex.annotations.CheckReturnValue
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import net.samystudio.rxlocationmanager.ContextProvider
@@ -32,7 +31,6 @@ object RxLocationManagerAltitude {
      * in most case you'll prefer getting the altitude from geoid [observeGpsGeoidalAltitudeUpdates].
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
-    @CheckReturnValue
     @JvmStatic
     fun observeGpsEllipsoidalAltitudeUpdates(): Observable<Double> =
         RxLocationManager.observeNmea().filter {
@@ -47,7 +45,6 @@ object RxLocationManagerAltitude {
      * Get an [Observable] that emmit geoidal altitude (also known as mean sea level altitude).
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
-    @CheckReturnValue
     @JvmStatic
     fun observeGpsGeoidalAltitudeUpdates(): Observable<Double> =
         RxLocationManager.observeNmea().filter {
@@ -63,7 +60,6 @@ object RxLocationManagerAltitude {
      * [sensorDelay] and [pressureAtSeaLevel]. To get a accurate altitude passing a
      * [pressureAtSeaLevel] is recommended.
      */
-    @CheckReturnValue
     @JvmStatic
     @JvmOverloads
     fun observeBarometricAltitudeUpdates(
@@ -78,7 +74,6 @@ object RxLocationManagerAltitude {
      * [sensorDelay] and [pressureAtSeaLevelObservable]. To get a accurate altitude passing a
      * [pressureAtSeaLevelObservable] is recommended.
      */
-    @CheckReturnValue
     @JvmStatic
     fun observeBarometricAltitudeUpdates(
         sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
@@ -96,7 +91,6 @@ object RxLocationManagerAltitude {
      * Get an [Single] that emmit altitude from a [RemoteServiceAltitude] at the specified
      * [latitude] and [longitude].
      */
-    @CheckReturnValue
     @JvmStatic
     fun getRemoteServiceAltitude(
         remoteServiceAltitude: RemoteServiceAltitude,
