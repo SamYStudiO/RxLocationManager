@@ -1,6 +1,6 @@
 RxLocationManager
 =================
-[Reactive](https://github.com/ReactiveX/RxJava) [LocationManager](https://developer.android.com/reference/android/location/LocationManager) callbacks.
+Android [Reactive](https://github.com/ReactiveX/RxJava) [LocationManager](https://developer.android.com/reference/android/location/LocationManager) callbacks.
 
 This library also includes some helper observables to get altitude using GPS, barometric sensor or a remote service (build in Google elevation API implementation included).
 GPS altitude may returned both ellipsoidal and geoidal (mean sea level), android [Location.getAltitude()](https://developer.android.com/reference/android/location/Location.html#getAltitude()) returns ellipsoidal altitude but in most case you want to get geoidal one.
