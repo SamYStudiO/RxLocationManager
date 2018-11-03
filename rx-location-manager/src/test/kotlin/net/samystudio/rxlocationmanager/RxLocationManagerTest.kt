@@ -117,24 +117,26 @@ class RxLocationManagerTest {
     fun observeLocationUpdates() {
         val observer = TestObserver<RxLocationManager.LocationUpdatesState>()
         val listener = RxLocationManager.LocationUpdatesObservable.Listener(observer, null)
+        val provider = RxLocationManager.Provider.GPS
+        val providerName = RxLocationManager.Provider.GPS.name
         listener.onLocationChanged(location)
         assertEquals(
             location,
             (observer.values()[0] as RxLocationManager.LocationUpdatesState.StateLocationChanged).location
         )
-        listener.onProviderDisabled("providerX")
+        listener.onProviderDisabled(providerName)
         assertEquals(
-            "providerX",
+            provider,
             (observer.values()[1] as RxLocationManager.LocationUpdatesState.StateProviderDisabled).provider
         )
-        listener.onProviderEnabled("providerY")
+        listener.onProviderEnabled(providerName)
         assertEquals(
-            "providerY",
+            provider,
             (observer.values()[2] as RxLocationManager.LocationUpdatesState.StateProviderEnabled).provider
         )
-        listener.onStatusChanged("providerZ", 10, bundle)
+        listener.onStatusChanged(providerName, 10, bundle)
         assertEquals(
-            "providerZ",
+            provider,
             (observer.values()[3] as RxLocationManager.LocationUpdatesState.StateStatusChanged).provider
         )
         assertEquals(
