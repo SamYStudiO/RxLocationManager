@@ -27,6 +27,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  * <pre>RxLocationManager.observeLocationUpdatesState(...).first().subscribe(...)</pre>
  */
 object RxLocationManager {
+    /**
+     * A reference to android [LocationManager] system service.
+     */
     @JvmStatic
     val locationManager by lazy {
         ContextProvider.applicationContext.getSystemService(
