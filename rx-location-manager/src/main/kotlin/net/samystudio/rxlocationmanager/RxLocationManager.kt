@@ -600,7 +600,7 @@ object RxLocationManager {
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle?) {
                 observer.onNext(
                     LocationUpdatesState.StateStatusChanged(
-                        provider,
+                        Provider.valueOf(provider.toUpperCase()),
                         status,
                         extras
                     )
@@ -608,11 +608,11 @@ object RxLocationManager {
             }
 
             override fun onProviderEnabled(provider: String) {
-                observer.onNext(LocationUpdatesState.StateProviderEnabled(provider))
+                observer.onNext(LocationUpdatesState.StateProviderEnabled(Provider.valueOf(provider.toUpperCase())))
             }
 
             override fun onProviderDisabled(provider: String) {
-                observer.onNext(LocationUpdatesState.StateProviderDisabled(provider))
+                observer.onNext(LocationUpdatesState.StateProviderDisabled(Provider.valueOf(provider.toUpperCase())))
             }
         }
     }
@@ -650,9 +650,13 @@ object RxLocationManager {
     }
 
     sealed class LocationUpdatesState {
-        data class StateProviderEnabled(val provider: String) : LocationUpdatesState()
-        data class StateProviderDisabled(val provider: String) : LocationUpdatesState()
-        data class StateStatusChanged(val provider: String, val status: Int, val extras: Bundle?) :
+        data class StateProviderEnabled(val provider: Provider) : LocationUpdatesState()
+        data class StateProviderDisabled(val provider: Provider) : LocationUpdatesState()
+        data class StateStatusChanged(
+            val provider: Provider,
+            val status: Int,
+            val extras: Bundle?
+        ) :
             LocationUpdatesState()
 
         data class StateLocationChanged(val location: Location) : LocationUpdatesState()
