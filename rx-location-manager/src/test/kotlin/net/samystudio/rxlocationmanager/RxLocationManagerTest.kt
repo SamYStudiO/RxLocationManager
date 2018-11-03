@@ -1,9 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package net.samystudio.rxlocationmanager
 
-import android.location.GnssMeasurementsEvent
-import android.location.GnssNavigationMessage
-import android.location.GnssStatus
-import android.location.Location
+import android.location.*
 import android.os.Bundle
 import io.reactivex.observers.TestObserver
 import org.junit.Assert.assertEquals
@@ -32,15 +31,6 @@ class RxLocationManagerTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-    }
-
-    @Test
-    fun observeGpsStatus() {
-        val observer = TestObserver<Int>()
-        val listener = RxLocationManager.GpsStatusObservable.Listener(observer, null)
-        listener.onGpsStatusChanged(10)
-        observer.assertValueAt(0, 10)
-        observer.onComplete()
     }
 
     @Test
@@ -91,6 +81,21 @@ class RxLocationManagerTest {
     fun observeGnssStatus() {
         val observer = TestObserver<RxLocationManager.GnssStatusState>()
         val listener = RxLocationManager.GnssStatusObservable.Listener(observer, null)
+        listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_FIRST_FIX)
+        observer.assertValueAt(0, RxLocationManager.GnssStatusState.StateFirstFix(null))
+        listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_SATELLITE_STATUS)
+        observer.assertValueAt(1, RxLocationManager.GnssStatusState.StateChanged(null))
+        listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_STARTED)
+        observer.assertValueAt(2, RxLocationManager.GnssStatusState.StateStarted)
+        listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_STOPPED)
+        observer.assertValueAt(3, RxLocationManager.GnssStatusState.StateStopped)
+        observer.onComplete()
+    }
+
+    @Test
+    fun observeGnssStatusN() {
+        val observer = TestObserver<RxLocationManager.GnssStatusState>()
+        val listener = RxLocationManager.GnssStatusObservable.NListener(observer, null)
         listener.callback.onFirstFix(10)
         assertEquals(
             10,
