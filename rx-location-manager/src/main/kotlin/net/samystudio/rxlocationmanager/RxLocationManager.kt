@@ -15,10 +15,13 @@ import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import net.samystudio.rxlocationmanager.RxLocationManager.observeGnssStatus
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A reactive wrapper for [LocationManager] callbacks.
+ * Note there is no [LocationManager.addGpsStatusListener] observable, you can use
+ * [observeGnssStatus] instead.
  */
 object RxLocationManager {
     @JvmStatic
@@ -27,13 +30,6 @@ object RxLocationManager {
             Context.LOCATION_SERVICE
         ) as LocationManager
     }
-
-    /**
-     * [LocationManager.addGpsStatusListener]
-     */
-    @RequiresPermission(ACCESS_FINE_LOCATION)
-    @JvmStatic
-    fun observeGpsStatus(): Observable<Int> = GpsStatusObservable(locationManager)
 
     /**
      * [NmeaEvent]
@@ -129,17 +125,17 @@ object RxLocationManager {
      * [GnssStatusState.StateStopped]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
     fun observeGnssStatus(): Observable<GnssStatusState> = GnssStatusObservable(locationManager)
 
     /**
+     * Prior to [Build.VERSION_CODES.N] [GnssStatusState.StateChanged.status] will always be null.
+     *
      * [LocationManager.registerGnssStatusCallback]
      * [GnssStatusState]
      * [GnssStatusState.StateChanged]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
     fun observeGnssStatusChanged(): Observable<GnssStatus> =
         observeGnssStatus()
@@ -147,12 +143,14 @@ object RxLocationManager {
             .map { t -> (t as GnssStatusState.StateChanged).status }
 
     /**
+     * Prior to [Build.VERSION_CODES.N] [GnssStatusState.StateFirstFix.ttffMillis] will always be
+     * null.
+     *
      * [LocationManager.registerGnssStatusCallback]
      * [GnssStatusState]
      * [GnssStatusState.StateFirstFix]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
     fun observeGnssStatusOnFirstFix(): Observable<Int> =
         observeGnssStatus()
@@ -165,7 +163,6 @@ object RxLocationManager {
      * [GnssStatusState.StateStarted]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
     fun observeGnssStatusOnStarted(): Observable<Unit> =
         observeGnssStatus()
@@ -178,7 +175,6 @@ object RxLocationManager {
      * [GnssStatusState.StateStopped]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
     fun observeGnssStatusOnStopped(): Observable<Unit> =
         observeGnssStatus()
@@ -376,29 +372,6 @@ object RxLocationManager {
     }
 
     @VisibleForTesting
-    internal class GpsStatusObservable(private val locationManager: LocationManager?) :
-        Observable<Int>() {
-        override fun subscribeActual(observer: Observer<in Int>) {
-            val listener = Listener(observer, locationManager)
-            observer.onSubscribe(listener)
-            locationManager?.addGpsStatusListener(listener)
-        }
-
-        class Listener(
-            private val observer: Observer<in Int>,
-            private val locationManager: LocationManager?
-        ) : AtomicDisposable(), GpsStatus.Listener {
-            override fun onDispose() {
-                locationManager?.removeGpsStatusListener(this)
-            }
-
-            override fun onGpsStatusChanged(event: Int) {
-                observer.onNext(event)
-            }
-        }
-    }
-
-    @VisibleForTesting
     internal class NmeaObservable(private val locationManager: LocationManager?) :
         Observable<NmeaEvent>() {
         override fun subscribeActual(observer: Observer<in NmeaEvent>) {
@@ -502,16 +475,41 @@ object RxLocationManager {
     }
 
     @VisibleForTesting
-    @TargetApi(Build.VERSION_CODES.N)
     internal class GnssStatusObservable(private val locationManager: LocationManager?) :
         Observable<GnssStatusState>() {
         override fun subscribeActual(observer: Observer<in GnssStatusState>) {
-            val listener = Listener(observer, locationManager)
-            observer.onSubscribe(listener)
-            locationManager?.registerGnssStatusCallback(listener.callback)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                val listener = NListener(observer, locationManager)
+                observer.onSubscribe(listener)
+                locationManager?.registerGnssStatusCallback(listener.callback)
+            } else {
+                val listener = Listener(observer, locationManager)
+                observer.onSubscribe(listener)
+                locationManager?.addGpsStatusListener(listener)
+            }
         }
 
         class Listener(
+            private val observer: Observer<in GnssStatusState>,
+            private val locationManager: LocationManager?
+        ) : AtomicDisposable(), GpsStatus.Listener {
+            override fun onGpsStatusChanged(event: Int) {
+                GpsStatus.GPS_EVENT_SATELLITE_STATUS
+                when (event) {
+                    GpsStatus.GPS_EVENT_SATELLITE_STATUS -> observer.onNext(GnssStatusState.StateChanged())
+                    GpsStatus.GPS_EVENT_STARTED -> observer.onNext(GnssStatusState.StateStarted)
+                    GpsStatus.GPS_EVENT_FIRST_FIX -> observer.onNext(GnssStatusState.StateFirstFix())
+                    GpsStatus.GPS_EVENT_STOPPED -> observer.onNext(GnssStatusState.StateStopped)
+                }
+            }
+
+            override fun onDispose() {
+                locationManager?.removeGpsStatusListener(this)
+            }
+        }
+
+        @TargetApi(Build.VERSION_CODES.N)
+        class NListener(
             private val observer: Observer<in GnssStatusState>,
             private val locationManager: LocationManager?
         ) : AtomicDisposable() {
@@ -644,8 +642,8 @@ object RxLocationManager {
     sealed class GnssStatusState {
         object StateStarted : GnssStatusState()
         object StateStopped : GnssStatusState()
-        data class StateFirstFix(val ttffMillis: Int) : GnssStatusState()
-        data class StateChanged(val status: GnssStatus) : GnssStatusState()
+        data class StateFirstFix(val ttffMillis: Int? = null) : GnssStatusState()
+        data class StateChanged(val status: GnssStatus? = null) : GnssStatusState()
     }
 
     sealed class LocationUpdatesState {
