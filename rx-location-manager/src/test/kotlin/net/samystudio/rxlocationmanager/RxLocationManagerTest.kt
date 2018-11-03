@@ -36,7 +36,7 @@ class RxLocationManagerTest {
     @Test
     fun observeNmea() {
         val timestamp = System.currentTimeMillis()
-        val observer = TestObserver<RxLocationManager.NmeaEvent>()
+        val observer = TestObserver<NmeaEvent>()
         val listener = RxLocationManager.NmeaObservable.Listener(observer, null)
         listener.onNmeaReceived(timestamp, "data")
         assertEquals("data", observer.values()[0].message)
@@ -45,107 +45,107 @@ class RxLocationManagerTest {
 
     @Test
     fun observeGnssMeasurements() {
-        val observer = TestObserver<RxLocationManager.GnssMeasurementsState>()
+        val observer = TestObserver<GnssMeasurementsState>()
         val listener = RxLocationManager.GnssMeasurementsObservable.Listener(observer, null)
         listener.callback.onGnssMeasurementsReceived(gnssMeasurementsEvent)
         assertEquals(
             gnssMeasurementsEvent,
-            (observer.values()[0] as RxLocationManager.GnssMeasurementsState.StateEvent).event
+            (observer.values()[0] as GnssMeasurementsState.StateEvent).event
         )
         listener.callback.onStatusChanged(10)
         assertEquals(
             10,
-            (observer.values()[1] as RxLocationManager.GnssMeasurementsState.StateStatus).status
+            (observer.values()[1] as GnssMeasurementsState.StateStatus).status
         )
         observer.onComplete()
     }
 
     @Test
     fun observeGnssNavigationMessage() {
-        val observer = TestObserver<RxLocationManager.GnssNavigationMessageState>()
+        val observer = TestObserver<GnssNavigationMessageState>()
         val listener = RxLocationManager.GnssNavigationMessageObservable.Listener(observer, null)
         listener.callback.onGnssNavigationMessageReceived(gnssNavigationMessage)
         assertEquals(
             gnssNavigationMessage,
-            (observer.values()[0] as RxLocationManager.GnssNavigationMessageState.StateEvent).event
+            (observer.values()[0] as GnssNavigationMessageState.StateEvent).event
         )
         listener.callback.onStatusChanged(10)
         assertEquals(
             10,
-            (observer.values()[1] as RxLocationManager.GnssNavigationMessageState.StateStatus).status
+            (observer.values()[1] as GnssNavigationMessageState.StateStatus).status
         )
         observer.onComplete()
     }
 
     @Test
     fun observeGnssStatus() {
-        val observer = TestObserver<RxLocationManager.GnssStatusState>()
+        val observer = TestObserver<GnssStatusState>()
         val listener = RxLocationManager.GnssStatusObservable.Listener(observer, null)
         listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_FIRST_FIX)
-        observer.assertValueAt(0, RxLocationManager.GnssStatusState.StateFirstFix(null))
+        observer.assertValueAt(0, GnssStatusState.StateFirstFix(null))
         listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_SATELLITE_STATUS)
-        observer.assertValueAt(1, RxLocationManager.GnssStatusState.StateChanged(null))
+        observer.assertValueAt(1, GnssStatusState.StateChanged(null))
         listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_STARTED)
-        observer.assertValueAt(2, RxLocationManager.GnssStatusState.StateStarted)
+        observer.assertValueAt(2, GnssStatusState.StateStarted)
         listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_STOPPED)
-        observer.assertValueAt(3, RxLocationManager.GnssStatusState.StateStopped)
+        observer.assertValueAt(3, GnssStatusState.StateStopped)
         observer.onComplete()
     }
 
     @Test
     fun observeGnssStatusN() {
-        val observer = TestObserver<RxLocationManager.GnssStatusState>()
+        val observer = TestObserver<GnssStatusState>()
         val listener = RxLocationManager.GnssStatusObservable.NListener(observer, null)
         listener.callback.onFirstFix(10)
         assertEquals(
             10,
-            (observer.values()[0] as RxLocationManager.GnssStatusState.StateFirstFix).ttffMillis
+            (observer.values()[0] as GnssStatusState.StateFirstFix).ttffMillis
         )
         listener.callback.onSatelliteStatusChanged(gnssStatus)
         assertEquals(
             gnssStatus,
-            (observer.values()[1] as RxLocationManager.GnssStatusState.StateChanged).status
+            (observer.values()[1] as GnssStatusState.StateChanged).status
         )
         listener.callback.onStarted()
-        observer.assertValueAt(2, RxLocationManager.GnssStatusState.StateStarted)
+        observer.assertValueAt(2, GnssStatusState.StateStarted)
         listener.callback.onStopped()
-        observer.assertValueAt(3, RxLocationManager.GnssStatusState.StateStopped)
+        observer.assertValueAt(3, GnssStatusState.StateStopped)
         observer.onComplete()
     }
 
     @Test
     fun observeLocationUpdates() {
-        val observer = TestObserver<RxLocationManager.LocationUpdatesState>()
+        val observer = TestObserver<LocationUpdatesState>()
         val listener = RxLocationManager.LocationUpdatesObservable.Listener(observer, null)
-        val provider = RxLocationManager.Provider.GPS
-        val providerName = RxLocationManager.Provider.GPS.name
+        val provider = Provider.GPS
+        val providerName = Provider.GPS.name
         listener.onLocationChanged(location)
         assertEquals(
             location,
-            (observer.values()[0] as RxLocationManager.LocationUpdatesState.StateLocationChanged).location
+            (observer.values()[0] as LocationUpdatesState.StateLocationChanged).location
         )
         listener.onProviderDisabled(providerName)
         assertEquals(
             provider,
-            (observer.values()[1] as RxLocationManager.LocationUpdatesState.StateProviderDisabled).provider
+            (observer.values()[1] as LocationUpdatesState.StateProviderDisabled).provider
         )
         listener.onProviderEnabled(providerName)
         assertEquals(
             provider,
-            (observer.values()[2] as RxLocationManager.LocationUpdatesState.StateProviderEnabled).provider
+            (observer.values()[2] as LocationUpdatesState.StateProviderEnabled).provider
         )
         listener.onStatusChanged(providerName, 10, bundle)
         assertEquals(
             provider,
-            (observer.values()[3] as RxLocationManager.LocationUpdatesState.StateStatusChanged).provider
+            (observer.values()[3] as LocationUpdatesState.StateStatusChanged).provider
         )
         assertEquals(
             10,
-            (observer.values()[3] as RxLocationManager.LocationUpdatesState.StateStatusChanged).status
+            (observer.values()[3] as LocationUpdatesState.StateStatusChanged).status
         )
         assertEquals(
             bundle,
-            (observer.values()[3] as RxLocationManager.LocationUpdatesState.StateStatusChanged).extras
+            (observer.values()[3] as LocationUpdatesState.StateStatusChanged).extras
         )
         observer.onComplete()
     }

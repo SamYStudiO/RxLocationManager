@@ -368,13 +368,17 @@ object RxLocationManager {
         ).filter { t -> t is LocationUpdatesState.StateProviderDisabled }
             .map { t -> (t as LocationUpdatesState.StateProviderDisabled) }
 
-    /**
-     * [LocationManager.NETWORK_PROVIDER]
-     * [LocationManager.GPS_PROVIDER]
-     * [LocationManager.PASSIVE_PROVIDER]
-     */
-    enum class Provider {
-        NETWORK, GPS, PASSIVE
+    internal abstract class AtomicDisposable : Disposable {
+        private val disposed = AtomicBoolean()
+        override fun isDisposed() = disposed.get()
+
+        override fun dispose() {
+            if (disposed.compareAndSet(false, true)) {
+                onDispose()
+            }
+        }
+
+        abstract fun onDispose()
     }
 
     @VisibleForTesting
@@ -618,50 +622,5 @@ object RxLocationManager {
                 observer.onNext(LocationUpdatesState.StateProviderDisabled(Provider.valueOf(provider.toUpperCase())))
             }
         }
-    }
-
-    internal abstract class AtomicDisposable : Disposable {
-        private val disposed = AtomicBoolean()
-        override fun isDisposed() = disposed.get()
-
-        override fun dispose() {
-            if (disposed.compareAndSet(false, true)) {
-                onDispose()
-            }
-        }
-
-        abstract fun onDispose()
-    }
-
-    data class NmeaEvent(val message: String, val timestamp: Long)
-
-    sealed class GnssMeasurementsState {
-        data class StateEvent(val event: GnssMeasurementsEvent) : GnssMeasurementsState()
-        data class StateStatus(val status: Int) : GnssMeasurementsState()
-    }
-
-    sealed class GnssNavigationMessageState {
-        data class StateEvent(val event: GnssNavigationMessage) : GnssNavigationMessageState()
-        data class StateStatus(val status: Int) : GnssNavigationMessageState()
-    }
-
-    sealed class GnssStatusState {
-        object StateStarted : GnssStatusState()
-        object StateStopped : GnssStatusState()
-        data class StateFirstFix(val ttffMillis: Int? = null) : GnssStatusState()
-        data class StateChanged(val status: GnssStatus? = null) : GnssStatusState()
-    }
-
-    sealed class LocationUpdatesState {
-        data class StateProviderEnabled(val provider: Provider) : LocationUpdatesState()
-        data class StateProviderDisabled(val provider: Provider) : LocationUpdatesState()
-        data class StateStatusChanged(
-            val provider: Provider,
-            val status: Int,
-            val extras: Bundle?
-        ) :
-            LocationUpdatesState()
-
-        data class StateLocationChanged(val location: Location) : LocationUpdatesState()
     }
 }
