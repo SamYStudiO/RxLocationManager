@@ -8,11 +8,11 @@ GPS altitude may returned both ellipsoidal and geoidal (mean sea level), android
 Download
 --------
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.1.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.2.0'
 ```
 If you need altitude helpers observables add this as well:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.1.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.2.0'
 ```
 
 Snapshots are available from [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/).
@@ -30,11 +30,11 @@ allprojects {
 and change library version:
 
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.2.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.3.0-SNAPSHOT'
 ```
 If you need altitude helpers observables add this as well:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.2.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.3.0-SNAPSHOT'
 ```
 
 License
