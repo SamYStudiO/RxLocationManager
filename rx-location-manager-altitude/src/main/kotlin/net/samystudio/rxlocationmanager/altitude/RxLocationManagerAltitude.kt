@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 object RxLocationManagerAltitude {
     /**
-     * Get an [Observable] that emmit ellipsoidal altitude, this is the same as [Location.getAltitude],
+     * Get an [Observable] that emit ellipsoidal altitude, this is the same as [Location.getAltitude],
      * in most case you'll prefer getting the altitude from geoid [observeGpsGeoidalAltitudeUpdates].
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
@@ -42,7 +42,7 @@ object RxLocationManagerAltitude {
 
 
     /**
-     * Get an [Observable] that emmit geoidal altitude (also known as mean sea level altitude).
+     * Get an [Observable] that emit geoidal altitude (also known as mean sea level altitude).
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
@@ -55,7 +55,7 @@ object RxLocationManagerAltitude {
         }.map { parseNmeaAltitude(it.message, true)!! }.distinctUntilChanged()
 
     /**
-     * Get an [Observable] that emmit altitude using barometric sensor. If barometric sensor is not
+     * Get an [Observable] that emit altitude using barometric sensor. If barometric sensor is not
      * present this will emit immediately a [BarometricSensorException]. You can pass an optional
      * [sensorDelay] and [pressureAtSeaLevel]. To get a accurate altitude passing a
      * [pressureAtSeaLevel] is recommended.
@@ -69,7 +69,7 @@ object RxLocationManagerAltitude {
         observeBarometricAltitudeUpdates(sensorDelay, Observable.just(pressureAtSeaLevel))
 
     /**
-     * Get an [Observable] that emmit altitude using barometric sensor. If barometric sensor is not
+     * Get an [Observable] that emit altitude using barometric sensor. If barometric sensor is not
      * present this will emit immediately a [BarometricSensorException]. You can pass an optional
      * [sensorDelay] and [pressureAtSeaLevelObservable]. To get a accurate altitude passing a
      * [pressureAtSeaLevelObservable] is recommended.
@@ -88,7 +88,7 @@ object RxLocationManagerAltitude {
 
 
     /**
-     * Get an [Single] that emmit altitude from a [RemoteServiceAltitude] at the specified
+     * Get an [Single] that emit altitude from a [RemoteServiceAltitude] at the specified
      * [latitude] and [longitude].
      */
     @JvmStatic
