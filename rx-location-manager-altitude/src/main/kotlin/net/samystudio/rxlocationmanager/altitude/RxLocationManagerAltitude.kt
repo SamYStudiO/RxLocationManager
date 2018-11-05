@@ -18,6 +18,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import net.samystudio.rxlocationmanager.ContextProvider
 import net.samystudio.rxlocationmanager.RxLocationManager
+import net.samystudio.rxlocationmanager.nmea.GGA
+import net.samystudio.rxlocationmanager.nmea.NmeaException
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.concurrent.atomic.AtomicBoolean
@@ -33,12 +35,20 @@ object RxLocationManagerAltitude {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGpsEllipsoidalAltitudeUpdates(): Observable<Double> =
-        RxLocationManager.observeNmea().filter {
-            parseNmeaAltitude(
-                it.message,
-                true
-            ) != null
-        }.map { parseNmeaAltitude(it.message, true)!! }.distinctUntilChanged()
+        RxLocationManager.observeNmea()
+            .flatMap {
+                try {
+                    val gga = GGA(it.message)
+                    if (gga.altitude != null && gga.ellipsoidalOffset != null)
+                        return@flatMap Observable.just(GGAWrapper(gga))
+                } catch (e: NmeaException) {
+
+                }
+                Observable.just(GGAWrapper(null))
+            }
+            .filter { it.gga != null }
+            .map { it.gga!!.altitude!! + it.gga.ellipsoidalOffset!! }
+            .distinctUntilChanged()
 
 
     /**
@@ -47,12 +57,20 @@ object RxLocationManagerAltitude {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGpsGeoidalAltitudeUpdates(): Observable<Double> =
-        RxLocationManager.observeNmea().filter {
-            parseNmeaAltitude(
-                it.message,
-                false
-            ) != null
-        }.map { parseNmeaAltitude(it.message, true)!! }.distinctUntilChanged()
+        RxLocationManager.observeNmea()
+            .flatMap {
+                try {
+                    val gga = GGA(it.message)
+                    if (gga.altitude != null)
+                        return@flatMap Observable.just(GGAWrapper(gga))
+                } catch (e: NmeaException) {
+
+                }
+                Observable.just(GGAWrapper(null))
+            }
+            .filter { it.gga != null }
+            .map { it.gga!!.altitude!! }
+            .distinctUntilChanged()
 
     /**
      * Get an [Observable] that emit altitude using barometric sensor. If barometric sensor is not
@@ -114,29 +132,7 @@ object RxLocationManagerAltitude {
         }
     }
 
-    @VisibleForTesting
-    internal fun parseNmeaAltitude(nmea: String, ellipsoidal: Boolean): Double? {
-        if (nmea.startsWith("$")) {
-            val tokens = nmea.split(",")
-            val type = tokens[0]
-
-            if (type.startsWith("\$GPGGA") && tokens.size >= 10) {
-                try {
-                    val altitude = tokens[9].toDouble()
-                    return if (!ellipsoidal) altitude else {
-                        if (tokens.size >= 12) {
-                            val ellipsoidalOffset: Double = tokens[11].toDouble()
-                            return altitude + ellipsoidalOffset
-                        }
-                        return null
-                    }
-                } catch (e: NumberFormatException) {
-
-                }
-            }
-        }
-        return null
-    }
+    private class GGAWrapper(val gga: GGA?)
 
     @VisibleForTesting
     internal class BarometricSensorObservable(private val sensorDelay: Int) : Observable<Float>() {

@@ -10,7 +10,6 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
 class GoogleElevationApiTest {
-
     private val googleElevationApi = GoogleElevationApi("123456789")
 
     @Test
