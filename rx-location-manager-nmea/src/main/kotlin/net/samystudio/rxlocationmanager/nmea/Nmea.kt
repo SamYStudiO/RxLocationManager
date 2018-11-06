@@ -20,7 +20,7 @@ abstract class Nmea constructor(val message: String) {
                     data[index]
                 )
             ) throw NmeaException(
-                getParseErrorMessage(index, tokenValidator::class.java, message),
+                getParseErrorMessage(index, tokenValidator::class.java.simpleName, message),
                 index
             )
         }
@@ -77,10 +77,10 @@ abstract class Nmea constructor(val message: String) {
         internal const val CANNOT_FIND_CHECKSUM_ERROR_MESSAGE = "Cannot find checksum from message"
         internal fun getParseErrorMessage(
             index: Int,
-            validatorClass: Class<out TokenValidator>,
+            validatorClassName: String,
             message: String
         ) =
-            "Cannot parse message at index $index with validator ${validatorClass.simpleName} from source $message"
+            "Cannot parse message at index $index with validator $validatorClassName from source $message"
 
         internal fun getChecksumErrorMessage(
             expectedChecksum: String,

@@ -37,7 +37,13 @@ class GLLTest {
     fun validateTypeError() {
         val message = "\$GPGL,3342.6618,N,11751.3858,W,002153.000,A*29"
         val expected =
-            NmeaException(Nmea.getParseErrorMessage(0, TypeValidator::class.java, message), 0)
+            NmeaException(
+                Nmea.getParseErrorMessage(
+                    0,
+                    TypeValidator::class.java.simpleName,
+                    message
+                ), 0
+            )
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -51,7 +57,13 @@ class GLLTest {
     fun validateLatitudeError() {
         val message = "\$GPGLL,33426618,N,11751.3858,W,002153.000,A*29"
         val expected =
-            NmeaException(Nmea.getParseErrorMessage(1, LatitudeValidator::class.java, message), 1)
+            NmeaException(
+                Nmea.getParseErrorMessage(
+                    1,
+                    LatitudeValidator::class.java.simpleName,
+                    message
+                ), 1
+            )
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -65,7 +77,13 @@ class GLLTest {
     fun validateLatitudeDirectionError() {
         val message = "\$GPGLL,3342.6618,z,11751.3858,W,002153.000,A*29"
         val expected =
-            NmeaException(Nmea.getParseErrorMessage(2, EnumValidator::class.java, message), 2)
+            NmeaException(
+                Nmea.getParseErrorMessage(
+                    2,
+                    EnumValidator::class.java.simpleName,
+                    message
+                ), 2
+            )
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -79,7 +97,13 @@ class GLLTest {
     fun validateLongitudeError() {
         val message = "\$GPGLL,3342.6618,N,117513858,W,002153.000,A*29"
         val expected =
-            NmeaException(Nmea.getParseErrorMessage(3, LongitudeValidator::class.java, message), 3)
+            NmeaException(
+                Nmea.getParseErrorMessage(
+                    3,
+                    LongitudeValidator::class.java.simpleName,
+                    message
+                ), 3
+            )
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -93,7 +117,13 @@ class GLLTest {
     fun validateLongitudeDirectionError() {
         val message = "\$GPGLL,3342.6618,N,11751.3858,z,002153.000,A*29"
         val expected =
-            NmeaException(Nmea.getParseErrorMessage(4, EnumValidator::class.java, message), 4)
+            NmeaException(
+                Nmea.getParseErrorMessage(
+                    4,
+                    EnumValidator::class.java.simpleName,
+                    message
+                ), 4
+            )
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -107,7 +137,13 @@ class GLLTest {
     fun validateTimeError() {
         val message = "\$GPGLL,3342.6618,N,11751.3858,W,002153000,A*29"
         val expected =
-            NmeaException(Nmea.getParseErrorMessage(5, TimeValidator::class.java, message), 5)
+            NmeaException(
+                Nmea.getParseErrorMessage(
+                    5,
+                    TimeValidator::class.java.simpleName,
+                    message
+                ), 5
+            )
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -122,7 +158,13 @@ class GLLTest {
     fun validateStatusError() {
         val message = "\$GPGLL,3342.6618,N,11751.3858,W,002153.000,z*29"
         val expected =
-            NmeaException(Nmea.getParseErrorMessage(6, EnumValidator::class.java, message), 6)
+            NmeaException(
+                Nmea.getParseErrorMessage(
+                    6,
+                    EnumValidator::class.java.simpleName,
+                    message
+                ), 6
+            )
         var result: NmeaException? = null
         try {
             GLL(message)
