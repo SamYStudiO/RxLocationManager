@@ -14,9 +14,7 @@ class GSA(message: String) : Nmea(message) {
         try {
             return@lazy Mode2.values()[data[2].toInt() - 1]
         } catch (e: NumberFormatException) {
-
         } catch (e: ArrayIndexOutOfBoundsException) {
-
         }
         null
     }
