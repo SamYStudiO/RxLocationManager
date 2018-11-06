@@ -166,7 +166,6 @@ class GGATest {
         assertEquals(expected, result)
     }
 
-
     @Test
     fun validateQualityError() {
         val message =

@@ -153,7 +153,6 @@ class GLLTest {
         assertEquals(expected, result)
     }
 
-
     @Test
     fun validateStatusError() {
         val message = "\$GPGLL,3342.6618,N,11751.3858,W,002153.000,z*29"
