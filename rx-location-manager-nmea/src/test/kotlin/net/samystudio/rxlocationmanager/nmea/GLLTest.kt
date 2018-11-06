@@ -36,7 +36,8 @@ class GLLTest {
     @Test
     fun validateTypeError() {
         val message = "\$GPGL,3342.6618,N,11751.3858,W,002153.000,A*29"
-        val expected = NmeaException("Cannot parse message at index 0 from source $message", 0)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(0, TypeValidator::class.java, message), 0)
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -49,7 +50,8 @@ class GLLTest {
     @Test
     fun validateLatitudeError() {
         val message = "\$GPGLL,33426618,N,11751.3858,W,002153.000,A*29"
-        val expected = NmeaException("Cannot parse message at index 1 from source $message", 1)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(1, LatitudeValidator::class.java, message), 1)
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -62,7 +64,8 @@ class GLLTest {
     @Test
     fun validateLatitudeDirectionError() {
         val message = "\$GPGLL,3342.6618,z,11751.3858,W,002153.000,A*29"
-        val expected = NmeaException("Cannot parse message at index 2 from source $message", 2)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(2, EnumValidator::class.java, message), 2)
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -75,7 +78,8 @@ class GLLTest {
     @Test
     fun validateLongitudeError() {
         val message = "\$GPGLL,3342.6618,N,117513858,W,002153.000,A*29"
-        val expected = NmeaException("Cannot parse message at index 3 from source $message", 3)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(3, LongitudeValidator::class.java, message), 3)
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -88,7 +92,8 @@ class GLLTest {
     @Test
     fun validateLongitudeDirectionError() {
         val message = "\$GPGLL,3342.6618,N,11751.3858,z,002153.000,A*29"
-        val expected = NmeaException("Cannot parse message at index 4 from source $message", 4)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(4, EnumValidator::class.java, message), 4)
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -101,7 +106,8 @@ class GLLTest {
     @Test
     fun validateTimeError() {
         val message = "\$GPGLL,3342.6618,N,11751.3858,W,002153000,A*29"
-        val expected = NmeaException("Cannot parse message at index 5 from source $message", 5)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(5, TimeValidator::class.java, message), 5)
         var result: NmeaException? = null
         try {
             GLL(message)
@@ -115,7 +121,8 @@ class GLLTest {
     @Test
     fun validateStatusError() {
         val message = "\$GPGLL,3342.6618,N,11751.3858,W,002153.000,z*29"
-        val expected = NmeaException("Cannot parse message at index 6 from source $message", 6)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(6, EnumValidator::class.java, message), 6)
         var result: NmeaException? = null
         try {
             GLL(message)

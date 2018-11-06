@@ -34,49 +34,48 @@ class GSA(message: String) : Nmea(message) {
     val horizontalDilutionOfPrecision: Double? by lazy { data[16].toDoubleOrNull() }
     val verticalDilutionOfPrecision: Double? by lazy { data[17].toDoubleOrNull() }
 
-    override fun validate(): Int {
-        for (i in 0..17) {
-            if (data.size < i + 1) return i
-            val token = data[i]
-            // type $__GSA
-            if (i == 0 && !typeValidator(token, "GSA")) return i
-            // mode1 A (automatic) or M (manual)
-            if (i == 1 && !enumValidator(token, arrayOf('A', 'M'), true)) return i
-            // mode2 1 (fix not available) 2 (2D) or 3 (3D)
-            if (i == 2 && !enumValidator(token, arrayOf('1', '2', '3'), true)) return i
-            // satellite 1
-            if (i == 3 && !intValidator(token, true, 0, 999)) return i
-            // satellite 2
-            if (i == 4 && !intValidator(token, true, 0, 999)) return i
-            // satellite 3
-            if (i == 5 && !intValidator(token, true, 0, 999)) return i
-            // satellite 4
-            if (i == 6 && !intValidator(token, true, 0, 999)) return i
-            // satellite 5
-            if (i == 7 && !intValidator(token, true, 0, 999)) return i
-            // satellite 6
-            if (i == 8 && !intValidator(token, true, 0, 999)) return i
-            // satellite 7
-            if (i == 9 && !intValidator(token, true, 0, 999)) return i
-            // satellite 8
-            if (i == 10 && !intValidator(token, true, 0, 999)) return i
-            // satellite 9
-            if (i == 11 && !intValidator(token, true, 0, 999)) return i
-            // satellite 10
-            if (i == 12 && !intValidator(token, true, 0, 999)) return i
-            // satellite 11
-            if (i == 13 && !intValidator(token, true, 0, 999)) return i
-            // satellite 12
-            if (i == 14 && !intValidator(token, true, 0, 999)) return i
-            // position dilution of precision
-            if (i == 15 && !doubleValidator(token, true)) return i
-            // horizontal dilution of precision
-            if (i == 16 && !doubleValidator(token, true)) return i
-            // vertical dilution of precision
-            if (i == 17 && !doubleValidator(token, true)) return i
-        }
+    override fun getTokenValidators(): Array<TokenValidator> {
+        val satelliteValidator = IntValidator(true, 0, 999)
+        val optionalDoubleValidator = DoubleValidator(true)
 
-        return -1
+        return arrayOf(
+            // type $__GSA
+            TypeValidator("GSA"),
+            // mode1 A (automatic) or M (manual)
+            EnumValidator(arrayOf('A', 'M'), true),
+            // mode2 1 (fix not available) 2 (2D) or 3 (3D)
+            EnumValidator(arrayOf('1', '2', '3'), true),
+            // satellite 1
+            satelliteValidator,
+            // satellite 2
+            satelliteValidator,
+            // satellite 3
+            satelliteValidator,
+            // satellite 4
+            satelliteValidator,
+            // satellite 5
+            satelliteValidator,
+            // satellite 6
+            satelliteValidator,
+            // satellite 7
+            satelliteValidator,
+            // satellite 8
+            satelliteValidator,
+            // satellite 9
+            satelliteValidator,
+            // satellite 10
+            satelliteValidator,
+            // satellite 11
+            satelliteValidator,
+            // satellite 12
+            satelliteValidator,
+            // position dilution of precision
+            optionalDoubleValidator,
+            // horizontal dilution of precision
+            optionalDoubleValidator,
+            // vertical dilution of precision
+            optionalDoubleValidator
+        )
     }
 
     enum class Mode1 {

@@ -8,7 +8,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class LocationExtensionTest {
+class LocationTest {
     @Test
     fun convert() {
         assertEquals(

@@ -49,7 +49,8 @@ class GGATest {
     @Test
     fun validateTypeError() {
         val message = "\$GPGG,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 0 from source $message", 0)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(0, TypeValidator::class.java, message), 0)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -62,7 +63,8 @@ class GGATest {
     @Test
     fun validateTimeError() {
         val message = "\$GPGGA,002153000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 1 from source $message", 1)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(1, TimeValidator::class.java, message), 1)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -75,7 +77,8 @@ class GGATest {
     @Test
     fun validateLatitudeError() {
         val message = "\$GPGGA,002153.000,33426618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 2 from source $message", 2)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(2, LatitudeValidator::class.java, message), 2)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -88,7 +91,8 @@ class GGATest {
     @Test
     fun validateLatitudeDirectionError() {
         val message = "\$GPGGA,002153.000,3342.6618,Z,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 3 from source $message", 3)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(3, EnumValidator::class.java, message), 3)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -101,7 +105,8 @@ class GGATest {
     @Test
     fun validateLongitudeError() {
         val message = "\$GPGGA,002153.000,3342.6618,N,117513858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 4 from source $message", 4)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(4, LongitudeValidator::class.java, message), 4)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -114,7 +119,8 @@ class GGATest {
     @Test
     fun validateLongitudeDirectionError() {
         val message = "\$GPGGA,002153.000,3342.6618,N,11751.3858,z,1,10,1.2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 5 from source $message", 5)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(5, EnumValidator::class.java, message), 5)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -129,7 +135,8 @@ class GGATest {
     fun validateQualityError() {
         val message =
             "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,10,10,1.2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 6 from source $message", 6)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(6, EnumValidator::class.java, message), 6)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -143,7 +150,8 @@ class GGATest {
     fun validateSatelliteCountError() {
         val message =
             "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10z,1.2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 7 from source $message", 7)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(7, IntValidator::class.java, message), 7)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -157,7 +165,8 @@ class GGATest {
     fun validateHorizontalDilutionOfPrecisionError() {
         val message =
             "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.z2,27.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 8 from source $message", 8)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(8, DoubleValidator::class.java, message), 8)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -171,7 +180,8 @@ class GGATest {
     fun validateAltitudeError() {
         val message =
             "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27z.0,M,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 9 from source $message", 9)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(9, DoubleValidator::class.java, message), 9)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -184,7 +194,8 @@ class GGATest {
     @Test
     fun validateAltitudeUnitError() {
         val message = "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,z,-34.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 10 from source $message", 10)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(10, EnumValidator::class.java, message), 10)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -198,7 +209,8 @@ class GGATest {
     fun validateEllipsoidOffsetError() {
         val message =
             "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34z.2,M,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 11 from source $message", 11)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(11, DoubleValidator::class.java, message), 11)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -211,7 +223,8 @@ class GGATest {
     @Test
     fun validateEllipsoidOffsetUnitError() {
         val message = "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,z,,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 12 from source $message", 12)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(12, EnumValidator::class.java, message), 12)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -225,7 +238,8 @@ class GGATest {
     fun validateDifferentialAgeError() {
         val message =
             "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,z,0000*5E"
-        val expected = NmeaException("Cannot parse message at index 13 from source $message", 13)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(13, DoubleValidator::class.java, message), 13)
         var result: NmeaException? = null
         try {
             GGA(message)
@@ -237,8 +251,10 @@ class GGATest {
 
     @Test
     fun validateStationIdError() {
-        val message = "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,2000*5E"
-        val expected = NmeaException("Cannot parse message at index 14 from source $message", 14)
+        val message =
+            "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,20000*5E"
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(14, StringValidator::class.java, message), 14)
         var result: NmeaException? = null
         try {
             GGA(message)

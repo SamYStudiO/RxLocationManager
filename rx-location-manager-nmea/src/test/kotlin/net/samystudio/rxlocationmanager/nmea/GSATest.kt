@@ -62,7 +62,8 @@ class GSATest {
     @Test
     fun validateTypeError() {
         val message = "\$GPGA,M,3,,,22,,,85,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 0 from source $message", 0)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(0, TypeValidator::class.java, message), 0)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -75,7 +76,8 @@ class GSATest {
     @Test
     fun validateMode1Error() {
         val message = "\$GPGSA,z,3,,,22,,,85,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 1 from source $message", 1)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(1, EnumValidator::class.java, message), 1)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -88,7 +90,8 @@ class GSATest {
     @Test
     fun validateMode2Error() {
         val message = "\$GPGSA,M,z,,,22,,,85,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 2 from source $message", 2)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(2, EnumValidator::class.java, message), 2)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -101,7 +104,8 @@ class GSATest {
     @Test
     fun validateSatellite1Error() {
         val message = "\$GPGSA,M,3,z,,22,,,85,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 3 from source $message", 3)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(3, IntValidator::class.java, message), 3)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -114,7 +118,8 @@ class GSATest {
     @Test
     fun validateSatellite2Error() {
         val message = "\$GPGSA,M,3,,z,22,,,85,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 4 from source $message", 4)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(4, IntValidator::class.java, message), 4)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -127,7 +132,8 @@ class GSATest {
     @Test
     fun validateSatellite3Error() {
         val message = "\$GPGSA,M,3,,,z,,,85,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 5 from source $message", 5)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(5, IntValidator::class.java, message), 5)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -140,7 +146,8 @@ class GSATest {
     @Test
     fun validateSatellite4Error() {
         val message = "\$GPGSA,M,3,,,22,z,,85,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 6 from source $message", 6)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(6, IntValidator::class.java, message), 6)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -153,7 +160,8 @@ class GSATest {
     @Test
     fun validateSatellite5Error() {
         val message = "\$GPGSA,M,3,,,22,,z,85,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 7 from source $message", 7)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(7, IntValidator::class.java, message), 7)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -166,7 +174,8 @@ class GSATest {
     @Test
     fun validateSatellite6Error() {
         val message = "\$GPGSA,M,3,,,22,,,z,,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 8 from source $message", 8)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(8, IntValidator::class.java, message), 8)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -179,7 +188,8 @@ class GSATest {
     @Test
     fun validateSatellite7Error() {
         val message = "\$GPGSA,M,3,,,22,,,85,z,,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 9 from source $message", 9)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(9, IntValidator::class.java, message), 9)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -192,7 +202,8 @@ class GSATest {
     @Test
     fun validateSatellite8Error() {
         val message = "\$GPGSA,M,3,,,22,,,85,,z,14,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 10 from source $message", 10)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(10, IntValidator::class.java, message), 10)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -205,7 +216,8 @@ class GSATest {
     @Test
     fun validateSatellite9Error() {
         val message = "\$GPGSA,M,3,,,22,,,85,,,z,23,,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 11 from source $message", 11)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(11, IntValidator::class.java, message), 11)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -216,9 +228,25 @@ class GSATest {
     }
 
     @Test
+    fun validateSatellite10Error() {
+        val message = "\$GPGSA,M,3,,,22,,,85,,,14,z,,,10.1,12.2,14.4*07"
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(12, IntValidator::class.java, message), 12)
+        var result: NmeaException? = null
+        try {
+            GSA(message)
+        } catch (e: NmeaException) {
+            result = e
+        }
+        assertEquals(expected, result)
+    }
+
+
+    @Test
     fun validateSatellite11Error() {
         val message = "\$GPGSA,M,3,,,22,,,85,,,14,23,z,,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 13 from source $message", 13)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(13, IntValidator::class.java, message), 13)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -231,7 +259,8 @@ class GSATest {
     @Test
     fun validateSatellite12Error() {
         val message = "\$GPGSA,M,3,,,22,,,85,,,14,23,,z,10.1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 14 from source $message", 14)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(14, IntValidator::class.java, message), 14)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -244,7 +273,8 @@ class GSATest {
     @Test
     fun validatePositionDilutionOfPrecisionError() {
         val message = "\$GPGSA,M,3,,,22,,,85,,,14,23,,,10z1,12.2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 15 from source $message", 15)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(15, DoubleValidator::class.java, message), 15)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -257,7 +287,8 @@ class GSATest {
     @Test
     fun validateHorizontalDilutionOfPrecisionError() {
         val message = "\$GPGSA,M,3,,,22,,,85,,,14,23,,,10.1,12z2,14.4*07"
-        val expected = NmeaException("Cannot parse message at index 16 from source $message", 16)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(16, DoubleValidator::class.java, message), 16)
         var result: NmeaException? = null
         try {
             GSA(message)
@@ -270,7 +301,8 @@ class GSATest {
     @Test
     fun validateVerticalDilutionOfPrecisionError() {
         val message = "\$GPGSA,M,3,,,22,,,85,,,14,23,,,10.1,12.2,14z4*07"
-        val expected = NmeaException("Cannot parse message at index 17 from source $message", 17)
+        val expected =
+            NmeaException(Nmea.getParseErrorMessage(17, DoubleValidator::class.java, message), 17)
         var result: NmeaException? = null
         try {
             GSA(message)

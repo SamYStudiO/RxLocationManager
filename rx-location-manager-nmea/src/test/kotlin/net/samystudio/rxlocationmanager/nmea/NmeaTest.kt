@@ -8,8 +8,12 @@ class NmeaTest {
     fun computeChecksum() {
         val nmea = object :
             Nmea("\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E") {
-            override fun validate(): Int {
-                return -1
+            override fun getTokenValidators(): Array<TokenValidator> {
+                return arrayOf(object : TokenValidator {
+                    override fun validate(token: String): Boolean {
+                        return true
+                    }
+                })
             }
         }
         assertEquals("5E", nmea.computeChecksum())
@@ -22,8 +26,12 @@ class NmeaTest {
         try {
             object :
                 Nmea(" \n\t") {
-                override fun validate(): Int {
-                    return -1
+                override fun getTokenValidators(): Array<TokenValidator> {
+                    return arrayOf(object : TokenValidator {
+                        override fun validate(token: String): Boolean {
+                            return true
+                        }
+                    })
                 }
             }
         } catch (e: NmeaException) {
@@ -39,8 +47,12 @@ class NmeaTest {
         try {
             object :
                 Nmea("GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,00005E") {
-                override fun validate(): Int {
-                    return -1
+                override fun getTokenValidators(): Array<TokenValidator> {
+                    return arrayOf(object : TokenValidator {
+                        override fun validate(token: String): Boolean {
+                            return true
+                        }
+                    })
                 }
             }
         } catch (e: NmeaException) {
@@ -56,8 +68,12 @@ class NmeaTest {
         try {
             object :
                 Nmea("\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000") {
-                override fun validate(): Int {
-                    return -1
+                override fun getTokenValidators(): Array<TokenValidator> {
+                    return arrayOf(object : TokenValidator {
+                        override fun validate(token: String): Boolean {
+                            return true
+                        }
+                    })
                 }
             }
         } catch (e: NmeaException) {
@@ -73,8 +89,12 @@ class NmeaTest {
         try {
             object :
                 Nmea("\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*55") {
-                override fun validate(): Int {
-                    return -1
+                override fun getTokenValidators(): Array<TokenValidator> {
+                    return arrayOf(object : TokenValidator {
+                        override fun validate(token: String): Boolean {
+                            return true
+                        }
+                    })
                 }
             }
         } catch (e: NmeaException) {

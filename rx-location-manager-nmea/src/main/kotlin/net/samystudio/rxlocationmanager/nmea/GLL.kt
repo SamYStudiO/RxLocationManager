@@ -4,13 +4,13 @@ package net.samystudio.rxlocationmanager.nmea
 
 class GLL(message: String) : Nmea(message) {
     val latitude: Double? by lazy {
-        convertLocationToken(
+        convertNmeaLocation(
             data[1],
             LocationDirection.valueOf(data[2], LocationDirection.N)
         )
     }
     val longitude: Double? by lazy {
-        convertLocationToken(
+        convertNmeaLocation(
             data[3],
             LocationDirection.valueOf(data[4], LocationDirection.E)
         )
@@ -24,27 +24,23 @@ class GLL(message: String) : Nmea(message) {
         }
     }
 
-    override fun validate(): Int {
-        for (i in 0..6) {
-            if (data.size < i + 1) return i
-            val token = data[i]
+    override fun getTokenValidators(): Array<TokenValidator> {
+        return arrayOf(
             // type $__GLL
-            if (i == 0 && !typeValidator(token, "GGL")) return i
+            TypeValidator("GLL"),
             // latitude ddmm.ssss
-            if (i == 1 && !latitudeValidator(token, true)) return i
+            LatitudeValidator(true),
             // N or S
-            if (i == 2 && !enumValidator(token, arrayOf('N', 'S'), true)) return i
+            EnumValidator(arrayOf('N', 'S'), true),
             // longitude ddddmm.ssss
-            if (i == 3 && !longitudeValidator(token, true)) return i
+            LongitudeValidator(true),
             // W or E
-            if (i == 4 && !enumValidator(token, arrayOf('W', 'E'), true)) return i
+            EnumValidator(arrayOf('W', 'E'), true),
             // UTC time hhmmss(.sss)
-            if (i == 5 && !timeValidator(token, true)) return i
+            TimeValidator(true),
             // status A (valid) or V (invalid)
-            if (i == 6 && !enumValidator(token, arrayOf('A', 'V'), true)) return i
-        }
-
-        return -1
+            EnumValidator(arrayOf('A', 'V'), true)
+        )
     }
 
     enum class Status {

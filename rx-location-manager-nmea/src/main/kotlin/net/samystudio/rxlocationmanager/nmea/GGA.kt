@@ -5,13 +5,13 @@ package net.samystudio.rxlocationmanager.nmea
 class GGA(message: String) : Nmea(message) {
     val time: String by lazy { data[1] }
     val latitude: Double? by lazy {
-        convertLocationToken(
+        convertNmeaLocation(
             data[2],
             LocationDirection.valueOf(data[3], LocationDirection.N)
         )
     }
     val longitude: Double? by lazy {
-        convertLocationToken(
+        convertNmeaLocation(
             data[4],
             LocationDirection.valueOf(data[5], LocationDirection.E)
         )
@@ -31,43 +31,42 @@ class GGA(message: String) : Nmea(message) {
     val differentialGpsAge: Double? by lazy { data[13].toDoubleOrNull() }
     val differentialGpsStationId: String by lazy { data[14] }
 
-    override fun validate(): Int {
-        for (i in 0..14) {
-            if (data.size < i + 1) return i
-            val token = data[i]
-            // type $__GGA
-            if (i == 0 && !typeValidator(token, "GGA")) return i
-            // UTC time hhmmss(.sss)
-            if (i == 1 && !timeValidator(token)) return i
-            // latitude ddmm.ssss
-            if (i == 2 && !latitudeValidator(token, true)) return i
-            // N or S
-            if (i == 3 && !enumValidator(token, arrayOf('N', 'S'), true)) return i
-            // longitude ddddmm.ssss
-            if (i == 4 && !longitudeValidator(token, true)) return i
-            // W or E
-            if (i == 5 && !enumValidator(token, arrayOf('W', 'E'), true)) return i
-            // quality 0, 1 or 2 (not fixed, fixed, differential fixed)
-            if (i == 6 && !enumValidator(token, arrayOf('0', '1', '2'), true)) return i
-            // satellites count 0-12
-            if (i == 7 && !intValidator(token, true, 0, 12)) return i
-            // horizontal dilution of precision
-            if (i == 8 && !doubleValidator(token, true)) return i
-            // altitude geoid (mean sea level) in meter
-            if (i == 9 && !doubleValidator(token, true)) return i
-            // altitude unit M
-            if (i == 10 && !enumValidator(token, arrayOf('M'), true)) return i
-            // WGS-84 earth ellipsoid offset
-            if (i == 11 && !doubleValidator(token, true)) return i
-            // ellipsoid offset unit M
-            if (i == 12 && !enumValidator(token, arrayOf('M'), true)) return i
-            // age of differential GPS data (seconds)
-            if (i == 13 && !doubleValidator(token, true)) return i
-            // station
-            if (i == 14 && !stringValidator(token, true, 4, 4)) return i
-        }
+    override fun getTokenValidators(): Array<TokenValidator> {
+        val optionalDoubleValidator = DoubleValidator(true)
+        val meterValidator = EnumValidator(arrayOf('M'), true)
 
-        return -1
+        return arrayOf(
+            // type $__GGA
+            TypeValidator("GGA"),
+            // UTC time hhmmss(.sss)
+            TimeValidator(true),
+            // latitude ddmm.ssss
+            LatitudeValidator(true),
+            // N or S
+            EnumValidator(arrayOf('N', 'S'), true),
+            // longitude ddddmm.ssss
+            LongitudeValidator(true),
+            // W or E
+            EnumValidator(arrayOf('W', 'E'), true),
+            // quality 0, 1 or 2 (not fixed, fixed, differential fixed)
+            EnumValidator(arrayOf('0', '1', '2'), true),
+            // satellites count 0-12
+            IntValidator(true, 0, 12),
+            // horizontal dilution of precision
+            optionalDoubleValidator,
+            // altitude geoid (mean sea level) in meter
+            optionalDoubleValidator,
+            // altitude unit M
+            meterValidator,
+            // WGS-84 earth ellipsoid offset
+            optionalDoubleValidator,
+            // ellipsoid offset unit M
+            meterValidator,
+            // age of differential GPS data (seconds)
+            optionalDoubleValidator,
+            // station
+            StringValidator(true, 4, 4)
+        )
     }
 
     enum class Quality {

@@ -2,8 +2,6 @@
 
 package net.samystudio.rxlocationmanager.nmea
 
-import android.location.Location
-
 /**
  * [message] A valid Nmea message starting with "$" followed by message data delimit with "," and
  * ending with checksum "*XX".
@@ -14,99 +12,32 @@ abstract class Nmea constructor(val message: String) {
     val checksum: String by lazy { message.split("*")[1] }
 
     init {
-        if (message.isBlank()) throw NmeaException("Message is blank")
-        if (!message.startsWith("$")) throw NmeaException("Message should stat with $", 0)
-        val index = validate()
-        if (index >= 0) throw NmeaException(
-            "Cannot parse message at index $index from source $message",
-            index
+        if (message.isBlank()) throw NmeaException(BLANK_ERROR_MESSAGE)
+        if (!message.startsWith("$")) throw NmeaException(MISSING_DOLLAR_ERROR_MESSAGE, 0)
+        val validators = getTokenValidators()
+        validators.forEachIndexed { index, tokenValidator ->
+            if (index > data.size - 1 || !tokenValidator.validate(
+                    data[index]
+                )
+            ) throw NmeaException(
+                getParseErrorMessage(index, tokenValidator::class.java, message),
+                index
+            )
+        }
+        if (!message.contains("*")) throw NmeaException(CANNOT_FIND_CHECKSUM_ERROR_MESSAGE)
+        if (computeChecksum() != checksum) throw NmeaException(
+            getChecksumErrorMessage(
+                checksum,
+                computeChecksum()
+            )
         )
-        if (!message.contains("*")) throw NmeaException("Cannot find checksum from message")
-        if (computeChecksum() != checksum) throw NmeaException("Message checksum $checksum doesn't match ${computeChecksum()}")
     }
 
     /**
      * Validate Nmea [data] array.
      * Return -1 if validation is successful or a array index where validation failed.
      */
-    protected abstract fun validate(): Int
-
-    /**
-     * Convert Nmea latitude/longitude token to [Double]. Return null if conversion failed.
-     */
-    fun convertLocationToken(token: String, direction: LocationDirection): Double? {
-        if (!latitudeValidator(token) && !longitudeValidator(token)) return null
-
-        val sign =
-            if (direction == LocationDirection.S || direction == LocationDirection.W) "-" else ""
-        val index =
-            if (direction == LocationDirection.N || direction == LocationDirection.S) 2 else 3
-        val formattedLocation =
-            sign + token.substring(0, index) + ":" + token.substring(index)
-
-        return try {
-            Location.convert(formattedLocation)
-        } catch (e: IllegalArgumentException) {
-            null
-        }
-    }
-
-    fun intValidator(
-        token: String,
-        optional: Boolean = false,
-        min: Int = Int.MIN_VALUE,
-        max: Int = Int.MAX_VALUE
-    ): Boolean {
-        if (token.isBlank() && optional) return true
-        val i: Int = token.toIntOrNull() ?: return false
-        return i in min..max
-    }
-
-    fun doubleValidator(
-        token: String,
-        optional: Boolean = false,
-        min: Double = Double.MIN_VALUE,
-        max: Double = Double.MAX_VALUE
-    ): Boolean {
-        if (token.isBlank() && optional) return true
-        val i: Double = token.toDoubleOrNull() ?: return false
-        return i in min..max
-    }
-
-    fun typeValidator(token: String, type: String): Boolean {
-        return token.matches(("[A-Z]{2}${type.toUpperCase()}").toRegex())
-    }
-
-    fun enumValidator(token: String, chars: Array<Char>, optional: Boolean = false): Boolean {
-        if (token.isBlank() && optional) return true
-        val s = chars.joinToString(",")
-        return token.matches(("[$s]").toRegex())
-    }
-
-    fun latitudeValidator(token: String, optional: Boolean = false): Boolean {
-        if (token.isBlank() && optional) return true
-        return token.matches("^\\d{4}\\.\\d{4}$".toRegex())
-    }
-
-    fun longitudeValidator(token: String, optional: Boolean = false): Boolean {
-        if (token.isBlank() && optional) return true
-        return token.matches("^\\d{5}\\.\\d{4}$".toRegex())
-    }
-
-    fun timeValidator(token: String, optional: Boolean = false): Boolean {
-        if (token.isBlank() && optional) return true
-        return token.matches("^\\d{6}(\\.\\d{2,4})?$".toRegex())
-    }
-
-    fun stringValidator(
-        token: String,
-        optional: Boolean = false,
-        min: Int = Int.MIN_VALUE,
-        max: Int = Int.MAX_VALUE
-    ): Boolean {
-        if (token.isBlank() && optional) return true
-        return token.length in min..max
-    }
+    protected abstract fun getTokenValidators(): Array<TokenValidator>
 
     internal fun computeChecksum(): String {
         val data = message.split("*")[0]
@@ -139,18 +70,21 @@ abstract class Nmea constructor(val message: String) {
         return message
     }
 
-    enum class LocationDirection {
-        N, S, E, W;
+    companion object {
 
-        companion object {
-            @JvmStatic
-            fun valueOf(value: String, defaultValue: LocationDirection): LocationDirection {
-                return try {
-                    LocationDirection.valueOf(value)
-                } catch (e: IllegalArgumentException) {
-                    defaultValue
-                }
-            }
-        }
+        internal const val BLANK_ERROR_MESSAGE = "Message is blank"
+        internal const val MISSING_DOLLAR_ERROR_MESSAGE = "Message should stat with $"
+        internal const val CANNOT_FIND_CHECKSUM_ERROR_MESSAGE = "Cannot find checksum from message"
+        internal fun getParseErrorMessage(
+            index: Int,
+            validatorClass: Class<out TokenValidator>,
+            message: String
+        ) =
+            "Cannot parse message at index $index with validator ${validatorClass.simpleName} from source $message"
+
+        internal fun getChecksumErrorMessage(
+            expectedChecksum: String,
+            actualChecksum: String
+        ) = "Message checksum $expectedChecksum doesn't match $actualChecksum"
     }
 }
