@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package net.samystudio.rxlocationmanager.nmea
 
 class GGA(message: String) : Nmea(message) {
@@ -71,16 +69,5 @@ class GGA(message: String) : Nmea(message) {
 
     enum class Quality {
         NO_FIX, FIX, DIFFERENTIAL_FIX;
-
-        companion object {
-            @JvmStatic
-            fun valueOfWithDefault(value: String, defaultValue: Quality = Quality.NO_FIX): Quality {
-                return try {
-                    Quality.valueOf(value)
-                } catch (e: IllegalArgumentException) {
-                    defaultValue
-                }
-            }
-        }
     }
 }

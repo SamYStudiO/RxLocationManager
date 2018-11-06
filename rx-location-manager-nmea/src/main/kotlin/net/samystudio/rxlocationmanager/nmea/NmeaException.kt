@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package net.samystudio.rxlocationmanager.nmea
 
 class NmeaException(message: String, val index: Int = -1) : Exception(message) {

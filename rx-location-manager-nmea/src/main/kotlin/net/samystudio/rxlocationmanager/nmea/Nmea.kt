@@ -1,4 +1,4 @@
-@file:Suppress("LeakingThis", "unused", "MemberVisibilityCanBePrivate")
+@file:Suppress("LeakingThis")
 
 package net.samystudio.rxlocationmanager.nmea
 

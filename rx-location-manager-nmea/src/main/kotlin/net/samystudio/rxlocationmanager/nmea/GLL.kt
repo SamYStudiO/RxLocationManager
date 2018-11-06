@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package net.samystudio.rxlocationmanager.nmea
 
 class GLL(message: String) : Nmea(message) {
