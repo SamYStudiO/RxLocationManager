@@ -2,6 +2,8 @@
 
 package net.samystudio.rxlocationmanager.nmea
 
+import android.location.Location
+
 /**
  * [message] A valid Nmea message starting with "$" followed by message data delimit with "," and
  * ending with checksum "*XX".
@@ -29,16 +31,24 @@ abstract class Nmea constructor(val message: String) {
      */
     protected abstract fun validate(): Int
 
-    internal fun computeChecksum(): String {
-        val data = message.split("*")[0]
-        var checksum = 0
-        for (char in data) {
-            if (char == '$') continue
-            if (char == '*') break
-            checksum = checksum.xor(char.toInt())
-        }
+    /**
+     * Convert Nmea latitude/longitude token to [Double]. Return null if conversion failed.
+     */
+    fun convertLocationToken(token: String, direction: LocationDirection): Double? {
+        if (!latitudeValidator(token) && !longitudeValidator(token)) return null
 
-        return String.format("%02X", checksum)
+        val sign =
+            if (direction == LocationDirection.S || direction == LocationDirection.W) "-" else ""
+        val index =
+            if (direction == LocationDirection.N || direction == LocationDirection.S) 2 else 3
+        val formattedLocation =
+            sign + token.substring(0, index) + ":" + token.substring(index)
+
+        return try {
+            Location.convert(formattedLocation)
+        } catch (e: IllegalArgumentException) {
+            null
+        }
     }
 
     fun intValidator(
@@ -98,6 +108,17 @@ abstract class Nmea constructor(val message: String) {
         return token.length in min..max
     }
 
+    internal fun computeChecksum(): String {
+        val data = message.split("*")[0]
+        var checksum = 0
+        for (char in data) {
+            if (char == '$') continue
+            if (char == '*') break
+            checksum = checksum.xor(char.toInt())
+        }
+
+        return String.format("%02X", checksum)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -116,5 +137,20 @@ abstract class Nmea constructor(val message: String) {
 
     override fun toString(): String {
         return message
+    }
+
+    enum class LocationDirection {
+        N, S, E, W;
+
+        companion object {
+            @JvmStatic
+            fun valueOf(value: String, defaultValue: LocationDirection): LocationDirection {
+                return try {
+                    LocationDirection.valueOf(value)
+                } catch (e: IllegalArgumentException) {
+                    defaultValue
+                }
+            }
+        }
     }
 }

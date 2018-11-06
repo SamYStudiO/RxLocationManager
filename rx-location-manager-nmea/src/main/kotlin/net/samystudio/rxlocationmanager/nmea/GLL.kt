@@ -4,13 +4,13 @@ package net.samystudio.rxlocationmanager.nmea
 
 class GLL(message: String) : Nmea(message) {
     val latitude: Double? by lazy {
-        convertNmeaLocation(
+        convertLocationToken(
             data[1],
             LocationDirection.valueOf(data[2], LocationDirection.N)
         )
     }
     val longitude: Double? by lazy {
-        convertNmeaLocation(
+        convertLocationToken(
             data[3],
             LocationDirection.valueOf(data[4], LocationDirection.E)
         )

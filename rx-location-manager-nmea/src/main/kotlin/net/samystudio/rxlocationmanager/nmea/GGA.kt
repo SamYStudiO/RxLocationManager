@@ -5,13 +5,13 @@ package net.samystudio.rxlocationmanager.nmea
 class GGA(message: String) : Nmea(message) {
     val time: String by lazy { data[1] }
     val latitude: Double? by lazy {
-        convertNmeaLocation(
+        convertLocationToken(
             data[2],
             LocationDirection.valueOf(data[3], LocationDirection.N)
         )
     }
     val longitude: Double? by lazy {
-        convertNmeaLocation(
+        convertLocationToken(
             data[4],
             LocationDirection.valueOf(data[5], LocationDirection.E)
         )
