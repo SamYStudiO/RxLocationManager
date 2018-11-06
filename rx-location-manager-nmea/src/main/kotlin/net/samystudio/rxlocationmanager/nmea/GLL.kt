@@ -29,19 +29,19 @@ class GLL(message: String) : Nmea(message) {
             if (data.size < i + 1) return i
             val token = data[i]
             // type $__GLL
-            if (i == 0 && !token.matches("[A-Z]{2}GLL".toRegex())) return i
-            // latitude
-            if (i == 1 && !token.matches("(\\d{4}\\.\\d{4})?".toRegex())) return i
+            if (i == 0 && !typeValidator(token, "GGL")) return i
+            // latitude ddmm.ssss
+            if (i == 1 && !latitudeValidator(token, true)) return i
             // N or S
-            if (i == 2 && !token.matches("([NS])?".toRegex())) return i
-            // longitude
-            if (i == 3 && !token.matches("(\\d{5}\\.\\d{4})?".toRegex())) return i
+            if (i == 2 && !enumValidator(token, arrayOf('N', 'S'), true)) return i
+            // longitude ddddmm.ssss
+            if (i == 3 && !longitudeValidator(token, true)) return i
             // W or E
-            if (i == 4 && !token.matches("([WE])?".toRegex())) return i
+            if (i == 4 && !enumValidator(token, arrayOf('W', 'E'), true)) return i
             // UTC time hhmmss(.sss)
-            if (i == 5 && !token.matches("(\\d{6}(\\.\\d{3})?)?".toRegex())) return i
-            // status
-            if (i == 6 && !token.matches("[AV]?".toRegex())) return i
+            if (i == 5 && !timeValidator(token, true)) return i
+            // status A (valid) or V (invalid)
+            if (i == 6 && !enumValidator(token, arrayOf('A', 'V'), true)) return i
         }
 
         return -1

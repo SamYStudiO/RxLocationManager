@@ -39,41 +39,41 @@ class GSA(message: String) : Nmea(message) {
             if (data.size < i + 1) return i
             val token = data[i]
             // type $__GSA
-            if (i == 0 && !token.matches("[A-Z]{2}GSA".toRegex())) return i
-            // mode1
-            if (i == 1 && !token.matches("([AM])?".toRegex())) return i
-            // mode2
-            if (i == 2 && !token.matches("([123])?".toRegex())) return i
+            if (i == 0 && !typeValidator(token, "GSA")) return i
+            // mode1 A (automatic) or M (manual)
+            if (i == 1 && !enumValidator(token, arrayOf('A', 'M'), true)) return i
+            // mode2 1 (fix not available) 2 (2D) or 3 (3D)
+            if (i == 2 && !enumValidator(token, arrayOf('1', '2', '3'), true)) return i
             // satellite 1
-            if (i == 3 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 3 && !intValidator(token, true, 0, 999)) return i
             // satellite 2
-            if (i == 4 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 4 && !intValidator(token, true, 0, 999)) return i
             // satellite 3
-            if (i == 5 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 5 && !intValidator(token, true, 0, 999)) return i
             // satellite 4
-            if (i == 6 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 6 && !intValidator(token, true, 0, 999)) return i
             // satellite 5
-            if (i == 7 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 7 && !intValidator(token, true, 0, 999)) return i
             // satellite 6
-            if (i == 8 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 8 && !intValidator(token, true, 0, 999)) return i
             // satellite 7
-            if (i == 9 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 9 && !intValidator(token, true, 0, 999)) return i
             // satellite 8
-            if (i == 10 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 10 && !intValidator(token, true, 0, 999)) return i
             // satellite 9
-            if (i == 11 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 11 && !intValidator(token, true, 0, 999)) return i
             // satellite 10
-            if (i == 12 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 12 && !intValidator(token, true, 0, 999)) return i
             // satellite 11
-            if (i == 13 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 13 && !intValidator(token, true, 0, 999)) return i
             // satellite 12
-            if (i == 14 && !token.matches("(\\d{1,3})?".toRegex())) return i
+            if (i == 14 && !intValidator(token, true, 0, 999)) return i
             // position dilution of precision
-            if (i == 15 && !token.matches("(\\d+\\.?\\d+)?".toRegex())) return i
+            if (i == 15 && !doubleValidator(token, true)) return i
             // horizontal dilution of precision
-            if (i == 16 && !token.matches("(\\d+\\.?\\d+)?".toRegex())) return i
+            if (i == 16 && !doubleValidator(token, true)) return i
             // vertical dilution of precision
-            if (i == 17 && !token.matches("(\\d+\\.?\\d+)?".toRegex())) return i
+            if (i == 17 && !doubleValidator(token, true)) return i
         }
 
         return -1

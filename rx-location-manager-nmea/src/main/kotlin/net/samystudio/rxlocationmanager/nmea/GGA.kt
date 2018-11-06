@@ -36,35 +36,35 @@ class GGA(message: String) : Nmea(message) {
             if (data.size < i + 1) return i
             val token = data[i]
             // type $__GGA
-            if (i == 0 && !token.matches("[A-Z]{2}GGA".toRegex())) return i
+            if (i == 0 && !typeValidator(token, "GGA")) return i
             // UTC time hhmmss(.sss)
-            if (i == 1 && !token.matches("(\\d{6}(\\.\\d{3})?)?".toRegex())) return i
-            // latitude ddmm.sssss
-            if (i == 2 && !token.matches("(\\d{4}\\.\\d{4})?".toRegex())) return i
+            if (i == 1 && !timeValidator(token)) return i
+            // latitude ddmm.ssss
+            if (i == 2 && !latitudeValidator(token, true)) return i
             // N or S
-            if (i == 3 && !token.matches("([NS])?".toRegex())) return i
-            // longitude dddmm.sssss
-            if (i == 4 && !token.matches("(\\d{5}\\.\\d{4})?".toRegex())) return i
+            if (i == 3 && !enumValidator(token, arrayOf('N', 'S'), true)) return i
+            // longitude ddddmm.ssss
+            if (i == 4 && !longitudeValidator(token, true)) return i
             // W or E
-            if (i == 5 && !token.matches("([WE])?".toRegex())) return i
+            if (i == 5 && !enumValidator(token, arrayOf('W', 'E'), true)) return i
             // quality 0, 1 or 2 (not fixed, fixed, differential fixed)
-            if (i == 6 && !token.matches("([012])?".toRegex())) return i
+            if (i == 6 && !enumValidator(token, arrayOf('0', '1', '2'), true)) return i
             // satellites count 0-12
-            if (i == 7 && !token.matches("([01][012]?)?".toRegex())) return i
+            if (i == 7 && !intValidator(token, true, 0, 12)) return i
             // horizontal dilution of precision
-            if (i == 8 && !token.matches("(\\d+\\.\\d+)?".toRegex())) return i
+            if (i == 8 && !doubleValidator(token, true)) return i
             // altitude geoid (mean sea level) in meter
-            if (i == 9 && !token.matches("(-?\\d+\\.\\d+)?".toRegex())) return i
+            if (i == 9 && !doubleValidator(token, true)) return i
             // altitude unit M
-            if (i == 10 && !token.matches("(M)?".toRegex())) return i
+            if (i == 10 && !enumValidator(token, arrayOf('M'), true)) return i
             // WGS-84 earth ellipsoid offset
-            if (i == 11 && !token.matches("(-?\\d+\\.\\d+)?".toRegex())) return i
+            if (i == 11 && !doubleValidator(token, true)) return i
             // ellipsoid offset unit M
-            if (i == 12 && !token.matches("(M)?".toRegex())) return i
+            if (i == 12 && !enumValidator(token, arrayOf('M'), true)) return i
             // age of differential GPS data (seconds)
-            if (i == 13 && !token.matches("(\\d+\\.\\d+)?".toRegex())) return i
+            if (i == 13 && !doubleValidator(token, true)) return i
             // station
-            if (i == 14 && !token.matches("([01]\\d{3})?".toRegex())) return i
+            if (i == 14 && !stringValidator(token, true, 4, 4)) return i
         }
 
         return -1
