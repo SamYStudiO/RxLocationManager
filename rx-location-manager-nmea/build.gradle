@@ -20,7 +20,6 @@ android {
 }
 
 dependencies {
-    implementation project(':rx-location-manager')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
     testImplementation "junit:junit:$versions.junit"
     testImplementation "org.mockito:mockito-core:$versions.mockito"
