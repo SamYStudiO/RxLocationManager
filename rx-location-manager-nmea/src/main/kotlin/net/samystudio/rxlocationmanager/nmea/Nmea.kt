@@ -34,8 +34,9 @@ abstract class Nmea constructor(val message: String) {
     }
 
     /**
-     * Validate Nmea [data] array.
-     * Return -1 if validation is successful or a array index where validation failed.
+     * Get [TokenValidator] for each [message] tokens. Returned array size should match message data
+     * count. Note checksum doesn't count as a token, there is no need to validate it, this is done
+     * internally.
      */
     protected abstract fun getTokenValidators(): Array<TokenValidator>
 
@@ -71,7 +72,6 @@ abstract class Nmea constructor(val message: String) {
     }
 
     companion object {
-
         internal const val BLANK_ERROR_MESSAGE = "Message is blank"
         internal const val MISSING_DOLLAR_ERROR_MESSAGE = "Message should stat with $"
         internal const val CANNOT_FIND_CHECKSUM_ERROR_MESSAGE = "Cannot find checksum from message"
