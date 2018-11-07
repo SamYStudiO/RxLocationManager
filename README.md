@@ -5,14 +5,26 @@ Android [Reactive](https://github.com/ReactiveX/RxJava) [LocationManager](https:
 This library also includes some helper observables to get altitude using GPS, barometric sensor or a remote service (build in Google elevation API implementation included).
 GPS altitude may returned both ellipsoidal and geoidal (mean sea level), android [Location.getAltitude()](https://developer.android.com/reference/android/location/Location.html#getAltitude()) returns ellipsoidal altitude but in most case you want to get geoidal one.
 
+An extra standalone library is available to parse NMEA messages that may be returned from `observeNmea()`. Actual available parsers are:
+- GGA
+- GLL
+- GSA
+- more to come... and PR welcome!
+
+You can easily add you own parser, just inherit from `net.samystudio.rxlocationmanager.nmea.Nmea` class and use `net.samystudio.rxlocationmanager.nmea.TokenValidator` to validate your messages.
+
 Download
 --------
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.2.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.3.0'
 ```
 If you need altitude helpers observables add this as well:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.2.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.3.0'
+```
+If you want to easily parse nmea messages you can use this standalone artifact (note this is already include if you added rxlocationmanager-altitude dependency):
+```groovy
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.3.0'
 ```
 
 Snapshots are available from [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/).
@@ -27,14 +39,11 @@ allprojects {
     }
 }
 ```
-and change library version:
-
+and change versions:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.3.0-SNAPSHOT'
-```
-If you need altitude helpers observables add this as well:
-```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.3.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.4.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.4.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.4.0-SNAPSHOT'
 ```
 
 License
