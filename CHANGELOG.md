@@ -1,4 +1,4 @@
-0.2.0 (2018-11-07)
+0.3.0 (2018-11-07)
 ------------------
 - Add Nmea rxlocationmanager-nmea module library to easily parse name sentence.
 - Migrate altitude module nmea parsing with new nmea parser module library.
