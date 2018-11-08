@@ -143,7 +143,7 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGnssStatusChanged(): Observable<GnssStatus> =
+    fun observeGnssStatusOnChanged(): Observable<GnssStatus> =
         observeGnssStatus()
             .filter { t -> t is GnssStatusState.StateChanged }
             .map { t -> (t as GnssStatusState.StateChanged).status }
