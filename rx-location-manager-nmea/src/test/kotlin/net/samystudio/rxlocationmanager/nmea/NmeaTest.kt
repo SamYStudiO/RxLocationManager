@@ -21,7 +21,7 @@ class NmeaTest {
 
     @Test
     fun blankError() {
-        val expected = NmeaException("Message is blank")
+        val expected = NmeaException(Nmea.BLANK_ERROR_MESSAGE)
         var result: NmeaException? = null
         try {
             object :
@@ -42,7 +42,7 @@ class NmeaTest {
 
     @Test
     fun dollarMissingError() {
-        val expected = NmeaException("Message should stat with $", 0)
+        val expected = NmeaException(Nmea.MISSING_DOLLAR_ERROR_MESSAGE, 0)
         var result: NmeaException? = null
         try {
             object :
@@ -63,7 +63,7 @@ class NmeaTest {
 
     @Test
     fun checksumMissingError() {
-        val expected = NmeaException("Cannot find checksum from message")
+        val expected = NmeaException(Nmea.CANNOT_FIND_CHECKSUM_ERROR_MESSAGE)
         var result: NmeaException? = null
         try {
             object :
@@ -84,7 +84,7 @@ class NmeaTest {
 
     @Test
     fun checksumDoesNotNotMatchError() {
-        val expected = NmeaException("Message checksum 55 doesn't match 5E")
+        val expected = NmeaException(Nmea.getChecksumErrorMessage("55", "5E"))
         var result: NmeaException? = null
         try {
             object :
