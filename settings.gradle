@@ -1,1 +1,1 @@
-include ':rx-location-manager', ':rx-location-manager-altitude', ':rx-location-manager-nmea'
+include ':rx-location-manager', ':rx-location-manager-altitude', ':rx-location-manager-nmea', ':rx-location-manager-sample'
