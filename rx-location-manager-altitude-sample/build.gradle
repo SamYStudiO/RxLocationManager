@@ -8,7 +8,7 @@ android {
     defaultConfig {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        applicationId "net.samystudio.rxlocationmanager"
+        applicationId "net.samystudio.rxlocationmanager.altitude"
         versionCode 1
         versionName "1.0"
     }
@@ -29,5 +29,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "net.samystudio.rxlocationmanager:rxlocationmanager:$versions.rxlocationmanager"
+    implementation "net.samystudio.rxlocationmanager:rxlocationmanager-altitude:$versions.rxlocationmanager"
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 }
