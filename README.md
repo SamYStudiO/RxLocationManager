@@ -46,6 +46,10 @@ implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.4.
 implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.4.0-SNAPSHOT'
 ```
 
+Usage
+-----
+Check `xxx-sample` directories. A lot of samples showcase [RxPermissions](https://github.com/tbruyelle/RxPermissions) library as well to easily request location permission for callbacks that require it.
+
 License
 -------
 
