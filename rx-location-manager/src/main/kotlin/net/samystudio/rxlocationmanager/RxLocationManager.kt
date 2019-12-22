@@ -1,4 +1,7 @@
-@file:Suppress("unused", "DEPRECATION", "MissingPermission", "MemberVisibilityCanBePrivate")
+@file:Suppress(
+    "unused", "DEPRECATION", "MissingPermission", "MemberVisibilityCanBePrivate",
+    "UNUSED_PARAMETER"
+)
 
 package net.samystudio.rxlocationmanager
 
@@ -9,6 +12,8 @@ import android.content.Context
 import android.location.*
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
@@ -16,6 +21,7 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import net.samystudio.rxlocationmanager.RxLocationManager.observeGnssStatus
+import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -43,7 +49,8 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeNmea(): Observable<NmeaEvent> = NmeaObservable(locationManager)
+    fun observeNmea(handler: Handler? = null): Observable<NmeaEvent> =
+        NmeaObservable(locationManager, handler)
 
     /**
      * [LocationManager.registerGnssMeasurementsCallback]
@@ -54,8 +61,8 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
-    fun observeGnssMeasurements(): Observable<GnssMeasurementsState> =
-        GnssMeasurementsObservable(locationManager)
+    fun observeGnssMeasurements(handler: Handler? = null): Observable<GnssMeasurementsState> =
+        GnssMeasurementsObservable(locationManager, handler)
 
 
     /**
@@ -66,8 +73,8 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
-    fun observeGnssMeasurementsEvent(): Observable<GnssMeasurementsEvent> =
-        observeGnssMeasurements()
+    fun observeGnssMeasurementsEvent(handler: Handler? = null): Observable<GnssMeasurementsEvent> =
+        observeGnssMeasurements(handler)
             .filter { it is GnssMeasurementsState.StateEvent }
             .map { (it as GnssMeasurementsState.StateEvent).event }
 
@@ -79,8 +86,8 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
-    fun observeGnssMeasurementsStatus(): Observable<Int> =
-        observeGnssMeasurements()
+    fun observeGnssMeasurementsStatus(handler: Handler? = null): Observable<Int> =
+        observeGnssMeasurements(handler)
             .filter { it is GnssMeasurementsState.StateStatus }
             .map { (it as GnssMeasurementsState.StateStatus).status }
 
@@ -93,8 +100,8 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
-    fun observeGnssNavigationMessage(): Observable<GnssNavigationMessageState> =
-        GnssNavigationMessageObservable(locationManager)
+    fun observeGnssNavigationMessage(handler: Handler? = null): Observable<GnssNavigationMessageState> =
+        GnssNavigationMessageObservable(locationManager, handler)
 
     /**
      * [LocationManager.registerGnssNavigationMessageCallback]
@@ -104,8 +111,8 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
-    fun observeGnssNavigationMessageEvent(): Observable<GnssNavigationMessage> =
-        observeGnssNavigationMessage()
+    fun observeGnssNavigationMessageEvent(handler: Handler? = null): Observable<GnssNavigationMessage> =
+        observeGnssNavigationMessage(handler)
             .filter { it is GnssNavigationMessageState.StateEvent }
             .map { (it as GnssNavigationMessageState.StateEvent).event }
 
@@ -117,8 +124,8 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
-    fun observeGnssNavigationMessageStatus(): Observable<Int> =
-        observeGnssNavigationMessage()
+    fun observeGnssNavigationMessageStatus(handler: Handler? = null): Observable<Int> =
+        observeGnssNavigationMessage(handler)
             .filter { it is GnssNavigationMessageState.StateStatus }
             .map { (it as GnssNavigationMessageState.StateStatus).status }
 
@@ -132,7 +139,8 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGnssStatus(): Observable<GnssStatusState> = GnssStatusObservable(locationManager)
+    fun observeGnssStatus(handler: Handler? = null): Observable<GnssStatusState> =
+        GnssStatusObservable(locationManager, handler)
 
     /**
      * Prior to [Build.VERSION_CODES.N] [GnssStatusState.StateChanged.status] will always be null.
@@ -143,8 +151,8 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGnssStatusOnChanged(): Observable<GnssStatus> =
-        observeGnssStatus()
+    fun observeGnssStatusOnChanged(handler: Handler? = null): Observable<GnssStatus> =
+        observeGnssStatus(handler)
             .filter { t -> t is GnssStatusState.StateChanged }
             .map { t -> (t as GnssStatusState.StateChanged).status }
 
@@ -158,8 +166,8 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGnssStatusOnFirstFix(): Observable<Int> =
-        observeGnssStatus()
+    fun observeGnssStatusOnFirstFix(handler: Handler? = null): Observable<Int> =
+        observeGnssStatus(handler)
             .filter { t -> t is GnssStatusState.StateFirstFix }
             .map { t -> (t as GnssStatusState.StateFirstFix).ttffMillis }
 
@@ -170,8 +178,8 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGnssStatusOnStarted(): Observable<Unit> =
-        observeGnssStatus()
+    fun observeGnssStatusOnStarted(handler: Handler? = null): Observable<Unit> =
+        observeGnssStatus(handler)
             .filter { t -> t is GnssStatusState.StateStarted }
             .map { }
 
@@ -182,8 +190,8 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGnssStatusOnStopped(): Observable<Unit> =
-        observeGnssStatus()
+    fun observeGnssStatusOnStopped(handler: Handler? = null): Observable<Unit> =
+        observeGnssStatus(handler)
             .filter { t -> t is GnssStatusState.StateStopped }
             .map { }
 
@@ -199,9 +207,10 @@ object RxLocationManager {
     fun observeLocationUpdatesState(
         provider: Provider,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<LocationUpdatesState> =
-        LocationUpdatesObservable(locationManager, provider, minTime, minDistance)
+        LocationUpdatesObservable(locationManager, provider, minTime, minDistance, looper)
 
     /**
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
@@ -215,9 +224,10 @@ object RxLocationManager {
     fun observeLocationUpdatesState(
         criteria: Criteria,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<LocationUpdatesState> =
-        LocationUpdatesObservable(locationManager, criteria, minTime, minDistance)
+        LocationUpdatesObservable(locationManager, criteria, minTime, minDistance, looper)
 
     /**
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
@@ -231,12 +241,14 @@ object RxLocationManager {
     fun observeLocationChanged(
         provider: Provider,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<Location> =
         observeLocationUpdatesState(
             provider,
             minTime,
-            minDistance
+            minDistance,
+            looper
         ).filter { t -> t is LocationUpdatesState.StateLocationChanged }
             .map { t -> (t as LocationUpdatesState.StateLocationChanged).location }
 
@@ -252,12 +264,14 @@ object RxLocationManager {
     fun observeLocationChanged(
         criteria: Criteria,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<Location> =
         observeLocationUpdatesState(
             criteria,
             minTime,
-            minDistance
+            minDistance,
+            looper
         ).filter { t -> t is LocationUpdatesState.StateLocationChanged }
             .map { t -> (t as LocationUpdatesState.StateLocationChanged).location }
 
@@ -270,12 +284,14 @@ object RxLocationManager {
     fun observeLocationStatusChanged(
         provider: Provider,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<LocationUpdatesState.StateStatusChanged> =
         observeLocationUpdatesState(
             provider,
             minTime,
-            minDistance
+            minDistance,
+            looper
         ).filter { t -> t is LocationUpdatesState.StateStatusChanged }
             .map { t -> (t as LocationUpdatesState.StateStatusChanged) }
 
@@ -288,11 +304,13 @@ object RxLocationManager {
     fun observeLocationStatusChanged(
         criteria: Criteria,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<LocationUpdatesState.StateStatusChanged> = observeLocationUpdatesState(
         criteria,
         minTime,
-        minDistance
+        minDistance,
+        looper
     ).filter { t -> t is LocationUpdatesState.StateStatusChanged }
         .map { t -> (t as LocationUpdatesState.StateStatusChanged) }
 
@@ -305,12 +323,14 @@ object RxLocationManager {
     fun observeLocationProviderEnabled(
         provider: Provider,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<LocationUpdatesState.StateProviderEnabled> =
         observeLocationUpdatesState(
             provider,
             minTime,
-            minDistance
+            minDistance,
+            looper
         ).filter { t -> t is LocationUpdatesState.StateProviderEnabled }
             .map { t -> (t as LocationUpdatesState.StateProviderEnabled) }
 
@@ -323,12 +343,14 @@ object RxLocationManager {
     fun observeLocationProviderEnabled(
         criteria: Criteria,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<LocationUpdatesState.StateProviderEnabled> =
         observeLocationUpdatesState(
             criteria,
             minTime,
-            minDistance
+            minDistance,
+            looper
         ).filter { t -> t is LocationUpdatesState.StateProviderEnabled }
             .map { t -> (t as LocationUpdatesState.StateProviderEnabled) }
 
@@ -341,12 +363,14 @@ object RxLocationManager {
     fun observeLocationProviderDisabled(
         provider: Provider,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<LocationUpdatesState.StateProviderDisabled> =
         observeLocationUpdatesState(
             provider,
             minTime,
-            minDistance
+            minDistance,
+            looper
         ).filter { t -> t is LocationUpdatesState.StateProviderDisabled }
             .map { t -> (t as LocationUpdatesState.StateProviderDisabled) }
 
@@ -359,12 +383,14 @@ object RxLocationManager {
     fun observeLocationProviderDisabled(
         criteria: Criteria,
         minTime: Long,
-        minDistance: Float
+        minDistance: Float,
+        looper: Looper? = null
     ): Observable<LocationUpdatesState.StateProviderDisabled> =
         observeLocationUpdatesState(
             criteria,
             minTime,
-            minDistance
+            minDistance,
+            looper
         ).filter { t -> t is LocationUpdatesState.StateProviderDisabled }
             .map { t -> (t as LocationUpdatesState.StateProviderDisabled) }
 
@@ -382,13 +408,16 @@ object RxLocationManager {
     }
 
     @VisibleForTesting
-    internal class NmeaObservable(private val locationManager: LocationManager?) :
+    internal class NmeaObservable(
+        private val locationManager: LocationManager?,
+        private val handler: Handler? = null
+    ) :
         Observable<NmeaEvent>() {
         override fun subscribeActual(observer: Observer<in NmeaEvent>) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val listener = NListener(observer, locationManager)
                 observer.onSubscribe(listener)
-                locationManager?.addNmeaListener(listener)
+                locationManager?.addNmeaListener(listener, handler)
             } else {
                 val listener = Listener(observer, locationManager)
                 observer.onSubscribe(listener)
@@ -426,12 +455,15 @@ object RxLocationManager {
 
     @VisibleForTesting
     @TargetApi(Build.VERSION_CODES.N)
-    internal class GnssMeasurementsObservable(private val locationManager: LocationManager?) :
+    internal class GnssMeasurementsObservable(
+        private val locationManager: LocationManager?,
+        private val handler: Handler? = null
+    ) :
         Observable<GnssMeasurementsState>() {
         override fun subscribeActual(observer: Observer<in GnssMeasurementsState>) {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
-            locationManager?.registerGnssMeasurementsCallback(listener.callback)
+            locationManager?.registerGnssMeasurementsCallback(listener.callback, handler)
         }
 
         class Listener(
@@ -456,12 +488,15 @@ object RxLocationManager {
 
     @VisibleForTesting
     @TargetApi(Build.VERSION_CODES.N)
-    internal class GnssNavigationMessageObservable(private val locationManager: LocationManager?) :
+    internal class GnssNavigationMessageObservable(
+        private val locationManager: LocationManager?,
+        private val handler: Handler? = null
+    ) :
         Observable<GnssNavigationMessageState>() {
         override fun subscribeActual(observer: Observer<in GnssNavigationMessageState>) {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
-            locationManager?.registerGnssNavigationMessageCallback(listener.callback)
+            locationManager?.registerGnssNavigationMessageCallback(listener.callback, handler)
         }
 
         class Listener(
@@ -485,13 +520,16 @@ object RxLocationManager {
     }
 
     @VisibleForTesting
-    internal class GnssStatusObservable(private val locationManager: LocationManager?) :
+    internal class GnssStatusObservable(
+        private val locationManager: LocationManager?,
+        private val handler: Handler? = null
+    ) :
         Observable<GnssStatusState>() {
         override fun subscribeActual(observer: Observer<in GnssStatusState>) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val listener = NListener(observer, locationManager)
                 observer.onSubscribe(listener)
-                locationManager?.registerGnssStatusCallback(listener.callback)
+                locationManager?.registerGnssStatusCallback(listener.callback, handler)
             } else {
                 val listener = Listener(observer, locationManager)
                 observer.onSubscribe(listener)
@@ -553,21 +591,24 @@ object RxLocationManager {
         private val minTime: Long,
         private val minDistance: Float,
         private val provider: Provider? = null,
-        private val criteria: Criteria? = null
+        private val criteria: Criteria? = null,
+        private val looper: Looper? = null
     ) : Observable<LocationUpdatesState>() {
         constructor(
             locationManager: LocationManager?,
             criteria: Criteria,
             minTime: Long,
-            minDistance: Float
-        ) : this(locationManager, minTime, minDistance, criteria = criteria)
+            minDistance: Float,
+            looper: Looper? = null
+        ) : this(locationManager, minTime, minDistance, criteria = criteria, looper = looper)
 
         constructor(
             locationManager: LocationManager?,
             provider: Provider,
             minTime: Long,
-            minDistance: Float
-        ) : this(locationManager, minTime, minDistance, provider = provider)
+            minDistance: Float,
+            looper: Looper? = null
+        ) : this(locationManager, minTime, minDistance, provider = provider, looper = looper)
 
         override fun subscribeActual(observer: Observer<in LocationUpdatesState>) {
             val listener = Listener(observer, locationManager)
@@ -575,10 +616,11 @@ object RxLocationManager {
 
             provider?.let {
                 locationManager?.requestLocationUpdates(
-                    it.name.toLowerCase(),
+                    it.name.toLowerCase(Locale.getDefault()),
                     minTime,
                     minDistance,
-                    listener
+                    listener,
+                    looper
                 )
             } ?: criteria?.let {
                 locationManager?.requestLocationUpdates(
@@ -586,7 +628,7 @@ object RxLocationManager {
                     minDistance,
                     it,
                     listener,
-                    null
+                    looper
                 )
             }
         }
@@ -607,7 +649,7 @@ object RxLocationManager {
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle?) {
                 observer.onNext(
                     LocationUpdatesState.StateStatusChanged(
-                        Provider.valueOf(provider.toUpperCase()),
+                        Provider.valueOf(provider.toUpperCase(Locale.getDefault())),
                         status,
                         extras
                     )
@@ -615,11 +657,27 @@ object RxLocationManager {
             }
 
             override fun onProviderEnabled(provider: String) {
-                observer.onNext(LocationUpdatesState.StateProviderEnabled(Provider.valueOf(provider.toUpperCase())))
+                observer.onNext(
+                    LocationUpdatesState.StateProviderEnabled(
+                        Provider.valueOf(
+                            provider.toUpperCase(
+                                Locale.getDefault()
+                            )
+                        )
+                    )
+                )
             }
 
             override fun onProviderDisabled(provider: String) {
-                observer.onNext(LocationUpdatesState.StateProviderDisabled(Provider.valueOf(provider.toUpperCase())))
+                observer.onNext(
+                    LocationUpdatesState.StateProviderDisabled(
+                        Provider.valueOf(
+                            provider.toUpperCase(
+                                Locale.getDefault()
+                            )
+                        )
+                    )
+                )
             }
         }
     }
