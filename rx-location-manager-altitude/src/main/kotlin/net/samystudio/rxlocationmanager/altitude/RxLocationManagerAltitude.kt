@@ -9,6 +9,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
+import android.os.Handler
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
@@ -34,8 +35,8 @@ object RxLocationManagerAltitude {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGpsEllipsoidalAltitudeUpdates(): Observable<Double> =
-        RxLocationManager.observeNmea()
+    fun observeGpsEllipsoidalAltitudeUpdates(handler: Handler? = null): Observable<Double> =
+        RxLocationManager.observeNmea(handler)
             .flatMap {
                 try {
                     val gga = GGA(it.message)
@@ -56,8 +57,8 @@ object RxLocationManagerAltitude {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGpsGeoidalAltitudeUpdates(): Observable<Double> =
-        RxLocationManager.observeNmea()
+    fun observeGpsGeoidalAltitudeUpdates(handler: Handler? = null): Observable<Double> =
+        RxLocationManager.observeNmea(handler)
             .flatMap {
                 try {
                     val gga = GGA(it.message)

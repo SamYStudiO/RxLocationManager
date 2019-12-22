@@ -29,7 +29,7 @@ enum class LocationDirection {
         @JvmStatic
         fun valueOf(value: String, defaultValue: LocationDirection): LocationDirection {
             return try {
-                LocationDirection.valueOf(value)
+                valueOf(value)
             } catch (e: IllegalArgumentException) {
                 defaultValue
             }
