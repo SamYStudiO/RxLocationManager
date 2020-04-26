@@ -9,7 +9,7 @@ package net.samystudio.rxlocationmanager.nmea
 abstract class Nmea constructor(val message: String) {
     val data: List<String> by lazy { message.substring(1).split("*")[0].split(",") }
     val type: String by lazy { data[0] }
-    val checksum: String by lazy { message.split("*")[1] }
+    val checksum: String by lazy { message.split("*")[1].trimEnd() }
 
     init {
         if (message.isBlank()) throw NmeaException(BLANK_ERROR_MESSAGE)
