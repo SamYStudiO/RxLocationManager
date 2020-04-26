@@ -1,3 +1,9 @@
+0.4.0 (unreleased yet)
+------------------
+- Add hanler/looper arguments when possible to match Android API arguments.
+- Fix nmea parsing with trailing spaces
+- Renamed observeGnssStatusChanged to observeGnssStatusOnChanged for consistency
+
 0.3.0 (2018-11-07)
 ------------------
 - Add Nmea rxlocationmanager-nmea module library to easily parse name sentence.
@@ -5,7 +11,7 @@
 - Improve doc.
 
 0.2.0 (2018-11-03)
--------------------
+------------------
 - Make provider arguments easier with enum.
 - Make locationManager property public.
 - Make GnssStatus compatible pre N.
