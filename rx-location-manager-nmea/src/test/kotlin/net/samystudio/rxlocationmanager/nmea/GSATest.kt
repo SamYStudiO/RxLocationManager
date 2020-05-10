@@ -420,6 +420,14 @@ class GSATest {
         assertEquals(expected, result)
     }
 
+    @Test
+    fun validateSatelliteCount() {
+        var message = "\$GPGSA,M,3,,,22,,,85,,,14,23,,,10.1,12.2,14.4*07"
+        assertEquals(4, GSA(message).satelliteCount)
+        message = "\$GPGSA,M,3,10,,22,,,85,,,14,23,,11,10.1,12.2,14.4*06"
+        assertEquals(6, GSA(message).satelliteCount)
+    }
+
     companion object {
         private const val PRECISION = 0.0000001
     }
