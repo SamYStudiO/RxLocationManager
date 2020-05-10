@@ -68,6 +68,10 @@ class GGA(message: String) : Nmea(message) {
     }
 
     enum class Quality {
-        NO_FIX, FIX, DIFFERENTIAL_FIX;
+        NO_FIX,
+        FIX,
+        DIFFERENTIAL_FIX,
+        REAL_TIME_KINEMATIC_FIXED_INTEGER,
+        REAL_TIME_KINEMATIC_FLOAT_INTEGER
     }
 }
