@@ -31,6 +31,22 @@ class GSA(message: String) : Nmea(message) {
     val positionDilutionOfPrecision: Double? by lazy { data[15].toDoubleOrNull() }
     val horizontalDilutionOfPrecision: Double? by lazy { data[16].toDoubleOrNull() }
     val verticalDilutionOfPrecision: Double? by lazy { data[17].toDoubleOrNull() }
+    val satelliteCount: Int by lazy {
+        listOfNotNull(
+            satellite1,
+            satellite2,
+            satellite3,
+            satellite4,
+            satellite5,
+            satellite6,
+            satellite7,
+            satellite8,
+            satellite9,
+            satellite10,
+            satellite11,
+            satellite12
+        ).count()
+    }
 
     override fun getTokenValidators(): Array<TokenValidator> {
         val satelliteValidator = IntValidator(true, 0, 999)
