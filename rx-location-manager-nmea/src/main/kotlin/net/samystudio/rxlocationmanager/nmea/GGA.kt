@@ -48,8 +48,8 @@ class GGA(message: String) : Nmea(message) {
             EnumValidator(arrayOf('W', 'E'), true),
             // quality 0, 1 or 2 (not fixed, fixed, differential fixed)
             EnumValidator(arrayOf('0', '1', '2'), true),
-            // satellites count 0-12
-            IntValidator(true, 0, 12),
+            // satellites count
+            IntValidator(true, 0, 999),
             // horizontal dilution of precision
             optionalDoubleValidator,
             // altitude geoid (mean sea level) in meter
