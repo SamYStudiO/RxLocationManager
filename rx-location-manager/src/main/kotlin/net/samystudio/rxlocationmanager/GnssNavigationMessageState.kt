@@ -3,7 +3,7 @@ package net.samystudio.rxlocationmanager
 import android.location.GnssNavigationMessage
 
 /**
- * [GnssNavigationMessage.Callback]
+ * @see [GnssNavigationMessage.Callback]
  */
 sealed class GnssNavigationMessageState {
     data class StateEvent(val event: GnssNavigationMessage) : GnssNavigationMessageState()

@@ -5,7 +5,7 @@ import android.location.LocationListener
 import android.os.Bundle
 
 /**
- * [LocationListener]
+ * @see [LocationListener]
  */
 sealed class LocationUpdatesState {
     data class StateProviderEnabled(val provider: Provider) : LocationUpdatesState()
@@ -14,8 +14,7 @@ sealed class LocationUpdatesState {
         val provider: Provider,
         val status: Int,
         val extras: Bundle?
-    ) :
-        LocationUpdatesState()
+    ) : LocationUpdatesState()
 
     data class StateLocationChanged(val location: Location) : LocationUpdatesState()
 }

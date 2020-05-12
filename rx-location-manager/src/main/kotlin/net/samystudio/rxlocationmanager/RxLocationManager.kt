@@ -45,7 +45,7 @@ object RxLocationManager {
     }
 
     /**
-     * [LocationManager.addNmeaListener]
+     * @see [LocationManager.addNmeaListener]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
@@ -53,10 +53,10 @@ object RxLocationManager {
         NmeaObservable(locationManager, handler)
 
     /**
-     * [LocationManager.registerGnssMeasurementsCallback]
-     * [GnssMeasurementsEvent]
-     * [GnssMeasurementsEvent.Callback.onGnssMeasurementsReceived]
-     * [GnssMeasurementsEvent.Callback.onStatusChanged]
+     * @see [LocationManager.registerGnssMeasurementsCallback]
+     * @see [GnssMeasurementsEvent]
+     * @see [GnssMeasurementsEvent.Callback.onGnssMeasurementsReceived]
+     * @see [GnssMeasurementsEvent.Callback.onStatusChanged]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
@@ -66,9 +66,9 @@ object RxLocationManager {
 
 
     /**
-     * [LocationManager.registerGnssMeasurementsCallback]
-     * [GnssMeasurementsEvent]
-     * [GnssMeasurementsEvent.Callback.onGnssMeasurementsReceived]
+     * @see [LocationManager.registerGnssMeasurementsCallback]
+     * @see [GnssMeasurementsEvent]
+     * @see [GnssMeasurementsEvent.Callback.onGnssMeasurementsReceived]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
@@ -79,9 +79,9 @@ object RxLocationManager {
             .map { (it as GnssMeasurementsState.StateEvent).event }
 
     /**
-     * [LocationManager.registerGnssMeasurementsCallback]
-     * [GnssMeasurementsEvent]
-     * [GnssMeasurementsEvent.Callback.onStatusChanged]
+     * @see [LocationManager.registerGnssMeasurementsCallback]
+     * @see [GnssMeasurementsEvent]
+     * @see [GnssMeasurementsEvent.Callback.onStatusChanged]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
@@ -92,10 +92,10 @@ object RxLocationManager {
             .map { (it as GnssMeasurementsState.StateStatus).status }
 
     /**
-     * [LocationManager.registerGnssNavigationMessageCallback]
-     * [GnssNavigationMessage]
-     * [GnssNavigationMessage.Callback.onGnssNavigationMessageReceived]
-     * [GnssNavigationMessage.Callback.onStatusChanged]
+     * @see [LocationManager.registerGnssNavigationMessageCallback]
+     * @see [GnssNavigationMessage]
+     * @see [GnssNavigationMessage.Callback.onGnssNavigationMessageReceived]
+     * @see [GnssNavigationMessage.Callback.onStatusChanged]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
@@ -104,9 +104,9 @@ object RxLocationManager {
         GnssNavigationMessageObservable(locationManager, handler)
 
     /**
-     * [LocationManager.registerGnssNavigationMessageCallback]
-     * [GnssNavigationMessage]
-     * [GnssNavigationMessage.Callback.onGnssNavigationMessageReceived]
+     * @see [LocationManager.registerGnssNavigationMessageCallback]
+     * @see [GnssNavigationMessage]
+     * @see [GnssNavigationMessage.Callback.onGnssNavigationMessageReceived]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
@@ -117,9 +117,9 @@ object RxLocationManager {
             .map { (it as GnssNavigationMessageState.StateEvent).event }
 
     /**
-     * [LocationManager.registerGnssNavigationMessageCallback]
-     * [GnssNavigationMessage]
-     * [GnssNavigationMessage.Callback.onStatusChanged]
+     * @see [LocationManager.registerGnssNavigationMessageCallback]
+     * @see [GnssNavigationMessage]
+     * @see [GnssNavigationMessage.Callback.onStatusChanged]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
@@ -130,12 +130,12 @@ object RxLocationManager {
             .map { (it as GnssNavigationMessageState.StateStatus).status }
 
     /**
-     * [LocationManager.registerGnssStatusCallback]
-     * [GnssStatusState]
-     * [GnssStatusState.StateChanged]
-     * [GnssStatusState.StateFirstFix]
-     * [GnssStatusState.StateStarted]
-     * [GnssStatusState.StateStopped]
+     * @see [LocationManager.registerGnssStatusCallback]
+     * @see [GnssStatusState]
+     * @see [GnssStatusState.StateChanged]
+     * @see [GnssStatusState.StateFirstFix]
+     * @see [GnssStatusState.StateStarted]
+     * @see [GnssStatusState.StateStopped]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
@@ -145,9 +145,9 @@ object RxLocationManager {
     /**
      * Prior to [Build.VERSION_CODES.N] [GnssStatusState.StateChanged.status] will always be null.
      *
-     * [LocationManager.registerGnssStatusCallback]
-     * [GnssStatusState]
-     * [GnssStatusState.StateChanged]
+     * @see [LocationManager.registerGnssStatusCallback]
+     * @see [GnssStatusState]
+     * @see [GnssStatusState.StateChanged]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
@@ -160,9 +160,9 @@ object RxLocationManager {
      * Prior to [Build.VERSION_CODES.N] [GnssStatusState.StateFirstFix.ttffMillis] will always be
      * null.
      *
-     * [LocationManager.registerGnssStatusCallback]
-     * [GnssStatusState]
-     * [GnssStatusState.StateFirstFix]
+     * @see [LocationManager.registerGnssStatusCallback]
+     * @see [GnssStatusState]
+     * @see [GnssStatusState.StateFirstFix]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
@@ -172,9 +172,9 @@ object RxLocationManager {
             .map { t -> (t as GnssStatusState.StateFirstFix).ttffMillis }
 
     /**
-     * [LocationManager.registerGnssStatusCallback]
-     * [GnssStatusState]
-     * [GnssStatusState.StateStarted]
+     * @see [LocationManager.registerGnssStatusCallback]
+     * @see [GnssStatusState]
+     * @see [GnssStatusState.StateStarted]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
@@ -184,9 +184,9 @@ object RxLocationManager {
             .map { }
 
     /**
-     * [LocationManager.registerGnssStatusCallback]
-     * [GnssStatusState]
-     * [GnssStatusState.StateStopped]
+     * @see [LocationManager.registerGnssStatusCallback]
+     * @see [GnssStatusState]
+     * @see [GnssStatusState.StateStopped]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
@@ -199,8 +199,8 @@ object RxLocationManager {
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
      * to fetch a [Location].
      *
-     * [LocationManager.requestLocationUpdates] (String, Long, Float)
-     * [LocationUpdatesState]
+     * @see [LocationManager.requestLocationUpdates] (String, Long, Float)
+     * @see [LocationUpdatesState]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -216,8 +216,8 @@ object RxLocationManager {
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
      * to fetch a [Location].
      *
-     * [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
-     * [LocationUpdatesState]
+     * @see [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
+     * @see [LocationUpdatesState]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -233,8 +233,8 @@ object RxLocationManager {
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
      * to fetch a [Location].
      *
-     * [LocationManager.requestLocationUpdates] (String, Long, Float)
-     * [LocationUpdatesState.StateLocationChanged]
+     * @see [LocationManager.requestLocationUpdates] (String, Long, Float)
+     * @see [LocationUpdatesState.StateLocationChanged]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -256,8 +256,8 @@ object RxLocationManager {
      * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
      * to fetch a [Location].
      *
-     * [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
-     * [LocationUpdatesState.StateLocationChanged]
+     * @see [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
+     * @see [LocationUpdatesState.StateLocationChanged]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -276,8 +276,8 @@ object RxLocationManager {
             .map { t -> (t as LocationUpdatesState.StateLocationChanged).location }
 
     /**
-     * [LocationManager.requestLocationUpdates] (String, Long, Float)
-     * [LocationUpdatesState.StateStatusChanged]
+     * @see [LocationManager.requestLocationUpdates] (String, Long, Float)
+     * @see [LocationUpdatesState.StateStatusChanged]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -296,8 +296,8 @@ object RxLocationManager {
             .map { t -> (t as LocationUpdatesState.StateStatusChanged) }
 
     /**
-     * [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
-     * [LocationUpdatesState.StateStatusChanged]
+     * @see [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
+     * @see [LocationUpdatesState.StateStatusChanged]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -315,8 +315,8 @@ object RxLocationManager {
         .map { t -> (t as LocationUpdatesState.StateStatusChanged) }
 
     /**
-     * [LocationManager.requestLocationUpdates] (String, Long, Float)
-     * [LocationUpdatesState.StateProviderEnabled]
+     * @see [LocationManager.requestLocationUpdates] (String, Long, Float)
+     * @see [LocationUpdatesState.StateProviderEnabled]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -335,8 +335,8 @@ object RxLocationManager {
             .map { t -> (t as LocationUpdatesState.StateProviderEnabled) }
 
     /**
-     * [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
-     * [LocationUpdatesState.StateProviderEnabled]
+     * @see [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
+     * @see [LocationUpdatesState.StateProviderEnabled]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -355,8 +355,8 @@ object RxLocationManager {
             .map { t -> (t as LocationUpdatesState.StateProviderEnabled) }
 
     /**
-     * [LocationManager.requestLocationUpdates] (String, Long, Float)
-     * [LocationUpdatesState.StateProviderDisabled]
+     * @see [LocationManager.requestLocationUpdates] (String, Long, Float)
+     * @see [LocationUpdatesState.StateProviderDisabled]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
@@ -375,8 +375,8 @@ object RxLocationManager {
             .map { t -> (t as LocationUpdatesState.StateProviderDisabled) }
 
     /**
-     * [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
-     * [LocationUpdatesState.StateProviderDisabled]
+     * @see [LocationManager.requestLocationUpdates] (Criteria, Long, Float)
+     * @see [LocationUpdatesState.StateProviderDisabled]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic

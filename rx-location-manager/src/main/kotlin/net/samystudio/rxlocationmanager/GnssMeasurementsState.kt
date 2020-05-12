@@ -3,7 +3,7 @@ package net.samystudio.rxlocationmanager
 import android.location.GnssMeasurementsEvent
 
 /**
- * [GnssMeasurementsEvent.Callback]
+ * @see [GnssMeasurementsEvent.Callback]
  */
 sealed class GnssMeasurementsState {
     data class StateEvent(val event: GnssMeasurementsEvent) : GnssMeasurementsState()

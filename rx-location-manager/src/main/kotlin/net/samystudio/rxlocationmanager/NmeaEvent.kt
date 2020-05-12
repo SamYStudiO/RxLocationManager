@@ -6,7 +6,7 @@ import android.location.GpsStatus
 import android.location.OnNmeaMessageListener
 
 /**
- * [OnNmeaMessageListener]
- * [GpsStatus.NmeaListener]
+ * @see [OnNmeaMessageListener]
+ * @see [GpsStatus.NmeaListener]
  */
 data class NmeaEvent(val message: String, val timestamp: Long)
