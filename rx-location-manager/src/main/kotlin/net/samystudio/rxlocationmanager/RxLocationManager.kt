@@ -14,6 +14,7 @@ import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -40,6 +41,15 @@ object RxLocationManager {
             Context.LOCATION_SERVICE
         ) as LocationManager
     }
+
+    /**
+     * @see [LocationManager.getLastKnownLocation]
+     */
+    @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
+    @JvmStatic
+    fun getLastKnownLocation(provider: Provider): Maybe<Location> =
+        locationManager.getLastKnownLocation(provider.name.toLowerCase(Locale.ROOT))
+            ?.let { Maybe.just(it) } ?: run { Maybe.empty() }
 
     /**
      * @see [LocationManager.addNmeaListener]
