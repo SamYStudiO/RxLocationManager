@@ -30,11 +30,11 @@ class DoubleValidator(
 
 class TypeValidator(private val type: String) : TokenValidator {
     override fun validate(token: String): Boolean {
-        return token.matches(("[A-Z]{2}${type.toUpperCase()}").toRegex())
+        return token.matches(("[A-Z]{2}${type.toUpperCase(Locale.ROOT)}").toRegex())
     }
 }
 
-class EnumValidator(private val chars: Array<Char>, private val optional: Boolean = false) :
+class EnumValidator(private val chars: CharArray, private val optional: Boolean = false) :
     TokenValidator {
     override fun validate(token: String): Boolean {
         if (token.isBlank() && optional) return true
