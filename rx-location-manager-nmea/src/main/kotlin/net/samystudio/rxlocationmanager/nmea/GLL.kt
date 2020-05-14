@@ -29,15 +29,15 @@ class GLL(message: String) : Nmea(message) {
             // latitude ddmm.ssss
             LatitudeValidator(true),
             // N or S
-            EnumValidator(arrayOf('N', 'S'), true),
+            EnumValidator(charArrayOf('N', 'S'), true),
             // longitude ddddmm.ssss
             LongitudeValidator(true),
             // W or E
-            EnumValidator(arrayOf('W', 'E'), true),
+            EnumValidator(charArrayOf('W', 'E'), true),
             // UTC time hhmmss(.sss)
             TimeValidator(true),
             // status A (valid) or V (invalid)
-            EnumValidator(arrayOf('A', 'V'), true)
+            EnumValidator(charArrayOf('A', 'V'), true)
         )
     }
 

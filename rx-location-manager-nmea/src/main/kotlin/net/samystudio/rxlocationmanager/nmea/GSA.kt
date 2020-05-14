@@ -56,9 +56,9 @@ class GSA(message: String) : Nmea(message) {
             // type $__GSA
             TypeValidator("GSA"),
             // mode1 A (automatic) or M (manual)
-            EnumValidator(arrayOf('A', 'M'), true),
+            EnumValidator(charArrayOf('A', 'M'), true),
             // mode2 1 (fix not available) 2 (2D) or 3 (3D)
-            EnumValidator(arrayOf('1', '2', '3'), true),
+            EnumValidator(charArrayOf('1', '2', '3'), true),
             // satellite 1
             satelliteValidator,
             // satellite 2

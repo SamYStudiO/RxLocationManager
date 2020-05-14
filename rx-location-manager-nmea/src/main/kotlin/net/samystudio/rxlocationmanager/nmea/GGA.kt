@@ -31,7 +31,7 @@ class GGA(message: String) : Nmea(message) {
 
     override fun getTokenValidators(): Array<TokenValidator> {
         val optionalDoubleValidator = DoubleValidator(true)
-        val meterValidator = EnumValidator(arrayOf('M'), true)
+        val meterValidator = EnumValidator(charArrayOf('M'), true)
 
         return arrayOf(
             // type $__GGA
@@ -41,14 +41,14 @@ class GGA(message: String) : Nmea(message) {
             // latitude ddmm.ssss
             LatitudeValidator(true),
             // N or S
-            EnumValidator(arrayOf('N', 'S'), true),
+            EnumValidator(charArrayOf('N', 'S'), true),
             // longitude ddddmm.ssss
             LongitudeValidator(true),
             // W or E
-            EnumValidator(arrayOf('W', 'E'), true),
+            EnumValidator(charArrayOf('W', 'E'), true),
             // quality 0, 1 or 2 (not fixed, fixed, differential fixed)
-            EnumValidator(arrayOf('0', '1', '2'), true),
-            // satellites count
+            EnumValidator(charArrayOf('0', '1', '2'), true),
+            // satellite count
             IntValidator(true, 0, 999),
             // horizontal dilution of precision
             optionalDoubleValidator,
