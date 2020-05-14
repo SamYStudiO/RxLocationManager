@@ -1,7 +1,4 @@
-@file:Suppress(
-    "unused", "DEPRECATION", "MissingPermission", "MemberVisibilityCanBePrivate",
-    "UNUSED_PARAMETER"
-)
+@file:Suppress("MissingPermission", "DEPRECATION", "unused")
 
 package net.samystudio.rxlocationmanager
 
@@ -196,9 +193,6 @@ object RxLocationManager {
             .map { }
 
     /**
-     * You  should consider using [LocationServices](https://developers.google.com/android/reference/com/google/android/gms/location/LocationServices)
-     * to fetch a [Location].
-     *
      * @see [LocationManager.requestLocationUpdates] (String, Long, Float)
      * @see [LocationUpdatesState]
      */
@@ -411,8 +405,7 @@ object RxLocationManager {
     internal class NmeaObservable(
         private val locationManager: LocationManager?,
         private val handler: Handler? = null
-    ) :
-        Observable<NmeaEvent>() {
+    ) : Observable<NmeaEvent>() {
         override fun subscribeActual(observer: Observer<in NmeaEvent>) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val listener = NListener(observer, locationManager)
@@ -458,8 +451,7 @@ object RxLocationManager {
     internal class GnssMeasurementsObservable(
         private val locationManager: LocationManager?,
         private val handler: Handler? = null
-    ) :
-        Observable<GnssMeasurementsState>() {
+    ) : Observable<GnssMeasurementsState>() {
         override fun subscribeActual(observer: Observer<in GnssMeasurementsState>) {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
@@ -491,8 +483,7 @@ object RxLocationManager {
     internal class GnssNavigationMessageObservable(
         private val locationManager: LocationManager?,
         private val handler: Handler? = null
-    ) :
-        Observable<GnssNavigationMessageState>() {
+    ) : Observable<GnssNavigationMessageState>() {
         override fun subscribeActual(observer: Observer<in GnssNavigationMessageState>) {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
@@ -523,8 +514,7 @@ object RxLocationManager {
     internal class GnssStatusObservable(
         private val locationManager: LocationManager?,
         private val handler: Handler? = null
-    ) :
-        Observable<GnssStatusState>() {
+    ) : Observable<GnssStatusState>() {
         override fun subscribeActual(observer: Observer<in GnssStatusState>) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val listener = NListener(observer, locationManager)
