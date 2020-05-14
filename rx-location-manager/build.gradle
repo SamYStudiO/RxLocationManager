@@ -13,15 +13,14 @@ android {
         test.java.srcDirs += 'src/test/kotlin'
     }
 
-    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
-    libraryVariants.all {
-        it.generateBuildConfig.enabled = false
+    buildFeatures {
+        buildConfig = true
     }
 }
 
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+    implementation "androidx.core:core-ktx:$versions.core"
     api "androidx.annotation:annotation:$versions.annotation"
     api "io.reactivex.rxjava2:rxjava:$versions.rxjava"
     api "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"

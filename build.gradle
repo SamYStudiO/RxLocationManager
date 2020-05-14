@@ -1,9 +1,8 @@
 buildscript {
     ext {
         versions = [
-                // TODO waiting for SDK 30 to bump https://issuetracker.google.com/issues/141019880
-                compileSdk       : 28,
-                targetSdk        : 28,
+                compileSdk       : "android-R",
+                targetSdk        : "R",
                 minSdk           : 14,
 
                 kotlin           : '1.3.72',
@@ -23,7 +22,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.0-rc01'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     }
 }
