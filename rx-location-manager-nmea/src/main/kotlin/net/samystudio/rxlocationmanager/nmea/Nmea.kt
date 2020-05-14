@@ -3,7 +3,7 @@
 package net.samystudio.rxlocationmanager.nmea
 
 /**
- * [message] A valid Nmea message starting with "$" followed by message data delimit with "," and
+ * @param message A valid Nmea message starting with "$" followed by message data delimit with "," and
  * ending with checksum "*XX".
  */
 abstract class Nmea constructor(val message: String) {
