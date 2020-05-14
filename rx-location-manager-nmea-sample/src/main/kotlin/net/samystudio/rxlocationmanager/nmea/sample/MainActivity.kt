@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                         val gga = GGA(it.message)
                         Log.d("observeNmea", gga.altitude.toString())
                     } catch (e: NmeaException) {
-                        Log.w("observeNmea", e.message)
+                        Log.w("observeNmea", e.message ?: "")
                     }
                 }
         )
