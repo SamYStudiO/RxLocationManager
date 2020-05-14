@@ -28,6 +28,7 @@ class GSATest {
         assertEquals(23, gsa.satellite10)
         assertEquals(null, gsa.satellite11)
         assertEquals(null, gsa.satellite12)
+        assertEquals(4, gsa.satelliteCount)
         assertEquals(10.1, gsa.positionDilutionOfPrecision!!, PRECISION)
         assertEquals(12.2, gsa.horizontalDilutionOfPrecision!!, PRECISION)
         assertEquals(14.4, gsa.verticalDilutionOfPrecision!!, PRECISION)
@@ -36,11 +37,11 @@ class GSATest {
 
     @Test
     fun validateEmpty() {
-        val gsa = GSA("\$GPGSA,,,,,,,,,,,,,,,,,*6E")
+        val gsa = GSA("\$GPGSA,A,1,,,,,,,,,,,,,,,*1E")
 
         assertEquals("GPGSA", gsa.type)
-        assertEquals(null, gsa.mode1)
-        assertEquals(null, gsa.mode2)
+        assertEquals(GSA.Mode1.A, gsa.mode1)
+        assertEquals(GSA.Mode2.FIX_NOT_AVAILABLE, gsa.mode2)
         assertEquals(null, gsa.satellite1)
         assertEquals(null, gsa.satellite2)
         assertEquals(null, gsa.satellite3)
@@ -53,10 +54,11 @@ class GSATest {
         assertEquals(null, gsa.satellite10)
         assertEquals(null, gsa.satellite11)
         assertEquals(null, gsa.satellite12)
+        assertEquals(0, gsa.satelliteCount)
         assertEquals(null, gsa.positionDilutionOfPrecision)
         assertEquals(null, gsa.horizontalDilutionOfPrecision)
         assertEquals(null, gsa.verticalDilutionOfPrecision)
-        assertEquals("6E", gsa.checksum)
+        assertEquals("1E", gsa.checksum)
     }
 
     @Test

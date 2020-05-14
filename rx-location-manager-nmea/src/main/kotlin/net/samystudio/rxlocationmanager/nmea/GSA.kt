@@ -1,20 +1,20 @@
 package net.samystudio.rxlocationmanager.nmea
 
 class GSA(message: String) : Nmea(message) {
-    val mode1: Mode1? by lazy {
+    val mode1: Mode1 by lazy {
         try {
             Mode1.valueOf(data[1])
         } catch (e: IllegalArgumentException) {
-            null
+            Mode1.A
         }
     }
-    val mode2: Mode2? by lazy {
+    val mode2: Mode2 by lazy {
         try {
             return@lazy Mode2.values()[data[2].toInt() - 1]
         } catch (e: NumberFormatException) {
         } catch (e: ArrayIndexOutOfBoundsException) {
         }
-        null
+        Mode2.FIX_NOT_AVAILABLE
     }
     val satellite1: Int? by lazy { data[3].toIntOrNull() }
     val satellite2: Int? by lazy { data[4].toIntOrNull() }
@@ -92,6 +92,10 @@ class GSA(message: String) : Nmea(message) {
         )
     }
 
+    /**
+     * A=Automatic
+     * M=Manual
+     */
     enum class Mode1 {
         A, M;
     }
