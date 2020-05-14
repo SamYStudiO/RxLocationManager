@@ -27,7 +27,7 @@ enum class LocationDirection {
 
     companion object {
         @JvmStatic
-        fun valueOf(value: String, defaultValue: LocationDirection): LocationDirection {
+        fun valueOf(value: String, defaultValue: LocationDirection?): LocationDirection? {
             return try {
                 valueOf(value)
             } catch (e: IllegalArgumentException) {

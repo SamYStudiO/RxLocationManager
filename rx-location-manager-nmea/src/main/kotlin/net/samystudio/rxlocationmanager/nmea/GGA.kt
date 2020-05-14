@@ -5,13 +5,13 @@ class GGA(message: String) : Nmea(message) {
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[2],
-            LocationDirection.valueOf(data[3], LocationDirection.N)
+            LocationDirection.valueOf(data[3], LocationDirection.N)!!
         )
     }
     val longitude: Double? by lazy {
         convertNmeaLocation(
             data[4],
-            LocationDirection.valueOf(data[5], LocationDirection.E)
+            LocationDirection.valueOf(data[5], LocationDirection.E)!!
         )
     }
     val quality: Quality by lazy {

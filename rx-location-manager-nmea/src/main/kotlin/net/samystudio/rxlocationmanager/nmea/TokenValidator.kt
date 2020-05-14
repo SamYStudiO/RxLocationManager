@@ -1,5 +1,7 @@
 package net.samystudio.rxlocationmanager.nmea
 
+import java.util.*
+
 interface TokenValidator {
     fun validate(token: String): Boolean
 }
@@ -61,6 +63,13 @@ class TimeValidator(private val optional: Boolean = false) : TokenValidator {
     override fun validate(token: String): Boolean {
         if (token.isBlank() && optional) return true
         return token.matches("^\\d{6}(\\.\\d{2,4})?$".toRegex())
+    }
+}
+
+class DateValidator(private val optional: Boolean = false) : TokenValidator {
+    override fun validate(token: String): Boolean {
+        if (token.isBlank() && optional) return true
+        return token.matches("^\\d{6}$".toRegex())
     }
 }
 

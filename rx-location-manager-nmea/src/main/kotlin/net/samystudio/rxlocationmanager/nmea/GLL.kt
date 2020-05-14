@@ -4,13 +4,13 @@ class GLL(message: String) : Nmea(message) {
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[1],
-            LocationDirection.valueOf(data[2], LocationDirection.N)
+            LocationDirection.valueOf(data[2], LocationDirection.N)!!
         )
     }
     val longitude: Double? by lazy {
         convertNmeaLocation(
             data[3],
-            LocationDirection.valueOf(data[4], LocationDirection.E)
+            LocationDirection.valueOf(data[4], LocationDirection.E)!!
         )
     }
     val time: String by lazy { data[5] }
