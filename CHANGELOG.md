@@ -1,8 +1,15 @@
-0.4.0 (unreleased yet)
+0.5.0-SNAPSHOT
 ------------------
-- Add hanler/looper arguments when possible to match Android API arguments.
-- Fix nmea parsing with trailing spaces
-- Renamed observeGnssStatusChanged to observeGnssStatusOnChanged for consistency
+- Add handler/looper arguments when possible to match Android API arguments.
+- Add getLastKnownLocation as Maybe observable.
+- Add GSA satelliteCount property to easily get satellite count.
+- Add RMCTiming and RMCNavigational nmea.
+- Fix nmea parsing with trailing spaces.
+- Fix GSA modes should be mandatory.
+- Fix maximum satellite count from GGA
+- Fix GGA quality enum list.
+- Change EnumValidator now uses CharArray insteadof array of char.
+- Rename observeGnssStatusChanged to observeGnssStatusOnChanged for consistency.
 
 0.3.0 (2018-11-07)
 ------------------
