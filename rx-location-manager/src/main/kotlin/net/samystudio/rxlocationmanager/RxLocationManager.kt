@@ -49,7 +49,7 @@ object RxLocationManager {
     @JvmStatic
     fun getLastKnownLocation(provider: Provider): Maybe<Location> =
         locationManager.getLastKnownLocation(provider.name.toLowerCase(Locale.ROOT))
-            ?.let { Maybe.just(it) } ?: run { Maybe.empty() }
+            ?.let { Maybe.just(it) } ?: run { Maybe.empty<Location>() }
 
     /**
      * @see [LocationManager.addNmeaListener]
