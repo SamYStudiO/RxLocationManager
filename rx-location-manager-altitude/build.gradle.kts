@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":rx-location-manager"))
     api(project(":rx-location-manager-nmea"))
     base()
+    reactive()
     test()
 }
 
