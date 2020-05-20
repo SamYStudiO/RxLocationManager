@@ -27,5 +27,3 @@ before_cache:
 cache:
   directories:
     - $HOME/.gradle
-
-sudo: false
