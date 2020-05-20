@@ -10,7 +10,6 @@ object Dependencies {
     // android
     const val core_ktx = "androidx.core:core-ktx:${Versions.core_ktx}"
     const val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
-    const val annotation = "androidx.appcompat:appcompat:${Versions.appcompat}"
 
     // reactive
     const val rxjava = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
@@ -33,7 +32,6 @@ fun DependencyHandler.base() {
     implementation(Dependencies.kotlin)
     implementation(Dependencies.core_ktx)
     implementation(Dependencies.appcompat)
-    implementation(Dependencies.annotation)
 }
 
 fun DependencyHandler.reactive() {

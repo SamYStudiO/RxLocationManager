@@ -13,7 +13,6 @@ object Versions {
     // android
     const val core_ktx = "1.2.0"
     const val appcompat = "1.1.0"
-    const val annotation = "1.1.0"
 
     // reactive
     const val rxjava = "2.2.19"
