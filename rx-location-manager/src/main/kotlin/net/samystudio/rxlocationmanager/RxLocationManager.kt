@@ -47,9 +47,13 @@ object RxLocationManager {
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
-    fun getLastKnownLocation(provider: Provider): Maybe<Location> =
+    fun getLastKnownLocation(provider: Provider): Maybe<Location> = Maybe.defer {
         locationManager.getLastKnownLocation(provider.name.toLowerCase(Locale.ROOT))
-            ?.let { Maybe.just(it) } ?: run { Maybe.empty<Location>() }
+            ?.let { Maybe.just(it) } ?: run {
+            @Suppress("RemoveExplicitTypeArguments")
+            Maybe.empty<Location>()
+        }
+    }
 
     /**
      * @see [LocationManager.addNmeaListener]
