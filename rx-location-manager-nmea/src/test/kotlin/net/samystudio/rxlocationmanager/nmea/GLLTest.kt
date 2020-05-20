@@ -22,6 +22,19 @@ class GLLTest {
     }
 
     @Test
+    fun validateAlternateConstructor() {
+        val gll = GLL(
+            "GP",
+            33.71103,
+            -117.85643,
+            "002153.000",
+            GLL.Status.A
+        )
+
+        assertEquals("\$GPGLL,3342.6618,N,11751.3858,W,002153.000,A*29", gll.message)
+    }
+
+    @Test
     fun validateEmpty() {
         val gll = GLL("\$GPGLL,,,,,,*50")
 

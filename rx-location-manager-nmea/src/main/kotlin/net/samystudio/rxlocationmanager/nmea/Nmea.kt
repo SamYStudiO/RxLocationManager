@@ -40,17 +40,7 @@ abstract class Nmea constructor(val message: String) {
      */
     protected abstract fun getTokenValidators(): Array<TokenValidator>
 
-    internal fun computeChecksum(): String {
-        val data = message.split("*")[0]
-        var checksum = 0
-        for (char in data) {
-            if (char == '$') continue
-            if (char == '*') break
-            checksum = checksum.xor(char.toInt())
-        }
-
-        return String.format("%02X", checksum)
-    }
+    internal fun computeChecksum(): String = computeChecksum(message)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -75,6 +65,19 @@ abstract class Nmea constructor(val message: String) {
         internal const val BLANK_ERROR_MESSAGE = "Message is blank"
         internal const val MISSING_DOLLAR_ERROR_MESSAGE = "Message should stat with $"
         internal const val CANNOT_FIND_CHECKSUM_ERROR_MESSAGE = "Cannot find checksum from message"
+
+        internal fun computeChecksum(message: String): String {
+            val data = message.split("*")[0]
+            var checksum = 0
+            for (char in data) {
+                if (char == '$') continue
+                if (char == '*') break
+                checksum = checksum.xor(char.toInt())
+            }
+
+            return String.format("%02X", checksum)
+        }
+
         internal fun getParseErrorMessage(
             index: Int,
             validatorClassName: String,

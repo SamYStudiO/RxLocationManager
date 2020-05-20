@@ -1,6 +1,7 @@
 package net.samystudio.rxlocationmanager.nmea
 
 import android.location.Location
+import kotlin.math.abs
 
 /**
  * Convert Nmea latitude/longitude token to [Double]. Return null if conversion failed.
@@ -19,6 +20,18 @@ fun convertNmeaLocation(token: String, direction: LocationDirection): Double? {
         Location.convert(formattedLocation)
     } catch (e: IllegalArgumentException) {
         null
+    }
+}
+
+/**
+ * Convert [Double] latitude/longitude coordinate to nmea token. Return empty string if conversion
+ * failed.
+ */
+fun convertLocationNmea(coordinate: Double): String {
+    return try {
+        Location.convert(abs(coordinate), Location.FORMAT_MINUTES).replace(":", "")
+    } catch (e: IllegalArgumentException) {
+        ""
     }
 }
 

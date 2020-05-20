@@ -3,6 +3,7 @@
 - Add handler/looper arguments when possible to match Android API arguments.
 - Add getLastKnownLocation as Maybe observable.
 - Add GSA satelliteCount property to easily get satellite count.
+- Add nmea constructor for building our own message more easily.
 - Add RMCTiming and RMCNavigational nmea.
 - Fix nmea parsing with trailing spaces.
 - Fix GSA modes should be mandatory.

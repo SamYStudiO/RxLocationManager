@@ -29,6 +29,28 @@ class RMCTimingTest {
     }
 
     @Test
+    fun validateAlternateConstructor() {
+        val rmc = RMCTiming(
+            "GN",
+            "191613.43",
+            RMCTiming.Status.A,
+            33.71103,
+            -117.85643,
+            5.0,
+            10.2,
+            "100520",
+            9.3,
+            LocationDirection.W,
+            RMCTiming.Mode.A
+        )
+
+        assertEquals(
+            "\$GNRMC,191613.43,A,3342.6618,N,11751.3858,W,5.0,10.2,100520,9.3,W,A*11",
+            rmc.message
+        )
+    }
+
+    @Test
     fun validateEmpty() {
         val rmc = RMCTiming("\$GPRMC,,V,,,,,,,,,,N*53")
 

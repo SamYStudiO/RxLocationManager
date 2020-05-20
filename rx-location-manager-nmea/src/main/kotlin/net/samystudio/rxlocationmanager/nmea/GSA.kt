@@ -1,5 +1,7 @@
 package net.samystudio.rxlocationmanager.nmea
 
+import java.util.*
+
 class GSA(message: String) : Nmea(message) {
     val mode1: Mode1 by lazy {
         try {
@@ -47,6 +49,48 @@ class GSA(message: String) : Nmea(message) {
             satellite12
         ).count()
     }
+
+    constructor(
+        type: String,
+        mode1: Mode1 = Mode1.A,
+        mode2: Mode2 = Mode2.FIX_NOT_AVAILABLE,
+        satellite1: Int? = null,
+        satellite2: Int? = null,
+        satellite3: Int? = null,
+        satellite4: Int? = null,
+        satellite5: Int? = null,
+        satellite6: Int? = null,
+        satellite7: Int? = null,
+        satellite8: Int? = null,
+        satellite9: Int? = null,
+        satellite10: Int? = null,
+        satellite11: Int? = null,
+        satellite12: Int? = null,
+        horizontalDilutionOfPrecision: Double? = null,
+        positionDilutionOfPrecision: Double? = null,
+        verticalDilutionOfPrecision: Double? = null
+    ) : this(
+        "$%sGSA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
+            type.toUpperCase(Locale.ROOT),
+            mode1.name,
+            Mode2.values().indexOf(mode2) + 1,
+            satellite1 ?: "",
+            satellite2 ?: "",
+            satellite3 ?: "",
+            satellite4 ?: "",
+            satellite5 ?: "",
+            satellite6 ?: "",
+            satellite7 ?: "",
+            satellite8 ?: "",
+            satellite9 ?: "",
+            satellite10 ?: "",
+            satellite11 ?: "",
+            satellite12 ?: "",
+            horizontalDilutionOfPrecision ?: "",
+            positionDilutionOfPrecision ?: "",
+            verticalDilutionOfPrecision ?: ""
+        ).let { "%s*%s".format(it, computeChecksum(it)) }
+    )
 
     override fun getTokenValidators(): Array<TokenValidator> {
         val satelliteValidator = IntValidator(true, 0, 999)

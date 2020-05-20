@@ -31,6 +31,32 @@ class GSATest {
     }
 
     @Test
+    fun validateAlternateConstructor() {
+        val gsa = GSA(
+            "GP",
+            GSA.Mode1.M,
+            GSA.Mode2.FIX_3D,
+            null,
+            null,
+            22,
+            null,
+            null,
+            85,
+            null,
+            null,
+            14,
+            23,
+            null,
+            null,
+            10.1,
+            12.2,
+            14.4
+        )
+
+        assertEquals("\$GPGSA,M,3,,,22,,,85,,,14,23,,,10.1,12.2,14.4*07", gsa.message)
+    }
+
+    @Test
     fun validateEmpty() {
         val gsa = GSA("\$GPGSA,A,1,,,,,,,,,,,,,,,*1E")
 

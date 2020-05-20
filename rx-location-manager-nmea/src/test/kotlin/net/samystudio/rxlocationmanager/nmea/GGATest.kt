@@ -29,6 +29,28 @@ class GGATest {
     }
 
     @Test
+    fun validateAlternateConstructor() {
+        val gga = GGA(
+            "GP",
+            "002153.000",
+            33.71103,
+            -117.85643,
+            GGA.Quality.FIX,
+            10,
+            1.2,
+            27.0,
+            -34.2,
+            null,
+            "0000"
+        )
+
+        assertEquals(
+            "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E",
+            gga.message
+        )
+    }
+
+    @Test
     fun validateEmpty() {
         val gga = GGA("\$GPGGA,,,,,,0,,,,,,,,*66")
 

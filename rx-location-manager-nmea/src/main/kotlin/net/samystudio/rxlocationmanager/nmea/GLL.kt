@@ -1,5 +1,7 @@
 package net.samystudio.rxlocationmanager.nmea
 
+import java.util.*
+
 class GLL(message: String) : Nmea(message) {
     val latitude: Double? by lazy {
         convertNmeaLocation(
@@ -21,6 +23,26 @@ class GLL(message: String) : Nmea(message) {
             null
         }
     }
+
+    constructor(
+        type: String,
+        latitude: Double? = null,
+        longitude: Double? = null,
+        time: String = "",
+        status: Status? = null
+    ) : this(
+        "$%sGLL,%s,%s,%s,%s,%s,%s".format(
+            type.toUpperCase(Locale.ROOT),
+            latitude?.let { convertLocationNmea(it) } ?: "",
+            latitude?.let { if (it < 0) LocationDirection.S.name else LocationDirection.N.name }
+                ?: "",
+            longitude?.let { convertLocationNmea(it) } ?: "",
+            longitude?.let { if (it < 0) LocationDirection.W.name else LocationDirection.E.name }
+                ?: "",
+            time,
+            status?.name ?: ""
+        ).let { "%s*%s".format(it, computeChecksum(it)) }
+    )
 
     override fun getTokenValidators(): Array<TokenValidator> {
         return arrayOf(
