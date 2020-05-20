@@ -3,6 +3,8 @@ plugins {
     kotlin("android")
 }
 
+apply(from = rootProject.file(".buildscript/configure_maven_publish.gradle"))
+
 android {
     compileSdkVersion(Versions.compileSdk)
 
@@ -25,8 +27,3 @@ dependencies {
     reactive()
     test()
 }
-
-apply {
-    from(rootProject.file("gradle/gradle-mvn-push.gradle"))
-}
-

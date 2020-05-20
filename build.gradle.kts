@@ -1,16 +1,15 @@
-group = "net.samystudio.rxlocationmanager"
-version = "0.5.0-SNAPSHOT"
-
 buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
         maven { url = uri("https://maven.fabric.io/public") }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.android_build_tools}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("com.github.ben-manes:gradle-versions-plugin:${Versions.gradle_versions_plugin}")
+        classpath("com.vanniktech:gradle-maven-publish-plugin:${Versions.gradle_maven_publish_plugin}")
     }
 }
 
@@ -42,8 +41,4 @@ tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
             }
         }
     }
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
 }
