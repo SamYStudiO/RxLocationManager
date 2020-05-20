@@ -1,7 +1,7 @@
 package net.samystudio.rxlocationmanager.nmea
 
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class DoubleValidatorTest {
