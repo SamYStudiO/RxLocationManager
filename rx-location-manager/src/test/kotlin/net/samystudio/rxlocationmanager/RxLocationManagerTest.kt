@@ -4,7 +4,7 @@ package net.samystudio.rxlocationmanager
 
 import android.location.*
 import android.os.Bundle
-import io.reactivex.observers.TestObserver
+import io.reactivex.rxjava3.observers.TestObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

@@ -16,8 +16,8 @@ object Versions {
     const val appcompat = "1.1.0"
 
     // reactive
-    const val rxjava = "2.2.19"
-    const val rxandroid = "2.1.1"
+    const val rxjava = "3.0.4"
+    const val rxandroid = "3.0.0"
     const val rxlocationmanager = "0.3.0"
 
     //misc

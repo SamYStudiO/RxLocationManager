@@ -1,7 +1,7 @@
 package net.samystudio.rxlocationmanager.altitude
 
 import android.hardware.SensorEvent
-import io.reactivex.observers.TestObserver
+import io.reactivex.rxjava3.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock

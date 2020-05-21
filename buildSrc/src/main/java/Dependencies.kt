@@ -12,8 +12,8 @@ object Dependencies {
     const val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
 
     // reactive
-    const val rxjava = "io.reactivex.rxjava2:rxjava:${Versions.rxjava}"
-    const val rxandroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}"
+    const val rxjava = "io.reactivex.rxjava3:rxjava:${Versions.rxjava}"
+    const val rxandroid = "io.reactivex.rxjava3:rxandroid:${Versions.rxandroid}"
     const val rxlocationmanager =
         "net.samystudio.rxlocationmanager:rxlocationmanager:${Versions.rxlocationmanager}"
     const val rxlocationmanager_altitude =

@@ -14,10 +14,10 @@ import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.Disposable
 import net.samystudio.rxlocationmanager.RxLocationManager.observeGnssStatus
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
