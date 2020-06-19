@@ -9,6 +9,7 @@ An extra standalone library is available to parse NMEA messages that may be retu
 - GGA
 - GLL
 - GSA
+- RMC (timing and navigational)
 - more to come... and PR welcome!
 
 You can easily add you own parser, just inherit from `net.samystudio.rxlocationmanager.nmea.Nmea` class and use `net.samystudio.rxlocationmanager.nmea.TokenValidator` to validate your messages.
@@ -16,15 +17,15 @@ You can easily add you own parser, just inherit from `net.samystudio.rxlocationm
 Download
 --------
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.3.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.5.0'
 ```
 If you need altitude helpers observables add this as well:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.3.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.5.0'
 ```
 If you want to easily parse nmea messages you can use this standalone artifact (note this is already include if you added rxlocationmanager-altitude dependency):
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.3.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.5.0'
 ```
 
 Snapshots are available from [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/).
@@ -41,14 +42,28 @@ allprojects {
 ```
 and change versions:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.4.0-SNAPSHOT'
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.4.0-SNAPSHOT'
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.4.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.6.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.6.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.6.0-SNAPSHOT'
 ```
 
 Usage
 -----
 Check `xxx-sample` directories. A lot of samples showcase [RxPermissions](https://github.com/tbruyelle/RxPermissions) library as well to easily request location permission for callbacks that require it.
+
+Publishing
+-----
+
+ 1. Change the version in `gradle.properties` to a non-SNAPSHOT version.
+ 2. Update the `CHANGELOG.md` for the impending release.
+ 3. Update the `README.md` with the new version.
+ 4. `git commit -am "Prepare for release X.Y.Z."` (where X.Y.Z is the new version)
+ 5. `./gradlew uploadArchives --no-daemon --no-parallel`
+ 6. `git tag -a X.Y.Z -m "Version X.Y.Z"` (where X.Y.Z is the new version)
+ 7. Update the `gradle.properties` to the next SNAPSHOT version.
+ 8. `git commit -am "Prepare next development version."`
+ 9. `git push && git push --tags`
+ 10. Visit [Sonatype Nexus](https://oss.sonatype.org/) and promote the artifact.
 
 License
 -------

@@ -1,5 +1,6 @@
-0.5.0-SNAPSHOT (rxjava3)
+0.5.0 (2020-06-19)
 ------------------
+- Migrate to **rxjava3**.
 - Add handler/looper arguments when possible to match Android API arguments.
 - Add getLastKnownLocation as Maybe observable.
 - Add GSA satelliteCount property to easily get satellite count.
@@ -11,7 +12,6 @@
 - Fix GGA quality enum list.
 - Change EnumValidator now uses CharArray insteadof array of char.
 - Rename observeGnssStatusChanged to observeGnssStatusOnChanged for consistency.
-- Migrate to rxjava3.
 
 0.3.0 (2018-11-07)
 ------------------
