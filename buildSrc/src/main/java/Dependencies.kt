@@ -35,8 +35,8 @@ fun DependencyHandler.base() {
 }
 
 fun DependencyHandler.reactive() {
-    implementation(Dependencies.rxjava)
-    implementation(Dependencies.rxandroid)
+    api(Dependencies.rxjava)
+    api(Dependencies.rxandroid)
 }
 
 fun DependencyHandler.test() {
@@ -68,6 +68,10 @@ fun DependencyHandler.implementation(
     ext,
     dependencyConfiguration
 )
+
+private fun DependencyHandler.api(depName: String) {
+    add("api", depName)
+}
 
 private fun DependencyHandler.kapt(depName: String) {
     add("kapt", depName)
