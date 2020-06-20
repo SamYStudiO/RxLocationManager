@@ -1,6 +1,5 @@
 package net.samystudio.rxlocationmanager
 
-import android.annotation.SuppressLint
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
@@ -40,7 +39,6 @@ class ContextProvider : ContentProvider() {
     override fun getType(uri: Uri) = null
 
     companion object {
-        @SuppressLint("StaticFieldLeak")
         lateinit var applicationContext: Context
     }
 }
