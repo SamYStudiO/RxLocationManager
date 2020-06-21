@@ -83,7 +83,7 @@ open class RMCTiming(message: String) : Nmea(message) {
             // UTC time hhmmss(.sss)
             TimeValidator(true),
             // Status
-            EnumValidator(charArrayOf('A', 'V'), false),
+            EnumValidator(Status.values().map { it.name.single() }.toCharArray(), false),
             // latitude ddmm.ssss
             LatitudeValidator(true),
             // N or S
@@ -103,7 +103,7 @@ open class RMCTiming(message: String) : Nmea(message) {
             // magneticVariationDirection
             EnumValidator(charArrayOf('W', 'E'), true),
             // mode
-            EnumValidator(charArrayOf('A', 'D', 'E', 'F', 'M', 'N', 'P', 'R', 'S'), false)
+            EnumValidator(Mode.values().map { it.name.single() }.toCharArray(), false)
         )
     }
 

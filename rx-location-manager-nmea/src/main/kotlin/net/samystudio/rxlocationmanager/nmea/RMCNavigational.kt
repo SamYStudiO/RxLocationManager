@@ -51,7 +51,8 @@ class RMCNavigational(message: String) : RMCTiming(message) {
             .apply {
                 add(
                     // navigational status
-                    EnumValidator(charArrayOf('S', 'C', 'U', 'V'), false)
+                    EnumValidator(NavigationalStatus.values().map { it.name.single() }
+                        .toCharArray(), false)
                 )
             }
             .toTypedArray()

@@ -59,7 +59,7 @@ class GLL(message: String) : Nmea(message) {
             // UTC time hhmmss(.sss)
             TimeValidator(true),
             // status A (valid) or V (invalid)
-            EnumValidator(charArrayOf('A', 'V'), true)
+            EnumValidator(Status.values().map { it.name.single() }.toCharArray(), true)
         )
     }
 
