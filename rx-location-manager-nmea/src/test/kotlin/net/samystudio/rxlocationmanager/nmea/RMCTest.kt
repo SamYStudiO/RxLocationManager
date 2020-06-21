@@ -8,15 +8,15 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class RMCTimingTest {
+class RMCTest {
     @Test
     fun validate() {
         val rmc =
-            RMCTiming("\$GNRMC,191613.43,A,3342.6618,N,11751.3858,W,5.0,10.2,100520,9.3,W,A*11")
+            RMC("\$GNRMC,191613.43,A,3342.6618,N,11751.3858,W,5.0,10.2,100520,9.3,W,A,S*6E")
 
         assertEquals("GNRMC", rmc.type)
         assertEquals("191613.43", rmc.time)
-        assertEquals(RMCTiming.Status.A, rmc.status)
+        assertEquals(RMC.Status.A, rmc.status)
         assertEquals(33.71103, rmc.latitude!!, PRECISION)
         assertEquals(-117.85643, rmc.longitude!!, PRECISION)
         assertEquals(5.0, rmc.speed!!, PRECISION)
@@ -24,16 +24,17 @@ class RMCTimingTest {
         assertEquals("100520", rmc.date)
         assertEquals(9.3, rmc.magneticVariation!!, PRECISION)
         assertEquals(LocationDirection.W, rmc.magneticVariationDirection)
-        assertEquals(RMCTiming.Mode.A, rmc.mode)
-        assertEquals("11", rmc.checksum)
+        assertEquals(RMC.Mode.A, rmc.mode)
+        assertEquals(RMC.NavigationalStatus.S, rmc.navigationalStatus)
+        assertEquals("6E", rmc.checksum)
     }
 
     @Test
     fun validateAlternateConstructor() {
-        val rmc = RMCTiming(
+        val rmc = RMC(
             "GN",
             "191613.43",
-            RMCTiming.Status.A,
+            RMC.Status.A,
             33.71103,
             -117.85643,
             5.0,
@@ -41,22 +42,23 @@ class RMCTimingTest {
             "100520",
             9.3,
             LocationDirection.W,
-            RMCTiming.Mode.A
+            RMC.Mode.A,
+            RMC.NavigationalStatus.S
         )
 
         assertEquals(
-            "\$GNRMC,191613.43,A,3342.6618,N,11751.3858,W,5.0,10.2,100520,9.3,W,A*11",
+            "\$GNRMC,191613.43,A,3342.6618,N,11751.3858,W,5.0,10.2,100520,9.3,W,A,S*6E",
             rmc.message
         )
     }
 
     @Test
     fun validateEmpty() {
-        val rmc = RMCTiming("\$GPRMC,,V,,,,,,,,,,N*53")
+        val rmc = RMC("\$GPRMC,,V,,,,,,,,,,N,V*29")
 
         assertEquals("GPRMC", rmc.type)
         assertEquals("", rmc.time)
-        assertEquals(RMCTiming.Status.V, rmc.status)
+        assertEquals(RMC.Status.V, rmc.status)
         assertEquals(null, rmc.latitude)
         assertEquals(null, rmc.longitude)
         assertEquals(null, rmc.speed)
@@ -64,8 +66,9 @@ class RMCTimingTest {
         assertEquals("", rmc.date)
         assertEquals(null, rmc.magneticVariation)
         assertEquals(null, rmc.magneticVariationDirection)
-        assertEquals(RMCTiming.Mode.N, rmc.mode)
-        assertEquals("53", rmc.checksum)
+        assertEquals(RMC.Mode.N, rmc.mode)
+        assertEquals(RMC.NavigationalStatus.V, rmc.navigationalStatus)
+        assertEquals("29", rmc.checksum)
     }
 
     companion object {

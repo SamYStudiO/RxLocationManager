@@ -2,7 +2,7 @@ package net.samystudio.rxlocationmanager.nmea
 
 import java.util.*
 
-open class RMCTiming(message: String) : Nmea(message) {
+open class RMC(message: String) : Nmea(message) {
     val time: String by lazy { data[1] }
     val status: Status by lazy {
         try {
@@ -41,6 +41,13 @@ open class RMCTiming(message: String) : Nmea(message) {
         }
         Mode.N
     }
+    val navigationalStatus: NavigationalStatus by lazy {
+        try {
+            return@lazy NavigationalStatus.valueOf(data[13])
+        } catch (e: IllegalArgumentException) {
+        }
+        NavigationalStatus.V
+    }
 
     constructor(
         type: String,
@@ -53,9 +60,10 @@ open class RMCTiming(message: String) : Nmea(message) {
         date: String = "",
         magneticVariation: Double? = null,
         magneticVariationDirection: LocationDirection? = null,
-        mode: Mode = Mode.N
+        mode: Mode = Mode.N,
+        navigationalStatus: NavigationalStatus = NavigationalStatus.V
     ) : this(
-        "$%sRMC,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
+        "$%sRMC,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
             type.toUpperCase(Locale.ROOT),
             time,
             status.name,
@@ -70,7 +78,8 @@ open class RMCTiming(message: String) : Nmea(message) {
             date,
             magneticVariation ?: "",
             magneticVariationDirection?.name ?: "",
-            mode.name
+            mode.name,
+            navigationalStatus.name
         ).let { "%s*%s".format(it, computeChecksum(it)) }
     )
 
@@ -103,7 +112,9 @@ open class RMCTiming(message: String) : Nmea(message) {
             // magneticVariationDirection
             EnumValidator(charArrayOf('W', 'E'), true),
             // mode
-            EnumValidator(Mode.values().map { it.name.single() }.toCharArray(), false)
+            EnumValidator(Mode.values().map { it.name.single() }.toCharArray(), false),
+            // navigational status
+            EnumValidator(NavigationalStatus.values().map { it.name.single() }.toCharArray(), false)
         )
     }
 
@@ -130,5 +141,16 @@ open class RMCTiming(message: String) : Nmea(message) {
      */
     enum class Mode {
         A, D, E, F, M, N, P, R, S
+    }
+
+    /**
+     * Navigational Status
+     * S=Safe
+     * C=Caution
+     * U=Unsafe
+     * V=Void
+     */
+    enum class NavigationalStatus {
+        S, C, U, V
     }
 }
