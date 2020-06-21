@@ -11,14 +11,15 @@ import org.robolectric.annotation.Config
 class GLLTest {
     @Test
     fun validate() {
-        val gll = GLL("\$GPGLL,3342.6618,N,11751.3858,W,002153.000,A*29")
+        val gll = GLL("\$GPGLL,3342.6618,N,11751.3858,W,002153.000,A,A*44")
 
         assertEquals("GPGLL", gll.type)
         assertEquals(33.71103, gll.latitude!!, PRECISION)
         assertEquals(-117.85643, gll.longitude!!, PRECISION)
         assertEquals("002153.000", gll.time)
-        assertEquals(GLL.Status.A, gll.status)
-        assertEquals("29", gll.checksum)
+        assertEquals(Status.A, gll.status)
+        assertEquals(FAAMode.A, gll.faaMode)
+        assertEquals("44", gll.checksum)
     }
 
     @Test
@@ -28,22 +29,24 @@ class GLLTest {
             33.71103,
             -117.85643,
             "002153.000",
-            GLL.Status.A
+            Status.A,
+            FAAMode.A
         )
 
-        assertEquals("\$GPGLL,3342.6618,N,11751.3858,W,002153.000,A*29", gll.message)
+        assertEquals("\$GPGLL,3342.6618,N,11751.3858,W,002153.000,A,A*44", gll.message)
     }
 
     @Test
     fun validateEmpty() {
-        val gll = GLL("\$GPGLL,,,,,,*50")
+        val gll = GLL("\$GPGLL,,,,,,,N,*1E")
 
         assertEquals("GPGLL", gll.type)
         assertEquals(null, gll.latitude)
         assertEquals(null, gll.longitude)
         assertEquals("", gll.time)
         assertEquals(null, gll.status)
-        assertEquals("50", gll.checksum)
+        assertEquals(FAAMode.N, gll.faaMode)
+        assertEquals("1E", gll.checksum)
     }
 
     companion object {

@@ -3,21 +3,21 @@ package net.samystudio.rxlocationmanager.nmea
 import java.util.*
 
 class GSA(message: String) : Nmea(message) {
-    val mode1: Mode1 by lazy {
+    val selectionMode: SelectionMode by lazy {
         try {
-            Mode1.valueOf(data[1])
+            SelectionMode.valueOf(data[1])
         } catch (e: IllegalArgumentException) {
-            Mode1.A
+            SelectionMode.A
         }
     }
-    val mode2: Mode2 by lazy {
+    val fix: Fix by lazy {
         try {
-            return@lazy Mode2.values().find { it.value == data[2].toInt() }
-                ?: Mode2.FIX_NOT_AVAILABLE
+            return@lazy Fix.values().find { it.value == data[2].toInt() }
+                ?: Fix.NO_FIX
         } catch (e: NumberFormatException) {
         } catch (e: ArrayIndexOutOfBoundsException) {
         }
-        Mode2.FIX_NOT_AVAILABLE
+        Fix.NO_FIX
     }
     val satellite1: Int? by lazy { data[3].toIntOrNull() }
     val satellite2: Int? by lazy { data[4].toIntOrNull() }
@@ -53,8 +53,8 @@ class GSA(message: String) : Nmea(message) {
 
     constructor(
         type: String,
-        mode1: Mode1 = Mode1.A,
-        mode2: Mode2 = Mode2.FIX_NOT_AVAILABLE,
+        selectionMode: SelectionMode = SelectionMode.A,
+        fix: Fix = Fix.NO_FIX,
         satellite1: Int? = null,
         satellite2: Int? = null,
         satellite3: Int? = null,
@@ -73,8 +73,8 @@ class GSA(message: String) : Nmea(message) {
     ) : this(
         "$%sGSA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
             type.toUpperCase(Locale.ROOT),
-            mode1.name,
-            mode2.value,
+            selectionMode.name,
+            fix.value,
             satellite1 ?: "",
             satellite2 ?: "",
             satellite3 ?: "",
@@ -100,10 +100,10 @@ class GSA(message: String) : Nmea(message) {
         return arrayOf(
             // type $__GSA
             TypeValidator("GSA"),
-            // mode1 A (automatic) or M (manual)
-            EnumValidator(Mode1.values().map { it.name.single() }.toCharArray(), true),
-            // mode2 1 (fix not available) 2 (2D) or 3 (3D)
-            EnumValidator(Mode2.values().map { it.value.toString().single() }.toCharArray(), true),
+            // selection mode
+            EnumValidator(SelectionMode.values().map { it.name.single() }.toCharArray(), true),
+            // fix
+            EnumValidator(Fix.values().map { it.value.toString().single() }.toCharArray(), true),
             // satellite 1
             satelliteValidator,
             // satellite 2
@@ -141,11 +141,11 @@ class GSA(message: String) : Nmea(message) {
      * A=Automatic
      * M=Manual
      */
-    enum class Mode1 {
+    enum class SelectionMode {
         A, M;
     }
 
-    enum class Mode2(val value: Int) {
-        FIX_NOT_AVAILABLE(1), FIX_2D(2), FIX_3D(3)
+    enum class Fix(val value: Int) {
+        NO_FIX(1), FIX_2D(2), FIX_3D(3)
     }
 }

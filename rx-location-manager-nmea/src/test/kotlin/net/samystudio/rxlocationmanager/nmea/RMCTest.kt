@@ -16,15 +16,15 @@ class RMCTest {
 
         assertEquals("GNRMC", rmc.type)
         assertEquals("191613.43", rmc.time)
-        assertEquals(RMC.Status.A, rmc.status)
+        assertEquals(Status.A, rmc.status)
         assertEquals(33.71103, rmc.latitude!!, PRECISION)
         assertEquals(-117.85643, rmc.longitude!!, PRECISION)
         assertEquals(5.0, rmc.speed!!, PRECISION)
         assertEquals(10.2, rmc.angle!!, PRECISION)
         assertEquals("100520", rmc.date)
         assertEquals(9.3, rmc.magneticVariation!!, PRECISION)
-        assertEquals(LocationDirection.W, rmc.magneticVariationDirection)
-        assertEquals(RMC.Mode.A, rmc.mode)
+        assertEquals(Cardinal.W, rmc.magneticVariationDirection)
+        assertEquals(FAAMode.A, rmc.faaMode)
         assertEquals(RMC.NavigationalStatus.S, rmc.navigationalStatus)
         assertEquals("6E", rmc.checksum)
     }
@@ -34,15 +34,15 @@ class RMCTest {
         val rmc = RMC(
             "GN",
             "191613.43",
-            RMC.Status.A,
+            Status.A,
             33.71103,
             -117.85643,
             5.0,
             10.2,
             "100520",
             9.3,
-            LocationDirection.W,
-            RMC.Mode.A,
+            Cardinal.W,
+            FAAMode.A,
             RMC.NavigationalStatus.S
         )
 
@@ -58,7 +58,7 @@ class RMCTest {
 
         assertEquals("GPRMC", rmc.type)
         assertEquals("", rmc.time)
-        assertEquals(RMC.Status.V, rmc.status)
+        assertEquals(Status.V, rmc.status)
         assertEquals(null, rmc.latitude)
         assertEquals(null, rmc.longitude)
         assertEquals(null, rmc.speed)
@@ -66,7 +66,7 @@ class RMCTest {
         assertEquals("", rmc.date)
         assertEquals(null, rmc.magneticVariation)
         assertEquals(null, rmc.magneticVariationDirection)
-        assertEquals(RMC.Mode.N, rmc.mode)
+        assertEquals(FAAMode.N, rmc.faaMode)
         assertEquals(RMC.NavigationalStatus.V, rmc.navigationalStatus)
         assertEquals("29", rmc.checksum)
     }

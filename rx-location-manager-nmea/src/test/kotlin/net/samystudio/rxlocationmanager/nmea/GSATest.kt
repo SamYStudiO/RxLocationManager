@@ -9,8 +9,8 @@ class GSATest {
         val gsa = GSA("\$GPGSA,M,3,,,22,,,85,,,14,23,,,10.1,12.2,14.4*07")
 
         assertEquals("GPGSA", gsa.type)
-        assertEquals(GSA.Mode1.M, gsa.mode1)
-        assertEquals(GSA.Mode2.FIX_3D, gsa.mode2)
+        assertEquals(GSA.SelectionMode.M, gsa.selectionMode)
+        assertEquals(GSA.Fix.FIX_3D, gsa.fix)
         assertEquals(null, gsa.satellite1)
         assertEquals(null, gsa.satellite2)
         assertEquals(22, gsa.satellite3)
@@ -34,8 +34,8 @@ class GSATest {
     fun validateAlternateConstructor() {
         val gsa = GSA(
             "GP",
-            GSA.Mode1.M,
-            GSA.Mode2.FIX_3D,
+            GSA.SelectionMode.M,
+            GSA.Fix.FIX_3D,
             null,
             null,
             22,
@@ -61,8 +61,8 @@ class GSATest {
         val gsa = GSA("\$GPGSA,A,1,,,,,,,,,,,,,,,*1E")
 
         assertEquals("GPGSA", gsa.type)
-        assertEquals(GSA.Mode1.A, gsa.mode1)
-        assertEquals(GSA.Mode2.FIX_NOT_AVAILABLE, gsa.mode2)
+        assertEquals(GSA.SelectionMode.A, gsa.selectionMode)
+        assertEquals(GSA.Fix.NO_FIX, gsa.fix)
         assertEquals(null, gsa.satellite1)
         assertEquals(null, gsa.satellite2)
         assertEquals(null, gsa.satellite3)

@@ -13,39 +13,39 @@ class LocationTest {
     fun convert() {
         assertEquals(
             48.864716,
-            convertNmeaLocation("4851.88296", LocationDirection.N)!!,
+            convertNmeaLocation("4851.88296", Cardinal.N)!!,
             PRECISION
         )
 
         assertEquals(
             2.349014,
-            convertNmeaLocation("00220.94084", LocationDirection.E)!!,
+            convertNmeaLocation("00220.94084", Cardinal.E)!!,
             PRECISION
         )
 
         assertEquals(
             -48.864716,
-            convertNmeaLocation("4851.88296", LocationDirection.S)!!,
+            convertNmeaLocation("4851.88296", Cardinal.S)!!,
             PRECISION
         )
 
         assertEquals(
             -2.349014,
-            convertNmeaLocation("00220.94084", LocationDirection.W)!!,
+            convertNmeaLocation("00220.94084", Cardinal.W)!!,
             PRECISION
         )
 
-        assertEquals(null, convertNmeaLocation("", LocationDirection.W))
-        assertEquals(null, convertNmeaLocation("00a08.25-750", LocationDirection.W))
+        assertEquals(null, convertNmeaLocation("", Cardinal.W))
+        assertEquals(null, convertNmeaLocation("00a08.25-750", Cardinal.W))
     }
 
     @Test
     fun locationDirectionValueOf() {
-        assertEquals(LocationDirection.N, LocationDirection.valueOf("N", LocationDirection.S))
-        assertEquals(LocationDirection.S, LocationDirection.valueOf("S", LocationDirection.S))
-        assertEquals(LocationDirection.E, LocationDirection.valueOf("E", LocationDirection.S))
-        assertEquals(LocationDirection.W, LocationDirection.valueOf("W", LocationDirection.S))
-        assertEquals(LocationDirection.N, LocationDirection.valueOf("Z", LocationDirection.N))
+        assertEquals(Cardinal.N, Cardinal.valueOf("N", Cardinal.S))
+        assertEquals(Cardinal.S, Cardinal.valueOf("S", Cardinal.S))
+        assertEquals(Cardinal.E, Cardinal.valueOf("E", Cardinal.S))
+        assertEquals(Cardinal.W, Cardinal.valueOf("W", Cardinal.S))
+        assertEquals(Cardinal.N, Cardinal.valueOf("Z", Cardinal.N))
     }
 
     companion object {

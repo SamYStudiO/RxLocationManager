@@ -7,22 +7,23 @@ class GGA(message: String) : Nmea(message) {
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[2],
-            LocationDirection.valueOf(data[3], LocationDirection.N)!!
+            Cardinal.valueOf(data[3], Cardinal.N)!!
         )
     }
     val longitude: Double? by lazy {
         convertNmeaLocation(
             data[4],
-            LocationDirection.valueOf(data[5], LocationDirection.E)!!
+            Cardinal.valueOf(data[5], Cardinal.E)!!
         )
     }
     val quality: Quality by lazy {
         try {
-            return@lazy Quality.values().find { it.value == data[6].toInt() } ?: Quality.NO_FIX
+            return@lazy Quality.values().find { it.value == data[6].toInt() }
+                ?: Quality.FIX_NOT_AVAILABLE
         } catch (e: NumberFormatException) {
         } catch (e: ArrayIndexOutOfBoundsException) {
         }
-        Quality.NO_FIX
+        Quality.FIX_NOT_AVAILABLE
     }
     val satelliteCount: Int by lazy { data[7].toIntOrNull() ?: 0 }
     val horizontalDilutionOfPrecision: Double? by lazy { data[8].toDoubleOrNull() }
@@ -36,7 +37,7 @@ class GGA(message: String) : Nmea(message) {
         time: String = "",
         latitude: Double? = null,
         longitude: Double? = null,
-        quality: Quality = Quality.NO_FIX,
+        quality: Quality = Quality.FIX_NOT_AVAILABLE,
         satelliteCount: Int = 0,
         horizontalDilutionOfPrecision: Double? = null,
         altitude: Double? = null,
@@ -48,10 +49,10 @@ class GGA(message: String) : Nmea(message) {
             type.toUpperCase(Locale.ROOT),
             time,
             latitude?.let { convertLocationNmea(it) } ?: "",
-            latitude?.let { if (it < 0) LocationDirection.S.name else LocationDirection.N.name }
+            latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
                 ?: "",
             longitude?.let { convertLocationNmea(it) } ?: "",
-            longitude?.let { if (it < 0) LocationDirection.W.name else LocationDirection.E.name }
+            longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
                 ?: "",
             quality.value,
             satelliteCount,
@@ -77,12 +78,22 @@ class GGA(message: String) : Nmea(message) {
             // latitude ddmm.ssss
             LatitudeValidator(true),
             // N or S
-            EnumValidator(charArrayOf('N', 'S'), true),
+            EnumValidator(
+                Cardinal.values()
+                    .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
+                    .map { it.name.single() }.toCharArray(),
+                true
+            ),
             // longitude ddddmm.ssss
             LongitudeValidator(true),
             // W or E
-            EnumValidator(charArrayOf('W', 'E'), true),
-            // quality 0, 1 or 2 (not fixed, fixed, differential fixed)
+            EnumValidator(
+                Cardinal.values()
+                    .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
+                    .map { it.name.single() }.toCharArray(),
+                true
+            ),
+            // quality
             EnumValidator(
                 Quality.values().map { it.value.toString().single() }.toCharArray(),
                 true
@@ -107,10 +118,14 @@ class GGA(message: String) : Nmea(message) {
     }
 
     enum class Quality(val value: Int) {
-        NO_FIX(0),
-        FIX(1),
-        DIFFERENTIAL_FIX(2),
-        REAL_TIME_KINEMATIC_FIXED_INTEGER(3),
-        REAL_TIME_KINEMATIC_FLOAT_INTEGER(4)
+        FIX_NOT_AVAILABLE(0),
+        GPS_FIX(1),
+        DIFFERENTIAL_GPS_FIX(2),
+        PPS_FIX(3),
+        REAL_TIME_KINEMATIC(4),
+        FLOAT_RTK(5),
+        ESTIMATED(6),
+        MANUAL_INPUT_MODE(7),
+        SIMULATION_MODE(8)
     }
 }

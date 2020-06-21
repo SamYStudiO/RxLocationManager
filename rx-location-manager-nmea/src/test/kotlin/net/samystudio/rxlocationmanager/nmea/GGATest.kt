@@ -18,7 +18,7 @@ class GGATest {
         assertEquals("002153.000", gga.time)
         assertEquals(33.71103, gga.latitude!!, PRECISION)
         assertEquals(-117.85643, gga.longitude!!, PRECISION)
-        assertEquals(GGA.Quality.FIX, gga.quality)
+        assertEquals(GGA.Quality.GPS_FIX, gga.quality)
         assertEquals(10, gga.satelliteCount)
         assertEquals(1.2, gga.horizontalDilutionOfPrecision!!, PRECISION)
         assertEquals(27.0, gga.altitude!!, PRECISION)
@@ -35,7 +35,7 @@ class GGATest {
             "002153.000",
             33.71103,
             -117.85643,
-            GGA.Quality.FIX,
+            GGA.Quality.GPS_FIX,
             10,
             1.2,
             27.0,
@@ -58,7 +58,7 @@ class GGATest {
         assertEquals("", gga.time)
         assertEquals(null, gga.latitude)
         assertEquals(null, gga.longitude)
-        assertEquals(GGA.Quality.NO_FIX, gga.quality)
+        assertEquals(GGA.Quality.FIX_NOT_AVAILABLE, gga.quality)
         assertEquals(0, gga.satelliteCount)
         assertEquals(null, gga.horizontalDilutionOfPrecision)
         assertEquals(null, gga.altitude)

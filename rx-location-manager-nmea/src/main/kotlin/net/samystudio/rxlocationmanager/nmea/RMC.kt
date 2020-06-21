@@ -14,32 +14,32 @@ open class RMC(message: String) : Nmea(message) {
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[3],
-            LocationDirection.valueOf(data[4], LocationDirection.N)!!
+            Cardinal.valueOf(data[4], Cardinal.N)!!
         )
     }
     val longitude: Double? by lazy {
         convertNmeaLocation(
             data[5],
-            LocationDirection.valueOf(data[6], LocationDirection.E)!!
+            Cardinal.valueOf(data[6], Cardinal.E)!!
         )
     }
     val speed: Double? by lazy { data[7].toDoubleOrNull() }
     val angle: Double? by lazy { data[8].toDoubleOrNull() }
     val date: String by lazy { data[9] }
     val magneticVariation: Double? by lazy { data[10].toDoubleOrNull() }
-    val magneticVariationDirection: LocationDirection? by lazy {
+    val magneticVariationDirection: Cardinal? by lazy {
         try {
-            return@lazy LocationDirection.valueOf(data[11])
+            return@lazy Cardinal.valueOf(data[11])
         } catch (e: IllegalArgumentException) {
         }
         null
     }
-    val mode: Mode by lazy {
+    val faaMode: FAAMode by lazy {
         try {
-            return@lazy Mode.valueOf(data[12])
+            return@lazy FAAMode.valueOf(data[12])
         } catch (e: IllegalArgumentException) {
         }
-        Mode.N
+        FAAMode.N
     }
     val navigationalStatus: NavigationalStatus by lazy {
         try {
@@ -59,8 +59,8 @@ open class RMC(message: String) : Nmea(message) {
         angle: Double? = null,
         date: String = "",
         magneticVariation: Double? = null,
-        magneticVariationDirection: LocationDirection? = null,
-        mode: Mode = Mode.N,
+        magneticVariationDirection: Cardinal? = null,
+        faaMode: FAAMode = FAAMode.N,
         navigationalStatus: NavigationalStatus = NavigationalStatus.V
     ) : this(
         "$%sRMC,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
@@ -68,17 +68,17 @@ open class RMC(message: String) : Nmea(message) {
             time,
             status.name,
             latitude?.let { convertLocationNmea(it) } ?: "",
-            latitude?.let { if (it < 0) LocationDirection.S.name else LocationDirection.N.name }
+            latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
                 ?: "",
             longitude?.let { convertLocationNmea(it) } ?: "",
-            longitude?.let { if (it < 0) LocationDirection.W.name else LocationDirection.E.name }
+            longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
                 ?: "",
             speed ?: "",
             angle ?: "",
             date,
             magneticVariation ?: "",
             magneticVariationDirection?.name ?: "",
-            mode.name,
+            faaMode.name,
             navigationalStatus.name
         ).let { "%s*%s".format(it, computeChecksum(it)) }
     )
@@ -96,11 +96,21 @@ open class RMC(message: String) : Nmea(message) {
             // latitude ddmm.ssss
             LatitudeValidator(true),
             // N or S
-            EnumValidator(charArrayOf('N', 'S'), true),
+            EnumValidator(
+                Cardinal.values()
+                    .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
+                    .map { it.name.single() }.toCharArray(),
+                true
+            ),
             // longitude ddddmm.ssss
             LongitudeValidator(true),
             // W or E
-            EnumValidator(charArrayOf('W', 'E'), true),
+            EnumValidator(
+                Cardinal.values()
+                    .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
+                    .map { it.name.single() }.toCharArray(),
+                true
+            ),
             // speed
             optionalDoubleValidator,
             // angle
@@ -110,37 +120,17 @@ open class RMC(message: String) : Nmea(message) {
             // magneticVariation
             optionalDoubleValidator,
             // magneticVariationDirection
-            EnumValidator(charArrayOf('W', 'E'), true),
-            // mode
-            EnumValidator(Mode.values().map { it.name.single() }.toCharArray(), false),
+            EnumValidator(
+                Cardinal.values()
+                    .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
+                    .map { it.name.single() }.toCharArray(),
+                true
+            ),
+            // FFA mode
+            EnumValidator(FAAMode.values().map { it.name.single() }.toCharArray(), false),
             // navigational status
             EnumValidator(NavigationalStatus.values().map { it.name.single() }.toCharArray(), false)
         )
-    }
-
-    /**
-     * A=Active
-     * V=Void
-     */
-    enum class Status {
-        A,
-        V
-    }
-
-    /**
-     * Mode Indicator
-     * A=Autonomous
-     * D=Differential
-     * E=Estimated
-     * F=Float RTK
-     * M=Manual input
-     * N=No fix
-     * P=Precise
-     * R=Real time kinematic
-     * S=Simulator
-     */
-    enum class Mode {
-        A, D, E, F, M, N, P, R, S
     }
 
     /**

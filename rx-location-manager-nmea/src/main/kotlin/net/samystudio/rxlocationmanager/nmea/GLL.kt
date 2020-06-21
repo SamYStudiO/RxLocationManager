@@ -6,13 +6,13 @@ class GLL(message: String) : Nmea(message) {
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[1],
-            LocationDirection.valueOf(data[2], LocationDirection.N)!!
+            Cardinal.valueOf(data[2], Cardinal.N)!!
         )
     }
     val longitude: Double? by lazy {
         convertNmeaLocation(
             data[3],
-            LocationDirection.valueOf(data[4], LocationDirection.E)!!
+            Cardinal.valueOf(data[4], Cardinal.E)!!
         )
     }
     val time: String by lazy { data[5] }
@@ -23,24 +23,33 @@ class GLL(message: String) : Nmea(message) {
             null
         }
     }
+    val faaMode: FAAMode by lazy {
+        try {
+            return@lazy FAAMode.valueOf(data[7])
+        } catch (e: IllegalArgumentException) {
+        }
+        FAAMode.N
+    }
 
     constructor(
         type: String,
         latitude: Double? = null,
         longitude: Double? = null,
         time: String = "",
-        status: Status? = null
+        status: Status? = null,
+        faaMode: FAAMode = FAAMode.N
     ) : this(
-        "$%sGLL,%s,%s,%s,%s,%s,%s".format(
+        "$%sGLL,%s,%s,%s,%s,%s,%s,%s".format(
             type.toUpperCase(Locale.ROOT),
             latitude?.let { convertLocationNmea(it) } ?: "",
-            latitude?.let { if (it < 0) LocationDirection.S.name else LocationDirection.N.name }
+            latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
                 ?: "",
             longitude?.let { convertLocationNmea(it) } ?: "",
-            longitude?.let { if (it < 0) LocationDirection.W.name else LocationDirection.E.name }
+            longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
                 ?: "",
             time,
-            status?.name ?: ""
+            status?.name ?: "",
+            faaMode.name
         ).let { "%s*%s".format(it, computeChecksum(it)) }
     )
 
@@ -51,19 +60,27 @@ class GLL(message: String) : Nmea(message) {
             // latitude ddmm.ssss
             LatitudeValidator(true),
             // N or S
-            EnumValidator(charArrayOf('N', 'S'), true),
+            EnumValidator(
+                Cardinal.values()
+                    .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
+                    .map { it.name.single() }.toCharArray(),
+                true
+            ),
             // longitude ddddmm.ssss
             LongitudeValidator(true),
             // W or E
-            EnumValidator(charArrayOf('W', 'E'), true),
+            EnumValidator(
+                Cardinal.values()
+                    .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
+                    .map { it.name.single() }.toCharArray(),
+                true
+            ),
             // UTC time hhmmss(.sss)
             TimeValidator(true),
-            // status A (valid) or V (invalid)
-            EnumValidator(Status.values().map { it.name.single() }.toCharArray(), true)
+            // status
+            EnumValidator(Status.values().map { it.name.single() }.toCharArray(), true),
+            // FFA mode
+            EnumValidator(FAAMode.values().map { it.name.single() }.toCharArray(), false)
         )
-    }
-
-    enum class Status {
-        A, V
     }
 }
