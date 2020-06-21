@@ -18,7 +18,7 @@ class GGA(message: String) : Nmea(message) {
     }
     val quality: Quality by lazy {
         try {
-            return@lazy Quality.values()[data[6].toInt()]
+            return@lazy Quality.values().find { it.value == data[6].toInt() } ?: Quality.NO_FIX
         } catch (e: NumberFormatException) {
         } catch (e: ArrayIndexOutOfBoundsException) {
         }
@@ -53,7 +53,7 @@ class GGA(message: String) : Nmea(message) {
             longitude?.let { convertLocationNmea(it) } ?: "",
             longitude?.let { if (it < 0) LocationDirection.W.name else LocationDirection.E.name }
                 ?: "",
-            Quality.values().indexOf(quality),
+            quality.value,
             satelliteCount,
             horizontalDilutionOfPrecision ?: "",
             altitude ?: "",
@@ -83,7 +83,10 @@ class GGA(message: String) : Nmea(message) {
             // W or E
             EnumValidator(charArrayOf('W', 'E'), true),
             // quality 0, 1 or 2 (not fixed, fixed, differential fixed)
-            EnumValidator(charArrayOf('0', '1', '2', '3', '4'), true),
+            EnumValidator(
+                Quality.values().map { it.value.toString().single() }.toCharArray(),
+                true
+            ),
             // satellite count
             IntValidator(true, 0, 99),
             // horizontal dilution of precision
@@ -103,11 +106,11 @@ class GGA(message: String) : Nmea(message) {
         )
     }
 
-    enum class Quality {
-        NO_FIX,
-        FIX,
-        DIFFERENTIAL_FIX,
-        REAL_TIME_KINEMATIC_FIXED_INTEGER,
-        REAL_TIME_KINEMATIC_FLOAT_INTEGER
+    enum class Quality(val value: Int) {
+        NO_FIX(0),
+        FIX(1),
+        DIFFERENTIAL_FIX(2),
+        REAL_TIME_KINEMATIC_FIXED_INTEGER(3),
+        REAL_TIME_KINEMATIC_FLOAT_INTEGER(4)
     }
 }

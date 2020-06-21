@@ -12,7 +12,8 @@ class GSA(message: String) : Nmea(message) {
     }
     val mode2: Mode2 by lazy {
         try {
-            return@lazy Mode2.values()[data[2].toInt() - 1]
+            return@lazy Mode2.values().find { it.value == data[2].toInt() }
+                ?: Mode2.FIX_NOT_AVAILABLE
         } catch (e: NumberFormatException) {
         } catch (e: ArrayIndexOutOfBoundsException) {
         }
@@ -73,7 +74,7 @@ class GSA(message: String) : Nmea(message) {
         "$%sGSA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
             type.toUpperCase(Locale.ROOT),
             mode1.name,
-            Mode2.values().indexOf(mode2) + 1,
+            mode2.value,
             satellite1 ?: "",
             satellite2 ?: "",
             satellite3 ?: "",
@@ -102,7 +103,7 @@ class GSA(message: String) : Nmea(message) {
             // mode1 A (automatic) or M (manual)
             EnumValidator(Mode1.values().map { it.name.single() }.toCharArray(), true),
             // mode2 1 (fix not available) 2 (2D) or 3 (3D)
-            EnumValidator(charArrayOf('1', '2', '3'), true),
+            EnumValidator(Mode2.values().map { it.value.toString().single() }.toCharArray(), true),
             // satellite 1
             satelliteValidator,
             // satellite 2
@@ -144,7 +145,7 @@ class GSA(message: String) : Nmea(message) {
         A, M;
     }
 
-    enum class Mode2 {
-        FIX_NOT_AVAILABLE, FIX_2D, FIX_3D
+    enum class Mode2(val value: Int) {
+        FIX_NOT_AVAILABLE(1), FIX_2D(2), FIX_3D(3)
     }
 }
