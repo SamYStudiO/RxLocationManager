@@ -40,7 +40,7 @@ abstract class Nmea constructor(val message: String) {
      */
     protected abstract fun getTokenValidators(): Array<TokenValidator>
 
-    internal fun computeChecksum(): String = computeChecksum(message)
+    internal fun computeChecksum() = computeChecksum(message)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -53,13 +53,9 @@ abstract class Nmea constructor(val message: String) {
         return true
     }
 
-    override fun hashCode(): Int {
-        return message.hashCode()
-    }
+    override fun hashCode() = message.hashCode()
 
-    override fun toString(): String {
-        return message
-    }
+    override fun toString() = message
 
     companion object {
         private const val CANNOT_PARSE_INDEX_ERROR_MESSAGE =

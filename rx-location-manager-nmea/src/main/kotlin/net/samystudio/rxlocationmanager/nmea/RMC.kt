@@ -3,45 +3,45 @@ package net.samystudio.rxlocationmanager.nmea
 import java.util.*
 
 open class RMC(message: String) : Nmea(message) {
-    val time: String by lazy { data[1] }
-    val status: Status by lazy {
+    val time by lazy { data[1] }
+    val status by lazy {
         try {
             return@lazy Status.valueOf(data[2])
         } catch (e: IllegalArgumentException) {
         }
         Status.V
     }
-    val latitude: Double? by lazy {
+    val latitude by lazy {
         convertNmeaLocation(
             data[3],
             Cardinal.valueOf(data[4], Cardinal.N)!!
         )
     }
-    val longitude: Double? by lazy {
+    val longitude by lazy {
         convertNmeaLocation(
             data[5],
             Cardinal.valueOf(data[6], Cardinal.E)!!
         )
     }
-    val speed: Double? by lazy { data[7].toDoubleOrNull() }
-    val angle: Double? by lazy { data[8].toDoubleOrNull() }
-    val date: String by lazy { data[9] }
-    val magneticVariation: Double? by lazy { data[10].toDoubleOrNull() }
-    val magneticVariationDirection: Cardinal? by lazy {
+    val speed by lazy { data[7].toDoubleOrNull() }
+    val angle by lazy { data[8].toDoubleOrNull() }
+    val date by lazy { data[9] }
+    val magneticVariation by lazy { data[10].toDoubleOrNull() }
+    val magneticVariationDirection by lazy {
         try {
             return@lazy Cardinal.valueOf(data[11])
         } catch (e: IllegalArgumentException) {
         }
         null
     }
-    val faaMode: FAAMode by lazy {
+    val faaMode by lazy {
         try {
             return@lazy FAAMode.valueOf(data[12])
         } catch (e: IllegalArgumentException) {
         }
         FAAMode.N
     }
-    val navigationalStatus: NavigationalStatus by lazy {
+    val navigationalStatus by lazy {
         try {
             return@lazy NavigationalStatus.valueOf(data[13])
         } catch (e: IllegalArgumentException) {

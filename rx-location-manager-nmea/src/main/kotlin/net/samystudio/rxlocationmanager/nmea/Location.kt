@@ -27,13 +27,12 @@ fun convertNmeaLocation(token: String, direction: Cardinal): Double? {
  * Convert [Double] latitude/longitude coordinate to nmea token. Return empty string if conversion
  * failed.
  */
-fun convertLocationNmea(coordinate: Double): String {
-    return try {
+fun convertLocationNmea(coordinate: Double) =
+    try {
         Location.convert(abs(coordinate), Location.FORMAT_MINUTES).replace(":", "")
     } catch (e: IllegalArgumentException) {
         ""
     }
-}
 
 enum class Cardinal(internal val cardinalDirection: CardinalDirection) {
     N(CardinalDirection.NORTH_SOUTH),

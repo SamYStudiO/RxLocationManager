@@ -3,14 +3,14 @@ package net.samystudio.rxlocationmanager.nmea
 import java.util.*
 
 class GGA(message: String) : Nmea(message) {
-    val time: String by lazy { data[1] }
-    val latitude: Double? by lazy {
+    val time by lazy { data[1] }
+    val latitude by lazy {
         convertNmeaLocation(
             data[2],
             Cardinal.valueOf(data[3], Cardinal.N)!!
         )
     }
-    val longitude: Double? by lazy {
+    val longitude by lazy {
         convertNmeaLocation(
             data[4],
             Cardinal.valueOf(data[5], Cardinal.E)!!
@@ -25,12 +25,12 @@ class GGA(message: String) : Nmea(message) {
         }
         Quality.FIX_NOT_AVAILABLE
     }
-    val satelliteCount: Int by lazy { data[7].toIntOrNull() ?: 0 }
-    val horizontalDilutionOfPrecision: Double? by lazy { data[8].toDoubleOrNull() }
-    val altitude: Double? by lazy { data[9].toDoubleOrNull() }
-    val ellipsoidalOffset: Double? by lazy { data[11].toDoubleOrNull() }
-    val differentialGpsAge: Double? by lazy { data[13].toDoubleOrNull() }
-    val differentialGpsStationId: String by lazy { data[14] }
+    val satelliteCount by lazy { data[7].toIntOrNull() ?: 0 }
+    val horizontalDilutionOfPrecision by lazy { data[8].toDoubleOrNull() }
+    val altitude by lazy { data[9].toDoubleOrNull() }
+    val ellipsoidalOffset by lazy { data[11].toDoubleOrNull() }
+    val differentialGpsAge by lazy { data[13].toDoubleOrNull() }
+    val differentialGpsStationId by lazy { data[14] }
 
     constructor(
         type: String,
