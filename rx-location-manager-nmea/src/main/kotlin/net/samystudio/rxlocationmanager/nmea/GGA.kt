@@ -83,7 +83,7 @@ class GGA(message: String) : Nmea(message) {
             // W or E
             EnumValidator(charArrayOf('W', 'E'), true),
             // quality 0, 1 or 2 (not fixed, fixed, differential fixed)
-            EnumValidator(charArrayOf('0', '1', '2'), true),
+            EnumValidator(charArrayOf('0', '1', '2', '3', '4'), true),
             // satellite count
             IntValidator(true, 0, 99),
             // horizontal dilution of precision
