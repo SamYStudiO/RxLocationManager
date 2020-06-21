@@ -62,6 +62,9 @@ abstract class Nmea constructor(val message: String) {
     }
 
     companion object {
+        private const val CANNOT_PARSE_INDEX_ERROR_MESSAGE =
+            "Cannot parse message at index %s with validator %s from source %s"
+        private const val CHECKSUM_ERROR_MESSAGE = "Message checksum %s doesn't match %s"
         internal const val BLANK_ERROR_MESSAGE = "Message is blank"
         internal const val MISSING_DOLLAR_ERROR_MESSAGE = "Message should stat with $"
         internal const val CANNOT_FIND_CHECKSUM_ERROR_MESSAGE = "Cannot find checksum from message"
@@ -82,12 +85,11 @@ abstract class Nmea constructor(val message: String) {
             index: Int,
             validatorClassName: String,
             message: String
-        ) =
-            "Cannot parse message at index $index with validator $validatorClassName from source $message"
+        ) = CANNOT_PARSE_INDEX_ERROR_MESSAGE.format(index, validatorClassName, message)
 
         internal fun getChecksumErrorMessage(
             expectedChecksum: String,
             actualChecksum: String
-        ) = "Message checksum $expectedChecksum doesn't match $actualChecksum"
+        ) = CHECKSUM_ERROR_MESSAGE.format(expectedChecksum, actualChecksum)
     }
 }
