@@ -122,8 +122,8 @@ class GGA(message: String) : Nmea(message) {
         GPS_FIX(1),
         DIFFERENTIAL_GPS_FIX(2),
         PPS_FIX(3),
-        REAL_TIME_KINEMATIC(4),
-        FLOAT_RTK(5),
+        REAL_TIME_KINEMATIC_INTEGER(4),
+        REAL_TIME_KINEMATIC_FLOAT(5),
         ESTIMATED(6),
         MANUAL_INPUT_MODE(7),
         SIMULATION_MODE(8)
