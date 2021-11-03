@@ -427,7 +427,9 @@ object RxLocationManager {
             } else {
                 val listener = Listener(observer, locationManager)
                 observer.onSubscribe(listener)
-                locationManager?.addNmeaListener(listener)
+                (handler ?: Handler()).post {
+                    locationManager?.addNmeaListener(listener)
+                }
             }
         }
 
