@@ -161,10 +161,10 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGnssStatusOnChanged(handler: Handler? = null): Observable<GnssStatus> =
+    fun observeGnssStatusOnChanged(handler: Handler? = null): Observable<GnssStatusState.StateChanged> =
         observeGnssStatus(handler)
-            .filter { t -> t is GnssStatusState.StateChanged }
-            .map { t -> (t as GnssStatusState.StateChanged).status }
+            .filter { it is GnssStatusState.StateChanged }
+            .map { it as GnssStatusState.StateChanged }
 
     /**
      * Prior to [Build.VERSION_CODES.N] [GnssStatusState.StateFirstFix.ttffMillis] will always be
@@ -176,10 +176,10 @@ object RxLocationManager {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGnssStatusOnFirstFix(handler: Handler? = null): Observable<Int> =
+    fun observeGnssStatusOnFirstFix(handler: Handler? = null): Observable<GnssStatusState.StateFirstFix> =
         observeGnssStatus(handler)
-            .filter { t -> t is GnssStatusState.StateFirstFix }
-            .map { t -> (t as GnssStatusState.StateFirstFix).ttffMillis }
+            .filter { it is GnssStatusState.StateFirstFix }
+            .map { it as GnssStatusState.StateFirstFix }
 
     /**
      * @see [LocationManager.registerGnssStatusCallback]

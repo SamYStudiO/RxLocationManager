@@ -16,7 +16,6 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.functions.BiFunction
 import net.samystudio.rxlocationmanager.ContextProvider
 import net.samystudio.rxlocationmanager.RxLocationManager
 import net.samystudio.rxlocationmanager.nmea.GGA
@@ -98,7 +97,7 @@ object RxLocationManagerAltitude {
         Observable.combineLatest(
             pressureAtSeaLevelObservable.distinctUntilChanged(),
             BarometricSensorObservable(sensorDelay),
-            BiFunction { t1: Float, t2: Float ->
+            { t1: Float, t2: Float ->
                 SensorManager.getAltitude(t1, t2).toDouble()
             }
         ).distinctUntilChanged()
