@@ -9,6 +9,7 @@ object Dependencies {
 
     // android
     const val core_ktx = "androidx.core:core-ktx:${Versions.core_ktx}"
+    const val startup = "androidx.startup:startup-runtime:${Versions.startup}"
     const val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
 
     // reactive
@@ -31,6 +32,7 @@ object Dependencies {
 fun DependencyHandler.base() {
     implementation(Dependencies.kotlin)
     implementation(Dependencies.core_ktx)
+    implementation(Dependencies.startup)
     implementation(Dependencies.appcompat)
 }
 

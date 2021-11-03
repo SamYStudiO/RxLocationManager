@@ -5,7 +5,6 @@ package net.samystudio.rxlocationmanager
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.TargetApi
-import android.content.Context
 import android.location.*
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +13,7 @@ import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
+import androidx.core.content.getSystemService
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
@@ -37,9 +37,7 @@ object RxLocationManager {
      */
     @JvmStatic
     val locationManager by lazy {
-        ContextProvider.applicationContext.getSystemService(
-            Context.LOCATION_SERVICE
-        ) as LocationManager
+        ContextProvider.applicationContext.getSystemService<LocationManager>()!!
     }
 
     /**

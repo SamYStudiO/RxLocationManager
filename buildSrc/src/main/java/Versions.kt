@@ -15,6 +15,7 @@ object Versions {
 
     // android
     const val core_ktx = "1.7.0"
+    const val startup = "1.1.0"
     const val appcompat = "1.3.1"
 
     // reactive
@@ -23,7 +24,7 @@ object Versions {
     const val rxlocationmanager = "0.5.0"
 
     //misc
-    const val rxpermissions = "0.12.0"
+    const val rxpermissions = "0.12"
 
     // test
     const val junit = "4.13.2"
