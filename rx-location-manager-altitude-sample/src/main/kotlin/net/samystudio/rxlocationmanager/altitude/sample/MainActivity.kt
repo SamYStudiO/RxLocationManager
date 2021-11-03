@@ -6,10 +6,10 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import com.tbruyelle.rxpermissions3.RxPermissions
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import net.samystudio.rxlocationmanager.altitude.GoogleElevationApi
 import net.samystudio.rxlocationmanager.altitude.RxLocationManagerAltitude
 

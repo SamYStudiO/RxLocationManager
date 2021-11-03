@@ -6,9 +6,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import com.tbruyelle.rxpermissions3.RxPermissions
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import net.samystudio.rxlocationmanager.*
 
 class MainActivity : AppCompatActivity() {
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity() {
             rxPermissions
                 .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .filter { it }
-                .flatMap { RxLocationManager.observeGnssStatusChanged() }
+                .flatMap { RxLocationManager.observeGnssStatusOnChanged() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("GnssStatusChanged2", it.toString())

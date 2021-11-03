@@ -5,9 +5,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import com.tbruyelle.rxpermissions3.RxPermissions
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import net.samystudio.rxlocationmanager.RxLocationManager
 import net.samystudio.rxlocationmanager.nmea.GGA
 import net.samystudio.rxlocationmanager.nmea.NmeaException
