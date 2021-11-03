@@ -31,7 +31,6 @@ class RxLocationManagerAltitudeTest {
             } catch (e: IllegalAccessException) {
                 e.printStackTrace()
             }
-
         } catch (e: NoSuchFieldException) {
             e.printStackTrace()
         }

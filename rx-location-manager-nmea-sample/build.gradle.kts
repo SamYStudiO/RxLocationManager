@@ -32,4 +32,3 @@ dependencies {
     implementation(Dependencies.rxlocationmanager_altitude)
     implementation(Dependencies.rxpermissions)
 }
-

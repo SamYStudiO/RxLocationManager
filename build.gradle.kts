@@ -1,9 +1,6 @@
 buildscript {
     repositories {
         google()
-        jcenter()
-        mavenCentral()
-        maven { url = uri("https://maven.fabric.io/public") }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${Versions.android_build_tools}")
@@ -11,6 +8,11 @@ buildscript {
         classpath("com.github.ben-manes:gradle-versions-plugin:${Versions.gradle_versions_plugin}")
         classpath("com.vanniktech:gradle-maven-publish-plugin:${Versions.gradle_maven_publish_plugin}")
     }
+}
+
+plugins {
+    id("com.github.ben-manes.versions") version Versions.gradle_versions_plugin
+    id("com.diffplug.spotless") version Versions.diffplugin
 }
 
 allprojects {
@@ -22,7 +24,25 @@ allprojects {
     }
 }
 
-apply(plugin = "com.github.ben-manes.versions")
+subprojects {
+    apply(plugin = "com.diffplug.spotless")
+    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        kotlin {
+            target("**/*.kt")
+            ktlint(Versions.ktlint).userData(mapOf("disabled_rules" to "no-wildcard-imports"))
+        }
+        kotlinGradle {
+            target("**/*.gradle.kts")
+            ktlint(Versions.ktlint).userData(mapOf("disabled_rules" to "no-wildcard-imports"))
+        }
+    }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            // Treat all Kotlin warnings as errors
+            allWarningsAsErrors = true
+        }
+    }
+}
 
 fun isNonStable(version: String): Boolean {
     val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }

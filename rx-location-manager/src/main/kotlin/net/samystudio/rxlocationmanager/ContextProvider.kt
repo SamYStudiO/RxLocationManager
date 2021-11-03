@@ -3,6 +3,7 @@ package net.samystudio.rxlocationmanager
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.net.Uri
 import androidx.annotation.RestrictTo
 import androidx.annotation.RestrictTo.Scope.LIBRARY
@@ -23,9 +24,9 @@ class ContextProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<String>?,
         sortOrder: String?
-    ) = null
+    ): Cursor? = null
 
-    override fun insert(uri: Uri, values: ContentValues?) = null
+    override fun insert(uri: Uri, values: ContentValues?): Uri? = null
 
     override fun update(
         uri: Uri,
@@ -36,7 +37,7 @@ class ContextProvider : ContentProvider() {
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?) = 0
 
-    override fun getType(uri: Uri) = null
+    override fun getType(uri: Uri): String? = null
 
     companion object {
         lateinit var applicationContext: Context

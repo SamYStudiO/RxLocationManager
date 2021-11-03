@@ -75,7 +75,6 @@ object RxLocationManager {
     fun observeGnssMeasurements(handler: Handler? = null): Observable<GnssMeasurementsState> =
         GnssMeasurementsObservable(locationManager, handler)
 
-
     /**
      * @see [LocationManager.registerGnssMeasurementsCallback]
      * @see [GnssMeasurementsEvent]

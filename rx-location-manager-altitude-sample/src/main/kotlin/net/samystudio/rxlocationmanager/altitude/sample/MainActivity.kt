@@ -56,12 +56,15 @@ class MainActivity : AppCompatActivity() {
                 2.333333
             ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Log.d(
-                        "RemoteServiceAltitude",
-                        it.toString()
-                    )
-                }, { Log.d("RemoteServiceAltitude", "Error getting remote altitude") })
+                .subscribe(
+                    {
+                        Log.d(
+                            "RemoteServiceAltitude",
+                            it.toString()
+                        )
+                    },
+                    { Log.d("RemoteServiceAltitude", "Error getting remote altitude") }
+                )
         )
     }
 

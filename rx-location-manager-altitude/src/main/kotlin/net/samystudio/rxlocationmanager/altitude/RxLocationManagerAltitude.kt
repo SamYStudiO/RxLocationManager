@@ -43,14 +43,12 @@ object RxLocationManagerAltitude {
                     if (gga.altitude != null && gga.ellipsoidalOffset != null)
                         return@flatMap Observable.just(GGAWrapper(gga))
                 } catch (e: NmeaException) {
-
                 }
                 Observable.just(GGAWrapper(null))
             }
             .filter { it.gga != null }
             .map { it.gga!!.altitude!! + it.gga.ellipsoidalOffset!! }
             .distinctUntilChanged()
-
 
     /**
      * Get an [Observable] that emit geoidal altitude (also known as mean sea level altitude).
@@ -65,7 +63,6 @@ object RxLocationManagerAltitude {
                     if (gga.altitude != null)
                         return@flatMap Observable.just(GGAWrapper(gga))
                 } catch (e: NmeaException) {
-
                 }
                 Observable.just(GGAWrapper(null))
             }
@@ -103,8 +100,8 @@ object RxLocationManagerAltitude {
             BarometricSensorObservable(sensorDelay),
             BiFunction { t1: Float, t2: Float ->
                 SensorManager.getAltitude(t1, t2).toDouble()
-            }).distinctUntilChanged()
-
+            }
+        ).distinctUntilChanged()
 
     /**
      * Get an [Single] that emit altitude from a [RemoteServiceAltitude] at the specified
@@ -126,7 +123,6 @@ object RxLocationManagerAltitude {
                 input.close()
 
                 emitter.onSuccess(remoteServiceAltitude.parseAltitude(response.toString()))
-
             } catch (e: Exception) {
                 emitter.onError(e)
             }
