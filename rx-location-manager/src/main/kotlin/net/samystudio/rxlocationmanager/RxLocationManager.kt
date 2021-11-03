@@ -48,8 +48,7 @@ object RxLocationManager {
     fun getLastKnownLocation(provider: Provider): Maybe<Location> = Maybe.defer {
         locationManager.getLastKnownLocation(provider.name.toLowerCase(Locale.ROOT))
             ?.let { Maybe.just(it) } ?: run {
-            @Suppress("RemoveExplicitTypeArguments")
-            Maybe.empty<Location>()
+            Maybe.empty()
         }
     }
 
