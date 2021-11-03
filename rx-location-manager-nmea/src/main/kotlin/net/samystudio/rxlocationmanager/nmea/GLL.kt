@@ -40,7 +40,7 @@ class GLL(message: String) : Nmea(message) {
         faaMode: FAAMode = FAAMode.N
     ) : this(
         "$%sGLL,%s,%s,%s,%s,%s,%s,%s".format(
-            type.toUpperCase(Locale.ROOT),
+            type.uppercase(Locale.ROOT),
             latitude?.let { convertLocationNmea(it) } ?: "",
             latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
                 ?: "",

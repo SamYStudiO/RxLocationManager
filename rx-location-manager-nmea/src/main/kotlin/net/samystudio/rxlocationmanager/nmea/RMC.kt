@@ -64,7 +64,7 @@ open class RMC(message: String) : Nmea(message) {
         navigationalStatus: NavigationalStatus = NavigationalStatus.V
     ) : this(
         "$%sRMC,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
-            type.toUpperCase(Locale.ROOT),
+            type.uppercase(Locale.ROOT),
             time,
             status.name,
             latitude?.let { convertLocationNmea(it) } ?: "",

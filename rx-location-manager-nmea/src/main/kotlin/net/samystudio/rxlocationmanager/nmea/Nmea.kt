@@ -71,7 +71,7 @@ abstract class Nmea constructor(val message: String) {
             for (char in data) {
                 if (char == '$') continue
                 if (char == '*') break
-                checksum = checksum.xor(char.toInt())
+                checksum = checksum.xor(char.code)
             }
 
             return String.format("%02X", checksum)

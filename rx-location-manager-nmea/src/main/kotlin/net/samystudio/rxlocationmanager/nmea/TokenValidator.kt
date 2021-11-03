@@ -32,7 +32,7 @@ class DoubleValidator(
 
 class TypeValidator(private val type: String) : TokenValidator {
     override fun validate(token: String): Boolean {
-        return token.matches(("[A-Z]{2}${type.toUpperCase(Locale.ROOT)}").toRegex())
+        return token.matches(("[A-Z]{2}${type.uppercase(Locale.ROOT)}").toRegex())
     }
 }
 

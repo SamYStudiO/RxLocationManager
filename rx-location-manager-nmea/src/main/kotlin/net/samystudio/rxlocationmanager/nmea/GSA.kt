@@ -72,7 +72,7 @@ class GSA(message: String) : Nmea(message) {
         verticalDilutionOfPrecision: Double? = null
     ) : this(
         "$%sGSA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
-            type.toUpperCase(Locale.ROOT),
+            type.uppercase(Locale.ROOT),
             selectionMode.name,
             fix.value,
             satellite1 ?: "",

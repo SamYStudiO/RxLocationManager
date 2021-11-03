@@ -46,7 +46,7 @@ class GGA(message: String) : Nmea(message) {
         differentialGpsStationId: String = ""
     ) : this(
         "$%sGGA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
-            type.toUpperCase(Locale.ROOT),
+            type.uppercase(Locale.ROOT),
             time,
             latitude?.let { convertLocationNmea(it) } ?: "",
             latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
