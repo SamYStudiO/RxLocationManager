@@ -6,10 +6,10 @@ plugins {
 apply(from = rootProject.file(".buildscript/configure_maven_publish.gradle"))
 
 android {
-    compileSdkVersion(Versions.compileSdk)
+    compileSdk = Versions.compileSdk
 
     defaultConfig {
-        minSdkVersion(Versions.minSdk)
+        minSdk = Versions.minSdk
     }
 
     sourceSets {
