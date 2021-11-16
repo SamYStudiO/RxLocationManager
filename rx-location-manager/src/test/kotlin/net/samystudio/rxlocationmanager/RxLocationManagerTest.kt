@@ -5,6 +5,7 @@ package net.samystudio.rxlocationmanager
 import android.location.*
 import android.os.Bundle
 import io.reactivex.rxjava3.observers.TestObserver
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -12,6 +13,7 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
 class RxLocationManagerTest {
+    lateinit var mocks: AutoCloseable
 
     @Mock
     lateinit var gnssMeasurementsEvent: GnssMeasurementsEvent
@@ -30,7 +32,12 @@ class RxLocationManagerTest {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        mocks = MockitoAnnotations.openMocks(this)
+    }
+
+    @After
+    fun cleanUp() {
+        mocks.close()
     }
 
     @Test

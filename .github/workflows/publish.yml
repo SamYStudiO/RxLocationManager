@@ -1,4 +1,4 @@
-name: Deploy SNAPSHOT
+name: Publish
 
 on:
   push:
@@ -26,6 +26,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
       - name: Set up Java
         uses: actions/setup-java@v1
         with:
