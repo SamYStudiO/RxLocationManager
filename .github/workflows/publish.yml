@@ -41,5 +41,5 @@ jobs:
       - name: Publish packages
         run: ./gradlew publish
         env:
-          mavenCentralUsername: ${{ secrets.SONATYPE_USER }}
-          mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USER }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}
