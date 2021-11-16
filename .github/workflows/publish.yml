@@ -31,6 +31,9 @@ jobs:
         with:
           java-version: '11'
 
+      - name: Gradlew permissions
+        run: chmod +x ./gradlew
+
       - name: Test
         run: ./gradlew check
 
