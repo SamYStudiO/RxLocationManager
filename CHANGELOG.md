@@ -1,3 +1,8 @@
+0.6.0 (2021-12-06)
+------------------
+- Update nmea validators to be more compliant with v2.3+ specification
+- Remove nmea RMCTiming and rename RMCNavigational to RMC
+
 0.5.0 (2020-06-19)
 ------------------
 - Migrate to **rxjava3**.

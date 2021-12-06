@@ -17,15 +17,15 @@ You can easily add you own parser, just inherit from `net.samystudio.rxlocationm
 Download
 --------
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.5.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.6.0'
 ```
 If you need altitude helpers observables add this as well:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.5.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.6.0'
 ```
 If you want to easily parse nmea messages you can use this standalone artifact (note this is already include if you added rxlocationmanager-altitude dependency):
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.5.0'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.6.0'
 ```
 
 Snapshots are available from [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/).
@@ -34,17 +34,16 @@ If you want to run latest snapshot add its repository from your root `build.grad
 allprojects {
     repositories {
         google()
-        jcenter()
-        ...
+        // ...
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }
 ```
 and change versions:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.6.0-SNAPSHOT'
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.6.0-SNAPSHOT'
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.6.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.6.1-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.6.1-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.6.1-SNAPSHOT'
 ```
 
 Usage
@@ -58,7 +57,7 @@ Publishing
  2. Update the `CHANGELOG.md` for the impending release.
  3. Update the `README.md` with the new version.
  4. `git commit -am "Prepare for release X.Y.Z"` (where X.Y.Z is the new version)
- 5. `./gradlew uploadArchives --no-daemon --no-parallel`
+ 5. `./gradlew publish --no-daemon --no-parallel`
  6. `git tag -a X.Y.Z -m "Version X.Y.Z"` (where X.Y.Z is the new version)
  7. Update the `gradle.properties` to the next SNAPSHOT version.
  8. `git commit -am "Prepare next development version"`
