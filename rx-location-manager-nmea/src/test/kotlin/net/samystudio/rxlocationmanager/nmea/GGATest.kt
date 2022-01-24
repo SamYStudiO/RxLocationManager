@@ -29,6 +29,25 @@ class GGATest {
     }
 
     @Test
+    fun validateWithSpecialDate() {
+        val gga =
+            GGA("\$GPGGA,103852.0,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*56")
+
+        assertEquals("GPGGA", gga.type)
+        assertEquals("103852.0", gga.time)
+        assertEquals(33.71103, gga.latitude!!, PRECISION)
+        assertEquals(-117.85643, gga.longitude!!, PRECISION)
+        assertEquals(GGA.Quality.GPS_FIX, gga.quality)
+        assertEquals(10, gga.satelliteCount)
+        assertEquals(1.2, gga.horizontalDilutionOfPrecision!!, PRECISION)
+        assertEquals(27.0, gga.altitude!!, PRECISION)
+        assertEquals(-34.2, gga.ellipsoidalOffset!!, PRECISION)
+        assertEquals(null, gga.differentialGpsAge)
+        assertEquals("0000", gga.differentialGpsStationId)
+        assertEquals("56", gga.checksum)
+    }
+
+    @Test
     fun validateAlternateConstructor() {
         val gga = GGA(
             "GP",

@@ -62,7 +62,7 @@ class LongitudeValidator(private val optional: Boolean = false) : TokenValidator
 class TimeValidator(private val optional: Boolean = false) : TokenValidator {
     override fun validate(token: String): Boolean {
         if (token.isBlank() && optional) return true
-        return token.matches("^\\d{6}(\\.\\d{2,4})?$".toRegex())
+        return token.matches("^\\d{6}(\\.\\d{1,4})?$".toRegex())
     }
 }
 
