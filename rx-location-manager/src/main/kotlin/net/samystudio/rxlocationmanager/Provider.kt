@@ -14,5 +14,9 @@ enum class Provider {
     /**
      * @see [LocationManager.PASSIVE_PROVIDER]
      */
-    PASSIVE
+    PASSIVE,
+    /**
+     * @see [LocationManager.FUSED_PROVIDER]
+     */
+    FUSED
 }
