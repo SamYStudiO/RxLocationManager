@@ -1,13 +1,13 @@
 package net.samystudio.rxlocationmanager
 
-import android.location.GnssStatus
+import androidx.core.location.GnssStatusCompat
 
 /**
- * @see [GnssStatus.Callback]
+ * @see [GnssStatusCompat.Callback]
  */
 sealed class GnssStatusState {
     object StateStarted : GnssStatusState()
     object StateStopped : GnssStatusState()
     data class StateFirstFix(val ttffMillis: Int? = null) : GnssStatusState()
-    data class StateChanged(val status: GnssStatus? = null) : GnssStatusState()
+    data class StateChanged(val status: GnssStatusCompat? = null) : GnssStatusState()
 }

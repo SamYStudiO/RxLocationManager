@@ -4,6 +4,7 @@ package net.samystudio.rxlocationmanager
 
 import android.location.*
 import android.os.Bundle
+import androidx.core.location.GnssStatusCompat
 import io.reactivex.rxjava3.observers.TestObserver
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -22,7 +23,7 @@ class RxLocationManagerTest {
     lateinit var gnssNavigationMessage: GnssNavigationMessage
 
     @Mock
-    lateinit var gnssStatus: GnssStatus
+    lateinit var gnssStatus: GnssStatusCompat
 
     @Mock
     lateinit var location: Location
@@ -78,21 +79,6 @@ class RxLocationManagerTest {
     fun observeGnssStatus() {
         val observer = TestObserver<GnssStatusState>()
         val listener = RxLocationManager.GnssStatusObservable.Listener(observer, null)
-        listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_FIRST_FIX)
-        observer.assertValueAt(0, GnssStatusState.StateFirstFix(null))
-        listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_SATELLITE_STATUS)
-        observer.assertValueAt(1, GnssStatusState.StateChanged(null))
-        listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_STARTED)
-        observer.assertValueAt(2, GnssStatusState.StateStarted)
-        listener.onGpsStatusChanged(GpsStatus.GPS_EVENT_STOPPED)
-        observer.assertValueAt(3, GnssStatusState.StateStopped)
-        observer.onComplete()
-    }
-
-    @Test
-    fun observeGnssStatusN() {
-        val observer = TestObserver<GnssStatusState>()
-        val listener = RxLocationManager.GnssStatusObservable.NListener(observer, null)
         listener.callback.onFirstFix(10)
         assertEquals(
             10,
