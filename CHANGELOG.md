@@ -1,3 +1,17 @@
+0.7.0-SNAPSHOT
+----------
+- Add synchronized when adding nmea listener as it may lead to ConcurrentException
+- Add FUSED_PROVIDER from Provider enum
+- Fix tests
+- Fix publish
+- Replace getLastKnownLocation with getCurrentLocation
+- Remove GnssMeasurements/GnssNavigationMessage status callbacks as they are not working anymore with latest android version
+- Make time validator less restrictive
+- Use LocationManagerCompat for requestLocationUpdates + spotless
+- Use LocationManagerCompat for registerGnssStatusCallback
+- Bump libraries
+
+
 0.6.0 (2021-12-06)
 ------------------
 - Update nmea validators to be more compliant with v2.3+ specification
