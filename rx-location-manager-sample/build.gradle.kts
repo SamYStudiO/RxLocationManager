@@ -37,6 +37,6 @@ android {
 
 dependencies {
     base()
-    implementation(Dependencies.rxlocationmanager)
+    implementation(project(":rx-location-manager"))
     implementation(Dependencies.rxpermissions)
 }

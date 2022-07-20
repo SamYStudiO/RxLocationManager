@@ -6,10 +6,14 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.location.LocationRequestCompat
 import com.tbruyelle.rxpermissions3.RxPermissions
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import net.samystudio.rxlocationmanager.*
+import net.samystudio.rxlocationmanager.GnssStatusState
+import net.samystudio.rxlocationmanager.LocationUpdatesState
+import net.samystudio.rxlocationmanager.Provider
+import net.samystudio.rxlocationmanager.RxLocationManager
 
 class MainActivity : AppCompatActivity() {
     private val compositeDisposable = CompositeDisposable()
@@ -41,38 +45,7 @@ class MainActivity : AppCompatActivity() {
                     .flatMap { RxLocationManager.observeGnssMeasurements() }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        when (it) {
-                            is GnssMeasurementsState.StateEvent -> Log.d(
-                                "GnssMeasurementsEvent1",
-                                it.event.toString()
-                            )
-                            is GnssMeasurementsState.StateStatus -> Log.d(
-                                "GnssMeasurementsStatus1",
-                                it.status.toString()
-                            )
-                        }
-                    }
-            )
-
-            compositeDisposable.add(
-                rxPermissions
-                    .request(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .filter { it }
-                    .flatMap { RxLocationManager.observeGnssMeasurementsEvent() }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        Log.d("GnssMeasurementsEvent2", it.toString())
-                    }
-            )
-
-            compositeDisposable.add(
-                rxPermissions
-                    .request(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .filter { it }
-                    .flatMap { RxLocationManager.observeGnssMeasurementsStatus() }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        Log.d("GnssMeasurementsStatus2", it.toString())
+                        Log.d("GnssMeasurementsEvent", it.toString())
                     }
             )
 
@@ -84,38 +57,7 @@ class MainActivity : AppCompatActivity() {
                     .flatMap { RxLocationManager.observeGnssNavigationMessage() }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        when (it) {
-                            is GnssNavigationMessageState.StateEvent -> Log.d(
-                                "GnssNavMessageEvent1",
-                                it.event.toString()
-                            )
-                            is GnssNavigationMessageState.StateStatus -> Log.d(
-                                "GnssNavMessageStatus1",
-                                it.status.toString()
-                            )
-                        }
-                    }
-            )
-
-            compositeDisposable.add(
-                rxPermissions
-                    .request(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .filter { it }
-                    .flatMap { RxLocationManager.observeGnssNavigationMessageEvent() }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        Log.d("GnssNavMesEvent2", it.toString())
-                    }
-            )
-
-            compositeDisposable.add(
-                rxPermissions
-                    .request(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .filter { it }
-                    .flatMap { RxLocationManager.observeGnssNavigationMessageStatus() }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        Log.d("GnssNavMesStatus2", it.toString())
+                        Log.d("GnssNavMesEvent", it.toString())
                     }
             )
         }
@@ -198,24 +140,27 @@ class MainActivity : AppCompatActivity() {
             rxPermissions
                 .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .filter { it }
-                .flatMap { RxLocationManager.observeLocationUpdatesState(Provider.GPS, 1000, 10f) }
+                .flatMap {
+                    RxLocationManager.observeLocationUpdatesState(
+                        Provider.GPS,
+                        LocationRequestCompat.Builder(1000)
+                            .setMinUpdateDistanceMeters(10f)
+                            .build()
+                    )
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     when (it) {
                         is LocationUpdatesState.StateLocationChanged -> Log.d(
-                            "LocUpdLocationChanged1",
-                            it.toString()
-                        )
-                        is LocationUpdatesState.StateStatusChanged -> Log.d(
-                            "LocUpdStatusChanged1",
+                            "LocUpdLocationChanged",
                             it.toString()
                         )
                         is LocationUpdatesState.StateProviderEnabled -> Log.d(
-                            "LocUpdProviderEnabled1",
+                            "LocUpdProviderEnabled",
                             it.toString()
                         )
                         is LocationUpdatesState.StateProviderDisabled -> Log.d(
-                            "LocUpdProviderDisabled1",
+                            "LocUpdProviderDisabled",
                             it.toString()
                         )
                     }
@@ -226,7 +171,14 @@ class MainActivity : AppCompatActivity() {
             rxPermissions
                 .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .filter { it }
-                .flatMap { RxLocationManager.observeLocationChanged(Provider.GPS, 1000, 10f) }
+                .flatMap {
+                    RxLocationManager.observeLocationChanged(
+                        Provider.GPS,
+                        LocationRequestCompat.Builder(1000)
+                            .setMinUpdateDistanceMeters(10f)
+                            .build()
+                    )
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("LocUpdLocationChanged2", it.toString())
@@ -237,22 +189,12 @@ class MainActivity : AppCompatActivity() {
             rxPermissions
                 .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .filter { it }
-                .flatMap { RxLocationManager.observeLocationStatusChanged(Provider.GPS, 1000, 10f) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    Log.d("LocUpdStatusChanged2", it.toString())
-                }
-        )
-
-        compositeDisposable.add(
-            rxPermissions
-                .request(Manifest.permission.ACCESS_FINE_LOCATION)
-                .filter { it }
                 .flatMap {
                     RxLocationManager.observeLocationProviderEnabled(
                         Provider.GPS,
-                        1000,
-                        10f
+                        LocationRequestCompat.Builder(1000)
+                            .setMinUpdateDistanceMeters(10f)
+                            .build()
                     )
                 }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -268,8 +210,9 @@ class MainActivity : AppCompatActivity() {
                 .flatMap {
                     RxLocationManager.observeLocationProviderDisabled(
                         Provider.GPS,
-                        1000,
-                        10f
+                        LocationRequestCompat.Builder(1000)
+                            .setMinUpdateDistanceMeters(10f)
+                            .build()
                     )
                 }
                 .observeOn(AndroidSchedulers.mainThread())

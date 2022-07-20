@@ -37,7 +37,7 @@ android {
 
 dependencies {
     base()
-    implementation(Dependencies.rxlocationmanager)
-    implementation(Dependencies.rxlocationmanager_altitude)
+    implementation(project(":rx-location-manager"))
+    implementation(project(":rx-location-manager-altitude"))
     implementation(Dependencies.rxpermissions)
 }

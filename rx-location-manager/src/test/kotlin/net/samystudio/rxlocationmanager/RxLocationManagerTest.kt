@@ -117,19 +117,6 @@ class RxLocationManagerTest {
             provider,
             (observer.values()[2] as LocationUpdatesState.StateProviderEnabled).provider
         )
-        listener.onStatusChanged(providerName, 10, bundle)
-        assertEquals(
-            provider,
-            (observer.values()[3] as LocationUpdatesState.StateStatusChanged).provider
-        )
-        assertEquals(
-            10,
-            (observer.values()[3] as LocationUpdatesState.StateStatusChanged).status
-        )
-        assertEquals(
-            bundle,
-            (observer.values()[3] as LocationUpdatesState.StateStatusChanged).extras
-        )
         observer.onComplete()
     }
 }

@@ -12,11 +12,14 @@ subprojects {
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {
             target("**/*.kt")
-            ktlint(Versions.ktlint).userData(mapOf("disabled_rules" to "no-wildcard-imports"))
+            ktlint(Versions.ktlint)
+                .editorConfigOverride(mapOf("disabled_rules" to "no-wildcard-imports"))
         }
         kotlinGradle {
             target("**/*.gradle.kts")
-            ktlint(Versions.ktlint).userData(mapOf("disabled_rules" to "no-wildcard-imports"))
+            ktlint(Versions.ktlint)
+                .setUseExperimental(true)
+                .editorConfigOverride(mapOf("disabled_rules" to "no-wildcard-imports"))
         }
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

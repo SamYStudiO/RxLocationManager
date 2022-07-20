@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.os.Handler
+import android.os.Looper
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
 import io.reactivex.rxjava3.core.Observable
@@ -34,13 +35,18 @@ object RxLocationManagerAltitude {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGpsEllipsoidalAltitudeUpdates(handler: Handler? = null): Observable<Double> =
+    fun observeGpsEllipsoidalAltitudeUpdates(
+        handler: Handler = Handler(
+            Looper.myLooper() ?: Looper.getMainLooper()
+        )
+    ): Observable<Double> =
         RxLocationManager.observeNmea(handler)
             .flatMap {
                 try {
                     val gga = GGA(it.message)
-                    if (gga.altitude != null && gga.ellipsoidalOffset != null)
+                    if (gga.altitude != null && gga.ellipsoidalOffset != null) {
                         return@flatMap Observable.just(GGAWrapper(gga))
+                    }
                 } catch (e: NmeaException) {
                 }
                 Observable.just(GGAWrapper(null))
@@ -54,13 +60,18 @@ object RxLocationManagerAltitude {
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
-    fun observeGpsGeoidalAltitudeUpdates(handler: Handler? = null): Observable<Double> =
+    fun observeGpsGeoidalAltitudeUpdates(
+        handler: Handler = Handler(
+            Looper.myLooper() ?: Looper.getMainLooper()
+        )
+    ): Observable<Double> =
         RxLocationManager.observeNmea(handler)
             .flatMap {
                 try {
                     val gga = GGA(it.message)
-                    if (gga.altitude != null)
+                    if (gga.altitude != null) {
                         return@flatMap Observable.just(GGAWrapper(gga))
+                    }
                 } catch (e: NmeaException) {
                 }
                 Observable.just(GGAWrapper(null))
@@ -96,11 +107,10 @@ object RxLocationManagerAltitude {
     ): Observable<Double> =
         Observable.combineLatest(
             pressureAtSeaLevelObservable.distinctUntilChanged(),
-            BarometricSensorObservable(sensorDelay),
-            { t1: Float, t2: Float ->
-                SensorManager.getAltitude(t1, t2).toDouble()
-            }
-        ).distinctUntilChanged()
+            BarometricSensorObservable(sensorDelay)
+        ) { t1: Float, t2: Float ->
+            SensorManager.getAltitude(t1, t2).toDouble()
+        }.distinctUntilChanged()
 
     /**
      * Get an [Single] that emit altitude from a [RemoteServiceAltitude] at the specified
