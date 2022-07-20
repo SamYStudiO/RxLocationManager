@@ -14,12 +14,15 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
+import androidx.core.location.LocationManagerCompat
+import androidx.core.os.CancellationSignal
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import net.samystudio.rxlocationmanager.RxLocationManager.observeGnssStatus
 import java.util.*
+import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -36,8 +39,8 @@ object RxLocationManager {
      * A reference to android [LocationManager] system service.
      */
     @JvmStatic
-    val locationManager by lazy {
-        ContextProvider.applicationContext.getSystemService<LocationManager>()!!
+    val locationManager: LocationManager by lazy {
+        ContextProvider.applicationContext.getSystemService()!!
     }
 
     /**
@@ -64,77 +67,23 @@ object RxLocationManager {
      * @see [LocationManager.registerGnssMeasurementsCallback]
      * @see [GnssMeasurementsEvent]
      * @see [GnssMeasurementsEvent.Callback.onGnssMeasurementsReceived]
-     * @see [GnssMeasurementsEvent.Callback.onStatusChanged]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
-    fun observeGnssMeasurements(handler: Handler? = null): Observable<GnssMeasurementsState> =
+    fun observeGnssMeasurements(handler: Handler? = null): Observable<GnssMeasurementsEvent> =
         GnssMeasurementsObservable(locationManager, handler)
 
     /**
-     * @see [LocationManager.registerGnssMeasurementsCallback]
-     * @see [GnssMeasurementsEvent]
-     * @see [GnssMeasurementsEvent.Callback.onGnssMeasurementsReceived]
-     */
-    @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
-    @JvmStatic
-    fun observeGnssMeasurementsEvent(handler: Handler? = null): Observable<GnssMeasurementsEvent> =
-        observeGnssMeasurements(handler)
-            .filter { it is GnssMeasurementsState.StateEvent }
-            .map { (it as GnssMeasurementsState.StateEvent).event }
-
-    /**
-     * @see [LocationManager.registerGnssMeasurementsCallback]
-     * @see [GnssMeasurementsEvent]
-     * @see [GnssMeasurementsEvent.Callback.onStatusChanged]
-     */
-    @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
-    @JvmStatic
-    fun observeGnssMeasurementsStatus(handler: Handler? = null): Observable<Int> =
-        observeGnssMeasurements(handler)
-            .filter { it is GnssMeasurementsState.StateStatus }
-            .map { (it as GnssMeasurementsState.StateStatus).status }
-
-    /**
      * @see [LocationManager.registerGnssNavigationMessageCallback]
      * @see [GnssNavigationMessage]
      * @see [GnssNavigationMessage.Callback.onGnssNavigationMessageReceived]
-     * @see [GnssNavigationMessage.Callback.onStatusChanged]
      */
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
-    fun observeGnssNavigationMessage(handler: Handler? = null): Observable<GnssNavigationMessageState> =
+    fun observeGnssNavigationMessage(handler: Handler? = null): Observable<GnssNavigationMessage> =
         GnssNavigationMessageObservable(locationManager, handler)
-
-    /**
-     * @see [LocationManager.registerGnssNavigationMessageCallback]
-     * @see [GnssNavigationMessage]
-     * @see [GnssNavigationMessage.Callback.onGnssNavigationMessageReceived]
-     */
-    @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
-    @JvmStatic
-    fun observeGnssNavigationMessageEvent(handler: Handler? = null): Observable<GnssNavigationMessage> =
-        observeGnssNavigationMessage(handler)
-            .filter { it is GnssNavigationMessageState.StateEvent }
-            .map { (it as GnssNavigationMessageState.StateEvent).event }
-
-    /**
-     * @see [LocationManager.registerGnssNavigationMessageCallback]
-     * @see [GnssNavigationMessage]
-     * @see [GnssNavigationMessage.Callback.onStatusChanged]
-     */
-    @RequiresPermission(ACCESS_FINE_LOCATION)
-    @RequiresApi(Build.VERSION_CODES.N)
-    @JvmStatic
-    fun observeGnssNavigationMessageStatus(handler: Handler? = null): Observable<Int> =
-        observeGnssNavigationMessage(handler)
-            .filter { it is GnssNavigationMessageState.StateStatus }
-            .map { (it as GnssNavigationMessageState.StateStatus).status }
 
     /**
      * @see [LocationManager.registerGnssStatusCallback]
@@ -438,6 +387,7 @@ object RxLocationManager {
                 locationManager?.removeNmeaListener(this)
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onNmeaReceived(timestamp: Long, nmea: String) {
                 observer.onNext(NmeaEvent(nmea, timestamp))
             }
@@ -463,24 +413,20 @@ object RxLocationManager {
     internal class GnssMeasurementsObservable(
         private val locationManager: LocationManager?,
         private val handler: Handler? = null
-    ) : Observable<GnssMeasurementsState>() {
-        override fun subscribeActual(observer: Observer<in GnssMeasurementsState>) {
+    ) : Observable<GnssMeasurementsEvent>() {
+        override fun subscribeActual(observer: Observer<in GnssMeasurementsEvent>) {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
             locationManager?.registerGnssMeasurementsCallback(listener.callback, handler)
         }
 
         class Listener(
-            private val observer: Observer<in GnssMeasurementsState>,
+            private val observer: Observer<in GnssMeasurementsEvent>,
             private val locationManager: LocationManager?
         ) : AtomicDisposable() {
             val callback = object : GnssMeasurementsEvent.Callback() {
                 override fun onGnssMeasurementsReceived(eventArgs: GnssMeasurementsEvent) {
-                    observer.onNext(GnssMeasurementsState.StateEvent(eventArgs))
-                }
-
-                override fun onStatusChanged(status: Int) {
-                    observer.onNext(GnssMeasurementsState.StateStatus(status))
+                    observer.onNext(eventArgs)
                 }
             }
 
@@ -495,24 +441,20 @@ object RxLocationManager {
     internal class GnssNavigationMessageObservable(
         private val locationManager: LocationManager?,
         private val handler: Handler? = null
-    ) : Observable<GnssNavigationMessageState>() {
-        override fun subscribeActual(observer: Observer<in GnssNavigationMessageState>) {
+    ) : Observable<GnssNavigationMessage>() {
+        override fun subscribeActual(observer: Observer<in GnssNavigationMessage>) {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
             locationManager?.registerGnssNavigationMessageCallback(listener.callback, handler)
         }
 
         class Listener(
-            private val observer: Observer<in GnssNavigationMessageState>,
+            private val observer: Observer<in GnssNavigationMessage>,
             private val locationManager: LocationManager?
         ) : AtomicDisposable() {
             val callback = object : GnssNavigationMessage.Callback() {
                 override fun onGnssNavigationMessageReceived(event: GnssNavigationMessage) {
-                    observer.onNext(GnssNavigationMessageState.StateEvent(event))
-                }
-
-                override fun onStatusChanged(status: Int) {
-                    observer.onNext(GnssNavigationMessageState.StateStatus(status))
+                    observer.onNext(event)
                 }
             }
 

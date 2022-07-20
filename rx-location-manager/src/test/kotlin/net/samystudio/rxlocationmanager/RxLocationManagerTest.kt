@@ -13,7 +13,7 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
 class RxLocationManagerTest {
-    lateinit var mocks: AutoCloseable
+    private lateinit var mocks: AutoCloseable
 
     @Mock
     lateinit var gnssMeasurementsEvent: GnssMeasurementsEvent
@@ -52,34 +52,24 @@ class RxLocationManagerTest {
 
     @Test
     fun observeGnssMeasurements() {
-        val observer = TestObserver<GnssMeasurementsState>()
+        val observer = TestObserver<GnssMeasurementsEvent>()
         val listener = RxLocationManager.GnssMeasurementsObservable.Listener(observer, null)
         listener.callback.onGnssMeasurementsReceived(gnssMeasurementsEvent)
         assertEquals(
             gnssMeasurementsEvent,
-            (observer.values()[0] as GnssMeasurementsState.StateEvent).event
-        )
-        listener.callback.onStatusChanged(10)
-        assertEquals(
-            10,
-            (observer.values()[1] as GnssMeasurementsState.StateStatus).status
+            observer.values()[0] as GnssMeasurementsEvent
         )
         observer.onComplete()
     }
 
     @Test
     fun observeGnssNavigationMessage() {
-        val observer = TestObserver<GnssNavigationMessageState>()
+        val observer = TestObserver<GnssNavigationMessage>()
         val listener = RxLocationManager.GnssNavigationMessageObservable.Listener(observer, null)
         listener.callback.onGnssNavigationMessageReceived(gnssNavigationMessage)
         assertEquals(
             gnssNavigationMessage,
-            (observer.values()[0] as GnssNavigationMessageState.StateEvent).event
-        )
-        listener.callback.onStatusChanged(10)
-        assertEquals(
-            10,
-            (observer.values()[1] as GnssNavigationMessageState.StateStatus).status
+            observer.values()[0] as GnssNavigationMessage
         )
         observer.onComplete()
     }
