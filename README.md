@@ -41,9 +41,9 @@ allprojects {
 ```
 and change versions:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.6.1-SNAPSHOT'
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.6.1-SNAPSHOT'
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.6.1-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.7.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.7.0-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.7.0-SNAPSHOT'
 ```
 
 Usage
