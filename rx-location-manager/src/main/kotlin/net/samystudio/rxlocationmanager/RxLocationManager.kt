@@ -299,15 +299,17 @@ object RxLocationManager {
         private val handler: Handler? = null
     ) : Observable<NmeaEvent>() {
         override fun subscribeActual(observer: Observer<in NmeaEvent>) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val listener = NListener(observer, locationManager)
-                observer.onSubscribe(listener)
-                locationManager?.addNmeaListener(listener, handler)
-            } else {
-                val listener = Listener(observer, locationManager)
-                observer.onSubscribe(listener)
-                (handler ?: Handler()).post {
-                    locationManager?.addNmeaListener(listener)
+            synchronized(this) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    val listener = NListener(observer, locationManager)
+                    observer.onSubscribe(listener)
+                    locationManager?.addNmeaListener(listener, handler)
+                } else {
+                    val listener = Listener(observer, locationManager)
+                    observer.onSubscribe(listener)
+                    (handler ?: Handler()).post {
+                        locationManager?.addNmeaListener(listener)
+                    }
                 }
             }
         }
