@@ -44,14 +44,30 @@ object RxLocationManager {
     }
 
     /**
-     * @see [LocationManager.getLastKnownLocation]
+     * @see [LocationManager.getCurrentLocation]
      */
     @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
     @JvmStatic
-    fun getLastKnownLocation(provider: Provider): Maybe<Location> = Maybe.defer {
-        locationManager.getLastKnownLocation(provider.name.toLowerCase(Locale.ROOT))
-            ?.let { Maybe.just(it) } ?: run {
-            Maybe.empty()
+    fun getCurrentLocation(
+        provider: Provider,
+        cancellationSignal: CancellationSignal?,
+        executor: Executor,
+    ): Maybe<Location> = Maybe.create { emitter ->
+        cancellationSignal?.setOnCancelListener {
+            emitter.onComplete()
+        }
+
+        LocationManagerCompat.getCurrentLocation(
+            locationManager,
+            provider.name.lowercase(),
+            cancellationSignal,
+            executor
+        ) {
+            when {
+                cancellationSignal?.isCanceled == true -> emitter.onComplete()
+                it == null -> emitter.onComplete()
+                else -> emitter.onSuccess(it)
+            }
         }
     }
 
@@ -558,6 +574,9 @@ object RxLocationManager {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
 
+            if( LocationManagerCompat.hasProvider(locationManager, provider?.name?.lowercase()))
+
+                LocationManagerCompat.requestLocationUpdates()
             provider?.let {
                 locationManager?.requestLocationUpdates(
                     it.name.toLowerCase(Locale.getDefault()),
