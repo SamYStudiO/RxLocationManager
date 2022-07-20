@@ -1,27 +1,10 @@
-buildscript {
-    repositories {
-        google()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:${Versions.android_build_tools}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
-        classpath("com.github.ben-manes:gradle-versions-plugin:${Versions.gradle_versions_plugin}")
-        classpath("com.vanniktech:gradle-maven-publish-plugin:${Versions.gradle_maven_publish_plugin}")
-    }
-}
-
 plugins {
+    id("com.android.application") version Versions.android_build_tools apply false
+    kotlin("android") version Versions.kotlin apply false
+    kotlin("kapt") version Versions.kotlin apply false
     id("com.github.ben-manes.versions") version Versions.gradle_versions_plugin
-    id("com.diffplug.spotless") version Versions.diffplugin
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
-        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
-    }
+    id("com.vanniktech.maven.publish") version Versions.gradle_maven_publish_plugin
+    id("com.diffplug.spotless") version Versions.spotless
 }
 
 subprojects {
