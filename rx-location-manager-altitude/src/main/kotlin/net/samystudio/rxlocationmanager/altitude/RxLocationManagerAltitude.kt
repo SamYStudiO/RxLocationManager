@@ -9,7 +9,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-import android.os.Handler
 import android.os.Looper
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
@@ -36,11 +35,9 @@ object RxLocationManagerAltitude {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGpsEllipsoidalAltitudeUpdates(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<Double> =
-        RxLocationManager.observeNmea(handler)
+        RxLocationManager.observeNmea(looper)
             .flatMap {
                 try {
                     val gga = GGA(it.message)
@@ -61,11 +58,9 @@ object RxLocationManagerAltitude {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGpsGeoidalAltitudeUpdates(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<Double> =
-        RxLocationManager.observeNmea(handler)
+        RxLocationManager.observeNmea(looper)
             .flatMap {
                 try {
                     val gga = GGA(it.message)
