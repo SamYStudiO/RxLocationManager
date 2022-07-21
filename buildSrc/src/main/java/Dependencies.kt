@@ -25,8 +25,8 @@ object Dependencies {
 
     // test
     const val junit = "junit:junit:${Versions.junit}"
-    const val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
-    const val mockito_core = "org.mockito:mockito-core:${Versions.mockito}"
+    const val test_truth = "com.google.truth:truth:${Versions.test_truth}"
+    const val mockk = "io.mockk:mockk:${Versions.mockk}"
 }
 
 fun DependencyHandler.base() {
@@ -43,8 +43,8 @@ fun DependencyHandler.reactive() {
 
 fun DependencyHandler.test() {
     testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.robolectric)
-    testImplementation(Dependencies.mockito_core)
+    testImplementation(Dependencies.test_truth)
+    testImplementation(Dependencies.mockk)
 }
 
 private fun DependencyHandler.implementation(depName: String) {

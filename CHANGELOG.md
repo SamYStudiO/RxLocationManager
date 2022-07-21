@@ -7,6 +7,7 @@
 - Fix publish
 - Use Looper instead of Handler/Executor as context for every method
 - Replace getLastKnownLocation with getCurrentLocation
+- Replace Mockito with MockK
 - Remove GnssMeasurements/GnssNavigationMessage status callbacks as they are not working anymore with latest android version
 - Make time validator less restrictive
 - Use LocationManagerCompat for requestLocationUpdates + spotless

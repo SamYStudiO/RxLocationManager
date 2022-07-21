@@ -2,43 +2,33 @@
 
 package net.samystudio.rxlocationmanager
 
-import android.location.*
-import android.os.Bundle
+import android.location.GnssMeasurementsEvent
+import android.location.GnssNavigationMessage
+import android.location.Location
 import androidx.core.location.GnssStatusCompat
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.observers.TestObserver
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 
 class RxLocationManagerTest {
-    private lateinit var mocks: AutoCloseable
-
-    @Mock
+    @MockK
     lateinit var gnssMeasurementsEvent: GnssMeasurementsEvent
 
-    @Mock
+    @MockK
     lateinit var gnssNavigationMessage: GnssNavigationMessage
 
-    @Mock
+    @MockK
     lateinit var gnssStatus: GnssStatusCompat
 
-    @Mock
+    @MockK
     lateinit var location: Location
-
-    @Mock
-    lateinit var bundle: Bundle
 
     @Before
     fun setUp() {
-        mocks = MockitoAnnotations.openMocks(this)
-    }
-
-    @After
-    fun cleanUp() {
-        mocks.close()
+        MockKAnnotations.init(this)
     }
 
     @Test

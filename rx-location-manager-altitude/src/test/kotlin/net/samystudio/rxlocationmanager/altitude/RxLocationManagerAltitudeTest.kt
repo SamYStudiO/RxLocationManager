@@ -1,27 +1,19 @@
 package net.samystudio.rxlocationmanager.altitude
 
 import android.hardware.SensorEvent
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.observers.TestObserver
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 
 class RxLocationManagerAltitudeTest {
-    lateinit var mocks: AutoCloseable
-
-    @Mock
+    @MockK
     lateinit var sensorEvent: SensorEvent
 
     @Before
     fun setUp() {
-        mocks = MockitoAnnotations.openMocks(this)
-    }
-
-    @After
-    fun cleanUp() {
-        mocks.close()
+        MockKAnnotations.init(this)
     }
 
     @Test
