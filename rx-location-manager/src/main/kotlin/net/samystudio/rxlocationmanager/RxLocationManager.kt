@@ -23,9 +23,9 @@ import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
-import net.samystudio.rxlocationmanager.RxLocationManager.observeGnssStatus
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import net.samystudio.rxlocationmanager.RxLocationManager.observeGnssStatus
 
 /**
  * A reactive wrapper for [LocationManager] callbacks.

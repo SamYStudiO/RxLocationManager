@@ -13,13 +13,24 @@ subprojects {
         kotlin {
             target("**/*.kt")
             ktlint(Versions.ktlint)
-                .editorConfigOverride(mapOf("disabled_rules" to "no-wildcard-imports"))
+                .editorConfigOverride(
+                    mapOf(
+                        "ktlint_code_style" to "android",
+                        "max_line_length" to "off",
+                        "disabled_rules" to "no-wildcard-imports",
+                    )
+                )
         }
         kotlinGradle {
             target("**/*.gradle.kts")
             ktlint(Versions.ktlint)
-                .setUseExperimental(true)
-                .editorConfigOverride(mapOf("disabled_rules" to "no-wildcard-imports"))
+                .editorConfigOverride(
+                    mapOf(
+                        "ktlint_code_style" to "android",
+                        "max_line_length" to "off",
+                        "disabled_rules" to "no-wildcard-imports",
+                    )
+                )
         }
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
