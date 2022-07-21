@@ -76,7 +76,8 @@ private fun convert(coordinate: Double): String {
         "###.#####",
         DecimalFormatSymbols.getInstance().apply {
             decimalSeparator = '.'
-        })
+        }
+    )
     val degrees = floor(c).toInt()
     sb.append(degrees)
     sb.append(':')
@@ -120,7 +121,7 @@ private fun convert(coordinate: String): Double {
             min = minutes.toDouble()
         }
         val isNegative180 = negative && deg == 180 &&
-                min == 0.0 && sec == 0.0
+            min == 0.0 && sec == 0.0
 
         // deg must be in [0, 179] except for the case of -180 degrees
         require(!(deg < 0.0 || deg > 179 && !isNegative180)) { "coordinate=$c" }

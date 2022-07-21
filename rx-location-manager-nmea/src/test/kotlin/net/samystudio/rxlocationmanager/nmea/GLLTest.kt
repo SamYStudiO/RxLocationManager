@@ -2,7 +2,6 @@ package net.samystudio.rxlocationmanager.nmea
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
 
 class GLLTest {
     @Test
