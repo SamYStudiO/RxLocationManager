@@ -28,6 +28,5 @@ object Versions {
 
     // test
     const val junit = "4.13.2"
-    const val test_truth = "1.1.3"
     const val mockk = "1.12.2"
 }

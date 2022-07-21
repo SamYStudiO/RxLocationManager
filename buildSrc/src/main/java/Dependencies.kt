@@ -25,7 +25,6 @@ object Dependencies {
 
     // test
     const val junit = "junit:junit:${Versions.junit}"
-    const val test_truth = "com.google.truth:truth:${Versions.test_truth}"
     const val mockk = "io.mockk:mockk:${Versions.mockk}"
 }
 
@@ -43,7 +42,6 @@ fun DependencyHandler.reactive() {
 
 fun DependencyHandler.test() {
     testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.test_truth)
     testImplementation(Dependencies.mockk)
 }
 
