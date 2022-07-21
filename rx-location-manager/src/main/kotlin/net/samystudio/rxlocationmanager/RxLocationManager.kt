@@ -18,13 +18,13 @@ import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
 import androidx.core.os.CancellationSignal
+import androidx.core.os.ExecutorCompat
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import net.samystudio.rxlocationmanager.RxLocationManager.observeGnssStatus
 import java.util.*
-import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -52,8 +52,8 @@ object RxLocationManager {
     @JvmStatic
     fun getCurrentLocation(
         provider: Provider,
-        cancellationSignal: CancellationSignal?,
-        executor: Executor
+        cancellationSignal: CancellationSignal? = null,
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Maybe<Location> = Maybe.create { emitter ->
         cancellationSignal?.setOnCancelListener {
             emitter.onComplete()
@@ -64,7 +64,7 @@ object RxLocationManager {
                 locationManager,
                 provider.name.lowercase(),
                 cancellationSignal,
-                executor
+                ExecutorCompat.create(Handler(looper))
             ) {
                 when {
                     cancellationSignal?.isCanceled == true -> emitter.onComplete()
@@ -83,11 +83,9 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeNmea(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<NmeaEvent> =
-        NmeaObservable(locationManager, handler)
+        NmeaObservable(locationManager, looper)
 
     /**
      * @see [LocationManager.registerGnssMeasurementsCallback]
@@ -98,11 +96,9 @@ object RxLocationManager {
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
     fun observeGnssMeasurements(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<GnssMeasurementsEvent> =
-        GnssMeasurementsObservable(locationManager, handler)
+        GnssMeasurementsObservable(locationManager, looper)
 
     /**
      * @see [LocationManager.registerGnssNavigationMessageCallback]
@@ -113,11 +109,9 @@ object RxLocationManager {
     @RequiresApi(Build.VERSION_CODES.N)
     @JvmStatic
     fun observeGnssNavigationMessage(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<GnssNavigationMessage> =
-        GnssNavigationMessageObservable(locationManager, handler)
+        GnssNavigationMessageObservable(locationManager, looper)
 
     /**
      * @see [LocationManager.registerGnssStatusCallback]
@@ -130,11 +124,9 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGnssStatus(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<GnssStatusState> =
-        GnssStatusObservable(locationManager, handler)
+        GnssStatusObservable(locationManager, looper)
 
     /**
      * Prior to [Build.VERSION_CODES.N] [GnssStatusState.StateChanged.status] will always be null.
@@ -146,11 +138,9 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGnssStatusOnChanged(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<GnssStatusState.StateChanged> =
-        observeGnssStatus(handler)
+        observeGnssStatus(looper)
             .filter { it is GnssStatusState.StateChanged }
             .map { it as GnssStatusState.StateChanged }
 
@@ -165,11 +155,9 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGnssStatusOnFirstFix(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<GnssStatusState.StateFirstFix> =
-        observeGnssStatus(handler)
+        observeGnssStatus(looper)
             .filter { it is GnssStatusState.StateFirstFix }
             .map { it as GnssStatusState.StateFirstFix }
 
@@ -181,11 +169,9 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGnssStatusOnStarted(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<Unit> =
-        observeGnssStatus(handler)
+        observeGnssStatus(looper)
             .filter { t -> t is GnssStatusState.StateStarted }
             .map { }
 
@@ -197,11 +183,9 @@ object RxLocationManager {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGnssStatusOnStopped(
-        handler: Handler = Handler(
-            Looper.myLooper() ?: Looper.getMainLooper()
-        )
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
     ): Observable<Unit> =
-        observeGnssStatus(handler)
+        observeGnssStatus(looper)
             .filter { t -> t is GnssStatusState.StateStopped }
             .map { }
 
@@ -296,18 +280,18 @@ object RxLocationManager {
     @VisibleForTesting
     internal class NmeaObservable(
         private val locationManager: LocationManager?,
-        private val handler: Handler? = null
+        private val looper: Looper
     ) : Observable<NmeaEvent>() {
         override fun subscribeActual(observer: Observer<in NmeaEvent>) {
             synchronized(this) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     val listener = NListener(observer, locationManager)
                     observer.onSubscribe(listener)
-                    locationManager?.addNmeaListener(listener, handler)
+                    locationManager?.addNmeaListener(listener, Handler(looper))
                 } else {
                     val listener = Listener(observer, locationManager)
                     observer.onSubscribe(listener)
-                    (handler ?: Handler()).post {
+                    Handler(looper).post {
                         locationManager?.addNmeaListener(listener)
                     }
                 }
@@ -347,12 +331,12 @@ object RxLocationManager {
     @TargetApi(Build.VERSION_CODES.N)
     internal class GnssMeasurementsObservable(
         private val locationManager: LocationManager?,
-        private val handler: Handler? = null
+        private val looper: Looper
     ) : Observable<GnssMeasurementsEvent>() {
         override fun subscribeActual(observer: Observer<in GnssMeasurementsEvent>) {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
-            locationManager?.registerGnssMeasurementsCallback(listener.callback, handler)
+            locationManager?.registerGnssMeasurementsCallback(listener.callback, Handler(looper))
         }
 
         class Listener(
@@ -375,12 +359,15 @@ object RxLocationManager {
     @TargetApi(Build.VERSION_CODES.N)
     internal class GnssNavigationMessageObservable(
         private val locationManager: LocationManager?,
-        private val handler: Handler? = null
+        private val looper: Looper
     ) : Observable<GnssNavigationMessage>() {
         override fun subscribeActual(observer: Observer<in GnssNavigationMessage>) {
             val listener = Listener(observer, locationManager)
             observer.onSubscribe(listener)
-            locationManager?.registerGnssNavigationMessageCallback(listener.callback, handler)
+            locationManager?.registerGnssNavigationMessageCallback(
+                listener.callback,
+                Handler(looper)
+            )
         }
 
         class Listener(
@@ -402,12 +389,16 @@ object RxLocationManager {
     @VisibleForTesting
     internal class GnssStatusObservable(
         private val locationManager: LocationManager?,
-        private val handler: Handler
+        private val looper: Looper
     ) : Observable<GnssStatusState>() {
         override fun subscribeActual(observer: Observer<in GnssStatusState>) {
             locationManager?.let {
                 val listener = Listener(observer, locationManager)
-                LocationManagerCompat.registerGnssStatusCallback(it, listener.callback, handler)
+                LocationManagerCompat.registerGnssStatusCallback(
+                    it,
+                    listener.callback,
+                    Handler(looper)
+                )
                 observer.onSubscribe(listener)
             }
         }

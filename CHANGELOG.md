@@ -1,5 +1,6 @@
 0.7.0-SNAPSHOT
-----------
+--------------
+- Use Looper instead of Handler/Executor as context for every method
 - Add synchronized when adding nmea listener as it may lead to ConcurrentException
 - Add FUSED_PROVIDER from Provider enum
 - Fix tests
