@@ -3,27 +3,27 @@ package net.samystudio.rxlocationmanager.nmea
 import java.util.*
 
 class GLL(message: String) : Nmea(message) {
-    val latitude by lazy {
+    val latitude: Double? by lazy {
         convertNmeaLocation(
             data[1],
             Cardinal.valueOf(data[2], Cardinal.N)!!
         )
     }
-    val longitude by lazy {
+    val longitude: Double? by lazy {
         convertNmeaLocation(
             data[3],
             Cardinal.valueOf(data[4], Cardinal.E)!!
         )
     }
-    val time by lazy { data[5] }
-    val status by lazy {
+    val time: String by lazy { data[5] }
+    val status: Status? by lazy {
         try {
             Status.valueOf(data[6])
         } catch (e: IllegalArgumentException) {
             null
         }
     }
-    val faaMode by lazy {
+    val faaMode: FAAMode by lazy {
         try {
             return@lazy FAAMode.valueOf(data[7])
         } catch (e: IllegalArgumentException) {

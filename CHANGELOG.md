@@ -1,10 +1,11 @@
 0.7.0-SNAPSHOT
 --------------
-- Use Looper instead of Handler/Executor as context for every method
 - Add synchronized when adding nmea listener as it may lead to ConcurrentException
 - Add FUSED_PROVIDER from Provider enum
+- Fix parsing nmea with some locale not using dot as decimal separator + get rid of android Location class dependency (better for testing)
 - Fix tests
 - Fix publish
+- Use Looper instead of Handler/Executor as context for every method
 - Replace getLastKnownLocation with getCurrentLocation
 - Remove GnssMeasurements/GnssNavigationMessage status callbacks as they are not working anymore with latest android version
 - Make time validator less restrictive

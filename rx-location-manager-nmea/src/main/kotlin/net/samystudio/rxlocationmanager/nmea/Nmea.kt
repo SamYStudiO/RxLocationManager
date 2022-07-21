@@ -12,25 +12,27 @@ abstract class Nmea constructor(val message: String) {
     val checksum: String by lazy { message.split("*")[1].trimEnd() }
 
     init {
-        if (message.isBlank()) throw NmeaException(BLANK_ERROR_MESSAGE)
-        if (!message.startsWith("$")) throw NmeaException(MISSING_DOLLAR_ERROR_MESSAGE, 0)
+        if (message.isBlank())
+            throw NmeaException(BLANK_ERROR_MESSAGE)
+        if (!message.startsWith("$"))
+            throw NmeaException(MISSING_DOLLAR_ERROR_MESSAGE, 0)
         val validators = getTokenValidators()
         validators.forEachIndexed { index, tokenValidator ->
-            if (index > data.size - 1 || !tokenValidator.validate(
-                    data[index]
+            if (index > data.size - 1 || !tokenValidator.validate(data[index]))
+                throw NmeaException(
+                    getParseErrorMessage(index, tokenValidator::class.java.simpleName, message),
+                    index
                 )
-            ) throw NmeaException(
-                getParseErrorMessage(index, tokenValidator::class.java.simpleName, message),
-                index
-            )
         }
-        if (!message.contains("*")) throw NmeaException(CANNOT_FIND_CHECKSUM_ERROR_MESSAGE)
-        if (computeChecksum() != checksum) throw NmeaException(
-            getChecksumErrorMessage(
-                checksum,
-                computeChecksum()
+        if (!message.contains("*"))
+            throw NmeaException(CANNOT_FIND_CHECKSUM_ERROR_MESSAGE)
+        if (computeChecksum() != checksum)
+            throw NmeaException(
+                getChecksumErrorMessage(
+                    checksum,
+                    computeChecksum()
+                )
             )
-        )
     }
 
     /**

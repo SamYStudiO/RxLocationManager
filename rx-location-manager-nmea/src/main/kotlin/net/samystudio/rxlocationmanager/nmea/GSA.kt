@@ -3,14 +3,14 @@ package net.samystudio.rxlocationmanager.nmea
 import java.util.*
 
 class GSA(message: String) : Nmea(message) {
-    val selectionMode by lazy {
+    val selectionMode: SelectionMode by lazy {
         try {
             SelectionMode.valueOf(data[1])
         } catch (e: IllegalArgumentException) {
             SelectionMode.A
         }
     }
-    val fix by lazy {
+    val fix: Fix by lazy {
         try {
             return@lazy Fix.values().find { it.value == data[2].toInt() }
                 ?: Fix.NO_FIX
@@ -19,22 +19,22 @@ class GSA(message: String) : Nmea(message) {
         }
         Fix.NO_FIX
     }
-    val satellite1 by lazy { data[3].toIntOrNull() }
-    val satellite2 by lazy { data[4].toIntOrNull() }
-    val satellite3 by lazy { data[5].toIntOrNull() }
-    val satellite4 by lazy { data[6].toIntOrNull() }
-    val satellite5 by lazy { data[7].toIntOrNull() }
-    val satellite6 by lazy { data[8].toIntOrNull() }
-    val satellite7 by lazy { data[9].toIntOrNull() }
-    val satellite8 by lazy { data[10].toIntOrNull() }
-    val satellite9 by lazy { data[11].toIntOrNull() }
-    val satellite10 by lazy { data[12].toIntOrNull() }
-    val satellite11 by lazy { data[13].toIntOrNull() }
-    val satellite12 by lazy { data[14].toIntOrNull() }
-    val positionDilutionOfPrecision by lazy { data[15].toDoubleOrNull() }
-    val horizontalDilutionOfPrecision by lazy { data[16].toDoubleOrNull() }
-    val verticalDilutionOfPrecision by lazy { data[17].toDoubleOrNull() }
-    val satelliteCount by lazy {
+    val satellite1: Int? by lazy { data[3].toIntOrNull() }
+    val satellite2: Int? by lazy { data[4].toIntOrNull() }
+    val satellite3: Int? by lazy { data[5].toIntOrNull() }
+    val satellite4: Int? by lazy { data[6].toIntOrNull() }
+    val satellite5: Int? by lazy { data[7].toIntOrNull() }
+    val satellite6: Int? by lazy { data[8].toIntOrNull() }
+    val satellite7: Int? by lazy { data[9].toIntOrNull() }
+    val satellite8: Int? by lazy { data[10].toIntOrNull() }
+    val satellite9: Int? by lazy { data[11].toIntOrNull() }
+    val satellite10: Int? by lazy { data[12].toIntOrNull() }
+    val satellite11: Int? by lazy { data[13].toIntOrNull() }
+    val satellite12: Int? by lazy { data[14].toIntOrNull() }
+    val positionDilutionOfPrecision: Double? by lazy { data[15].toDoubleOrNull() }
+    val horizontalDilutionOfPrecision: Double? by lazy { data[16].toDoubleOrNull() }
+    val verticalDilutionOfPrecision: Double? by lazy { data[17].toDoubleOrNull() }
+    val satelliteCount: Int by lazy {
         listOfNotNull(
             satellite1,
             satellite2,
