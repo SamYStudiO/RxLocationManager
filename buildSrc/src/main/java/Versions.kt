@@ -1,7 +1,7 @@
 object Versions {
-    const val compileSdk = 32
+    const val compileSdk = 33
     const val minSdk = 14
-    const val targetSdk = 32
+    const val targetSdk = 33
 
     // tools
     const val android_build_tools = "7.3.1"
