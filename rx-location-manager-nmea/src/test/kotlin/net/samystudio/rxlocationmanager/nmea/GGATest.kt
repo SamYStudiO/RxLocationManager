@@ -82,6 +82,26 @@ class GGATest {
         assertEquals("66", gga.checksum)
     }
 
+    @Test
+    fun validateStation() {
+        val gga =
+            GGA("\$GNGGA,121813.000,4402.7838,N,00443.1020,E,2,23,0.58,108.4,M,49.2,M,0.0,0*6F")
+
+        assertEquals("GNGGA", gga.type)
+        assertEquals("121813.000", gga.time)
+        assertEquals(44.046396666666666, gga.latitude!!, PRECISION)
+        assertEquals(4.718366666666666, gga.longitude!!, PRECISION)
+        assertEquals(GGA.Quality.GPS_FIX, gga.quality)
+        assertEquals(10, gga.satelliteCount)
+        assertEquals(1.2, gga.horizontalDilutionOfPrecision!!, PRECISION)
+        assertEquals(27.0, gga.altitude!!, PRECISION)
+        assertEquals(-34.2, gga.ellipsoidalOffset!!, PRECISION)
+        assertEquals(null, gga.differentialGpsAge)
+        assertEquals("0", gga.differentialGpsStationId)
+        assertEquals("6F", gga.checksum)
+    }
+
+
     companion object {
         private const val PRECISION = 0.0000001
     }

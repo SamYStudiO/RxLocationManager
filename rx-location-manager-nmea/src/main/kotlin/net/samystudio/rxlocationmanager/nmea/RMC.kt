@@ -7,7 +7,7 @@ open class RMC(message: String) : Nmea(message) {
     val status: Status by lazy {
         try {
             return@lazy Status.valueOf(data[2])
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
         }
         Status.V
     }
@@ -30,21 +30,21 @@ open class RMC(message: String) : Nmea(message) {
     val magneticVariationDirection: Cardinal? by lazy {
         try {
             return@lazy Cardinal.valueOf(data[11])
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
         }
         null
     }
     val faaMode: FAAMode by lazy {
         try {
             return@lazy FAAMode.valueOf(data[12])
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
         }
         FAAMode.N
     }
     val navigationalStatus: NavigationalStatus by lazy {
         try {
             return@lazy NavigationalStatus.valueOf(data[13])
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
         }
         NavigationalStatus.V
     }

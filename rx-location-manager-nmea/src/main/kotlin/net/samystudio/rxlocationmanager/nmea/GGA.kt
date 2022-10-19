@@ -20,8 +20,8 @@ class GGA(message: String) : Nmea(message) {
         try {
             return@lazy Quality.values().find { it.value == data[6].toInt() }
                 ?: Quality.FIX_NOT_AVAILABLE
-        } catch (e: NumberFormatException) {
-        } catch (e: ArrayIndexOutOfBoundsException) {
+        } catch (_: NumberFormatException) {
+        } catch (_: ArrayIndexOutOfBoundsException) {
         }
         Quality.FIX_NOT_AVAILABLE
     }
@@ -113,7 +113,7 @@ class GGA(message: String) : Nmea(message) {
             // age of differential GPS data (seconds)
             optionalDoubleValidator,
             // station
-            StringValidator(true, 4, 4)
+            StringValidator(true)
         )
     }
 

@@ -26,7 +26,7 @@ class GLL(message: String) : Nmea(message) {
     val faaMode: FAAMode by lazy {
         try {
             return@lazy FAAMode.valueOf(data[7])
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
         }
         FAAMode.N
     }

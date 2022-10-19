@@ -14,8 +14,8 @@ class GSA(message: String) : Nmea(message) {
         try {
             return@lazy Fix.values().find { it.value == data[2].toInt() }
                 ?: Fix.NO_FIX
-        } catch (e: NumberFormatException) {
-        } catch (e: ArrayIndexOutOfBoundsException) {
+        } catch (_: NumberFormatException) {
+        } catch (_: ArrayIndexOutOfBoundsException) {
         }
         Fix.NO_FIX
     }
