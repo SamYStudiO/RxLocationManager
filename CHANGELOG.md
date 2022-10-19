@@ -1,3 +1,9 @@
+0.7.0
+--------------
+- Add Nmea throwIfContentInvalid parameter to allow more flexibility when parsing nmea by not throwing any error when content is mal formatted
+- Fix parsing some gga
+
+
 0.7.0-SNAPSHOT
 --------------
 - Add synchronized when adding nmea listener as it may lead to ConcurrentException
