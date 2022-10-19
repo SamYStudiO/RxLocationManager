@@ -91,16 +91,34 @@ class GGATest {
         assertEquals("121813.000", gga.time)
         assertEquals(44.046396666666666, gga.latitude!!, PRECISION)
         assertEquals(4.718366666666666, gga.longitude!!, PRECISION)
-        assertEquals(GGA.Quality.GPS_FIX, gga.quality)
-        assertEquals(10, gga.satelliteCount)
-        assertEquals(1.2, gga.horizontalDilutionOfPrecision!!, PRECISION)
-        assertEquals(27.0, gga.altitude!!, PRECISION)
-        assertEquals(-34.2, gga.ellipsoidalOffset!!, PRECISION)
-        assertEquals(null, gga.differentialGpsAge)
+        assertEquals(GGA.Quality.DIFFERENTIAL_GPS_FIX, gga.quality)
+        assertEquals(23, gga.satelliteCount)
+        assertEquals(0.58, gga.horizontalDilutionOfPrecision!!, PRECISION)
+        assertEquals(108.4, gga.altitude!!, PRECISION)
+        assertEquals(49.2, gga.ellipsoidalOffset!!, PRECISION)
+        assertEquals(0.0, gga.differentialGpsAge)
         assertEquals("0", gga.differentialGpsStationId)
         assertEquals("6F", gga.checksum)
     }
 
+    @Test
+    fun validateWithoutThrowIfContentInvalid() {
+        val gga =
+            GGA("\$GNGGA,121813.000,4402.7838,,00443.1020,E,,23,0.58,108.4,M,,M,aze,0*52", false)
+
+        assertEquals("GNGGA", gga.type)
+        assertEquals("121813.000", gga.time)
+        assertEquals(44.046396666666666, gga.latitude!!, PRECISION)
+        assertEquals(4.718366666666666, gga.longitude!!, PRECISION)
+        assertEquals(GGA.Quality.FIX_NOT_AVAILABLE, gga.quality)
+        assertEquals(23, gga.satelliteCount)
+        assertEquals(0.58, gga.horizontalDilutionOfPrecision!!, PRECISION)
+        assertEquals(108.4, gga.altitude!!, PRECISION)
+        assertEquals(null, gga.ellipsoidalOffset)
+        assertEquals(null, gga.differentialGpsAge)
+        assertEquals("0", gga.differentialGpsStationId)
+        assertEquals("52", gga.checksum)
+    }
 
     companion object {
         private const val PRECISION = 0.0000001

@@ -2,7 +2,8 @@ package net.samystudio.rxlocationmanager.nmea
 
 import java.util.*
 
-class GGA(message: String) : Nmea(message) {
+class GGA(message: String, throwIfContentInvalid: Boolean = true) :
+    Nmea(message, throwIfContentInvalid) {
     val time: String by lazy { data[1] }
     val latitude: Double? by lazy {
         convertNmeaLocation(

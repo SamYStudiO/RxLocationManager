@@ -5,8 +5,11 @@ package net.samystudio.rxlocationmanager.nmea
 /**
  * @param message A valid Nmea message starting with "$" followed by message data delimit with "," and
  * ending with checksum "*XX".
+ * @param throwIfContentInvalid indicates if we want to throw an [NmeaException] if we couldn't
+ * parse data with [getTokenValidators]. THis will still throw an error even if set to `false` if
+ * message is not the right type or checksum is invalid.
  */
-abstract class Nmea constructor(val message: String) {
+abstract class Nmea constructor(val message: String, throwIfContentInvalid: Boolean = true) {
     val data: List<String> by lazy { message.substring(1).split("*")[0].split(",") }
     val type: String by lazy { data[0] }
     val checksum: String by lazy { message.split("*")[1].trimEnd() }
@@ -18,7 +21,9 @@ abstract class Nmea constructor(val message: String) {
         if (!message.startsWith("$")) {
             throw NmeaException(MISSING_DOLLAR_ERROR_MESSAGE, 0)
         }
-        val validators = getTokenValidators()
+
+        val validators =
+            getTokenValidators().filterIndexed { index, _ -> index == 0 || throwIfContentInvalid }
         validators.forEachIndexed { index, tokenValidator ->
             if (index > data.size - 1 || !tokenValidator.validate(data[index])) {
                 throw NmeaException(
@@ -27,6 +32,7 @@ abstract class Nmea constructor(val message: String) {
                 )
             }
         }
+
         if (!message.contains("*")) {
             throw NmeaException(CANNOT_FIND_CHECKSUM_ERROR_MESSAGE)
         }

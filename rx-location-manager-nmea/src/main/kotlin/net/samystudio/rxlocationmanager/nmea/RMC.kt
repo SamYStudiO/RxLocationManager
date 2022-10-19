@@ -2,7 +2,8 @@ package net.samystudio.rxlocationmanager.nmea
 
 import java.util.*
 
-open class RMC(message: String) : Nmea(message) {
+open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
+    Nmea(message, throwIfContentInvalid) {
     val time: String by lazy { data[1] }
     val status: Status by lazy {
         try {

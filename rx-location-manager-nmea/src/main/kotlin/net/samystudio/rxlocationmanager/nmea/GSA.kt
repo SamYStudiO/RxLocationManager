@@ -2,7 +2,8 @@ package net.samystudio.rxlocationmanager.nmea
 
 import java.util.*
 
-class GSA(message: String) : Nmea(message) {
+class GSA(message: String, throwIfContentInvalid: Boolean = true) :
+    Nmea(message, throwIfContentInvalid) {
     val selectionMode: SelectionMode by lazy {
         try {
             SelectionMode.valueOf(data[1])
