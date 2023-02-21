@@ -85,9 +85,14 @@ object RxLocationManagerAltitude {
     @JvmOverloads
     fun observeBarometricAltitudeUpdates(
         sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
-        pressureAtSeaLevel: Float = SensorManager.PRESSURE_STANDARD_ATMOSPHERE
+        pressureAtSeaLevel: Float = SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
+        minimumAccuracy: Int = -1
     ): Observable<Double> =
-        observeBarometricAltitudeUpdates(sensorDelay, Observable.just(pressureAtSeaLevel))
+        observeBarometricAltitudeUpdates(
+            sensorDelay,
+            Observable.just(pressureAtSeaLevel),
+            minimumAccuracy
+        )
 
     /**
      * Get an [Observable] that emit altitude using barometric sensor. If barometric sensor is not
@@ -98,13 +103,51 @@ object RxLocationManagerAltitude {
     @JvmStatic
     fun observeBarometricAltitudeUpdates(
         sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
-        pressureAtSeaLevelObservable: Observable<Float> = Observable.just(SensorManager.PRESSURE_STANDARD_ATMOSPHERE)
+        pressureAtSeaLevelObservable: Observable<Float> = Observable.just(SensorManager.PRESSURE_STANDARD_ATMOSPHERE),
+        minimumAccuracy: Int = -1
     ): Observable<Double> =
         Observable.combineLatest(
             pressureAtSeaLevelObservable.distinctUntilChanged(),
             BarometricSensorObservable(sensorDelay)
+                .filter { it.first != null && it.second >= minimumAccuracy }
+                .map { it.first!! }
         ) { t1: Float, t2: Float ->
             SensorManager.getAltitude(t1, t2).toDouble()
+        }.distinctUntilChanged()
+
+    /**
+     * Get an [Observable] that emit altitude along with accuracy using barometric sensor.
+     * If barometric sensor is not present this will emit immediately a [BarometricSensorException].
+     * You can pass an optional [sensorDelay] and [pressureAtSeaLevel]. To get a accurate altitude
+     * passing a [pressureAtSeaLevel] is recommended.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun observeBarometricAltitudeAndAccuracyUpdates(
+        sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
+        pressureAtSeaLevel: Float = SensorManager.PRESSURE_STANDARD_ATMOSPHERE
+    ): Observable<Pair<Double?, Int>> =
+        observeBarometricAltitudeAndAccuracyUpdates(
+            sensorDelay,
+            Observable.just(pressureAtSeaLevel)
+        )
+
+    /**
+     * Get an [Observable] that emit altitude along with accuracy using barometric sensor. If
+     * barometric sensor is not present this will emit immediately a [BarometricSensorException].
+     * You can pass an optional [sensorDelay] and [pressureAtSeaLevelObservable]. To get a accurate
+     * altitude passing a [pressureAtSeaLevelObservable] is recommended.
+     */
+    @JvmStatic
+    fun observeBarometricAltitudeAndAccuracyUpdates(
+        sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
+        pressureAtSeaLevelObservable: Observable<Float> = Observable.just(SensorManager.PRESSURE_STANDARD_ATMOSPHERE)
+    ): Observable<Pair<Double?, Int>> =
+        Observable.combineLatest(
+            pressureAtSeaLevelObservable.distinctUntilChanged(),
+            BarometricSensorObservable(sensorDelay)
+        ) { t1: Float, t2: Pair<Float?, Int> ->
+            t2.first?.let { SensorManager.getAltitude(t1, it).toDouble() } to t2.second
         }.distinctUntilChanged()
 
     /**
@@ -135,12 +178,13 @@ object RxLocationManagerAltitude {
     private class GGAWrapper(val gga: GGA?)
 
     @VisibleForTesting
-    internal class BarometricSensorObservable(private val sensorDelay: Int) : Observable<Float>() {
+    internal class BarometricSensorObservable(private val sensorDelay: Int) :
+        Observable<Pair<Float?, Int>>() {
         private val sensorManager =
             ContextProvider.applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         private val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
 
-        override fun subscribeActual(observer: Observer<in Float>) {
+        override fun subscribeActual(observer: Observer<in Pair<Float?, Int>>) {
             val listener = Listener(observer, sensorManager)
             observer.onSubscribe(listener)
 
@@ -152,7 +196,7 @@ object RxLocationManagerAltitude {
         }
 
         class Listener(
-            private val observer: Observer<in Float>,
+            private val observer: Observer<in Pair<Float?, Int>>,
             private val sensorManager: SensorManager? = null
         ) : Disposable, SensorEventListener {
             private val unSubscribed = AtomicBoolean()
@@ -165,10 +209,12 @@ object RxLocationManagerAltitude {
                 }
             }
 
-            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
+                observer.onNext(null to accuracy)
+            }
 
             override fun onSensorChanged(event: SensorEvent) {
-                observer.onNext(event.values[0])
+                observer.onNext(event.values[0] to event.accuracy)
             }
         }
     }
