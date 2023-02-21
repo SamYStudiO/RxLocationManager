@@ -18,16 +18,20 @@ class RxLocationManagerAltitudeTest {
 
     @Test
     fun observeBarometricAltitudeUpdates() {
-        val observer = TestObserver<Float>()
+        val observer = TestObserver<Pair<Float?, Int>>()
         val barometricListener =
             RxLocationManagerAltitude.BarometricSensorObservable.Listener(observer, null)
 
         try {
             val valuesField = SensorEvent::class.java.getField("values")
+            val accuracyField = SensorEvent::class.java.getField("accuracy")
             valuesField.isAccessible = true
+            accuracyField.isAccessible = true
             val sensorValue = floatArrayOf(10.0f)
+            val accuracy = 1
             try {
                 valuesField.set(sensorEvent, sensorValue)
+                accuracyField.set(sensorEvent, accuracy)
             } catch (e: IllegalAccessException) {
                 e.printStackTrace()
             }
@@ -36,7 +40,7 @@ class RxLocationManagerAltitudeTest {
         }
 
         barometricListener.onSensorChanged(sensorEvent)
-        observer.assertValueAt(0, 10.0f)
+        observer.assertValueAt(0, 10.0f to 1)
         observer.onComplete()
     }
 }
