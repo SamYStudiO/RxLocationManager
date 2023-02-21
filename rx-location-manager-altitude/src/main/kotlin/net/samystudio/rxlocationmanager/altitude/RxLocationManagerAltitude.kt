@@ -16,13 +16,13 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.util.concurrent.atomic.AtomicBoolean
 import net.samystudio.rxlocationmanager.ContextProvider
 import net.samystudio.rxlocationmanager.RxLocationManager
 import net.samystudio.rxlocationmanager.nmea.GGA
 import net.samystudio.rxlocationmanager.nmea.NmeaException
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Reactive helpers to get altitude using GPS, barometric sensor or remote service.
@@ -44,7 +44,7 @@ object RxLocationManagerAltitude {
                     if (gga.altitude != null && gga.ellipsoidalOffset != null) {
                         return@flatMap Observable.just(GGAWrapper(gga))
                     }
-                } catch (e: NmeaException) {
+                } catch (_: NmeaException) {
                 }
                 Observable.just(GGAWrapper(null))
             }
@@ -67,7 +67,7 @@ object RxLocationManagerAltitude {
                     if (gga.altitude != null) {
                         return@flatMap Observable.just(GGAWrapper(gga))
                     }
-                } catch (e: NmeaException) {
+                } catch (_: NmeaException) {
                 }
                 Observable.just(GGAWrapper(null))
             }
@@ -116,8 +116,8 @@ object RxLocationManagerAltitude {
         remoteServiceAltitude: RemoteServiceAltitude,
         latitude: Double,
         longitude: Double
-    ): Single<Double> {
-        return Single.create { emitter ->
+    ): Single<Double> =
+        Single.create { emitter ->
             try {
                 val httpConnection =
                     remoteServiceAltitude.getHttpURLConnection(latitude, longitude)
@@ -131,7 +131,6 @@ object RxLocationManagerAltitude {
                 emitter.onError(e)
             }
         }
-    }
 
     private class GGAWrapper(val gga: GGA?)
 
@@ -144,13 +143,12 @@ object RxLocationManagerAltitude {
         override fun subscribeActual(observer: Observer<in Float>) {
             val listener = Listener(observer, sensorManager)
             observer.onSubscribe(listener)
-            sensorManager.registerListener(listener, sensor, sensorDelay)
 
-            if (sensor == null) observer.onError(
-                BarometricSensorException(
-                    "Barometric sensor is not available"
-                )
-            )
+            if (sensor == null) {
+                observer.onError(BarometricSensorException("Barometric sensor is not available"))
+            } else {
+                sensorManager.registerListener(listener, sensor, sensorDelay)
+            }
         }
 
         class Listener(
