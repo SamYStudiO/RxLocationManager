@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace = "net.samystudio.rxlocationmanager.nmea.sample"
     compileSdk = Versions.compileSdk
 
     defaultConfig {
@@ -23,6 +24,10 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     compileOptions {

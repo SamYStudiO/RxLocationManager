@@ -6,6 +6,7 @@ plugins {
 apply(from = rootProject.file(".buildscript/configure_maven_publish.gradle"))
 
 android {
+    namespace = "net.samystudio.rxlocationmanager"
     compileSdk = Versions.compileSdk
 
     defaultConfig {
