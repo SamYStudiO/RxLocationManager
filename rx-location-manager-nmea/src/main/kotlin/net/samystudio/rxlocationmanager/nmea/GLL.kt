@@ -7,13 +7,13 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[1],
-            Cardinal.valueOf(data[2], Cardinal.N)!!
+            Cardinal.valueOf(data[2], Cardinal.N)!!,
         )
     }
     val longitude: Double? by lazy {
         convertNmeaLocation(
             data[3],
-            Cardinal.valueOf(data[4], Cardinal.E)!!
+            Cardinal.valueOf(data[4], Cardinal.E)!!,
         )
     }
     val time: String by lazy { data[5] }
@@ -38,7 +38,7 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
         longitude: Double? = null,
         time: String = "",
         status: Status? = null,
-        faaMode: FAAMode = FAAMode.N
+        faaMode: FAAMode = FAAMode.N,
     ) : this(
         "$%sGLL,%s,%s,%s,%s,%s,%s,%s".format(
             type.uppercase(Locale.ROOT),
@@ -50,8 +50,8 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
                 ?: "",
             time,
             status?.name ?: "",
-            faaMode.name
-        ).let { "%s*%s".format(it, computeChecksum(it)) }
+            faaMode.name,
+        ).let { "%s*%s".format(it, computeChecksum(it)) },
     )
 
     override fun getTokenValidators(): Array<TokenValidator> {
@@ -65,7 +65,7 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
                 Cardinal.values()
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
                     .map { it.name.single() }.toCharArray(),
-                true
+                true,
             ),
             // longitude ddddmm.ssss
             LongitudeValidator(true),
@@ -74,14 +74,14 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
                 Cardinal.values()
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
                     .map { it.name.single() }.toCharArray(),
-                true
+                true,
             ),
             // UTC time hhmmss(.sss)
             TimeValidator(true),
             // status
             EnumValidator(Status.values().map { it.name.single() }.toCharArray(), true),
             // FFA mode
-            EnumValidator(FAAMode.values().map { it.name.single() }.toCharArray(), false)
+            EnumValidator(FAAMode.values().map { it.name.single() }.toCharArray(), false),
         )
     }
 }

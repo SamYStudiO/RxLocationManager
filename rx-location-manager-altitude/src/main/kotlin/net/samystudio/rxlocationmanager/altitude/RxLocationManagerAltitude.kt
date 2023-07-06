@@ -16,13 +16,13 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.util.concurrent.atomic.AtomicBoolean
 import net.samystudio.rxlocationmanager.ContextProvider
 import net.samystudio.rxlocationmanager.RxLocationManager
 import net.samystudio.rxlocationmanager.nmea.GGA
 import net.samystudio.rxlocationmanager.nmea.NmeaException
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Reactive helpers to get altitude using GPS, barometric sensor or remote service.
@@ -35,7 +35,7 @@ object RxLocationManagerAltitude {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGpsEllipsoidalAltitudeUpdates(
-        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper(),
     ): Observable<Double> =
         RxLocationManager.observeNmea(looper)
             .flatMap {
@@ -58,7 +58,7 @@ object RxLocationManagerAltitude {
     @RequiresPermission(ACCESS_FINE_LOCATION)
     @JvmStatic
     fun observeGpsGeoidalAltitudeUpdates(
-        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper()
+        looper: Looper = Looper.myLooper() ?: Looper.getMainLooper(),
     ): Observable<Double> =
         RxLocationManager.observeNmea(looper)
             .flatMap {
@@ -86,12 +86,12 @@ object RxLocationManagerAltitude {
     fun observeBarometricAltitudeUpdates(
         sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
         pressureAtSeaLevel: Float = SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
-        minimumAccuracy: Int = -1
+        minimumAccuracy: Int = -1,
     ): Observable<Double> =
         observeBarometricAltitudeUpdates(
             sensorDelay,
             Observable.just(pressureAtSeaLevel),
-            minimumAccuracy
+            minimumAccuracy,
         )
 
     /**
@@ -104,13 +104,13 @@ object RxLocationManagerAltitude {
     fun observeBarometricAltitudeUpdates(
         sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
         pressureAtSeaLevelObservable: Observable<Float> = Observable.just(SensorManager.PRESSURE_STANDARD_ATMOSPHERE),
-        minimumAccuracy: Int = -1
+        minimumAccuracy: Int = -1,
     ): Observable<Double> =
         Observable.combineLatest(
             pressureAtSeaLevelObservable.distinctUntilChanged(),
             BarometricSensorObservable(sensorDelay)
                 .filter { it.first != null && it.second >= minimumAccuracy }
-                .map { it.first!! }
+                .map { it.first!! },
         ) { t1: Float, t2: Float ->
             SensorManager.getAltitude(t1, t2).toDouble()
         }.distinctUntilChanged()
@@ -125,11 +125,11 @@ object RxLocationManagerAltitude {
     @JvmOverloads
     fun observeBarometricAltitudeAndAccuracyUpdates(
         sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
-        pressureAtSeaLevel: Float = SensorManager.PRESSURE_STANDARD_ATMOSPHERE
+        pressureAtSeaLevel: Float = SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
     ): Observable<Pair<Double?, Int>> =
         observeBarometricAltitudeAndAccuracyUpdates(
             sensorDelay,
-            Observable.just(pressureAtSeaLevel)
+            Observable.just(pressureAtSeaLevel),
         )
 
     /**
@@ -141,11 +141,11 @@ object RxLocationManagerAltitude {
     @JvmStatic
     fun observeBarometricAltitudeAndAccuracyUpdates(
         sensorDelay: Int = SensorManager.SENSOR_DELAY_NORMAL,
-        pressureAtSeaLevelObservable: Observable<Float> = Observable.just(SensorManager.PRESSURE_STANDARD_ATMOSPHERE)
+        pressureAtSeaLevelObservable: Observable<Float> = Observable.just(SensorManager.PRESSURE_STANDARD_ATMOSPHERE),
     ): Observable<Pair<Double?, Int>> =
         Observable.combineLatest(
             pressureAtSeaLevelObservable.distinctUntilChanged(),
-            BarometricSensorObservable(sensorDelay)
+            BarometricSensorObservable(sensorDelay),
         ) { t1: Float, t2: Pair<Float?, Int> ->
             t2.first?.let { SensorManager.getAltitude(t1, it).toDouble() } to t2.second
         }.distinctUntilChanged()
@@ -158,7 +158,7 @@ object RxLocationManagerAltitude {
     fun getRemoteServiceAltitude(
         remoteServiceAltitude: RemoteServiceAltitude,
         latitude: Double,
-        longitude: Double
+        longitude: Double,
     ): Single<Double> =
         Single.create { emitter ->
             try {
@@ -197,7 +197,7 @@ object RxLocationManagerAltitude {
 
         class Listener(
             private val observer: Observer<in Pair<Float?, Int>>,
-            private val sensorManager: SensorManager? = null
+            private val sensorManager: SensorManager? = null,
         ) : Disposable, SensorEventListener {
             private val unSubscribed = AtomicBoolean()
 

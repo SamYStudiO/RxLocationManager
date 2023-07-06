@@ -12,23 +12,25 @@ subprojects {
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {
             target("**/*.kt")
-            ktlint(Versions.ktlint)
+            ktlint()
+                .setUseExperimental(true)
                 .editorConfigOverride(
                     mapOf(
-                        "ktlint_code_style" to "android",
-                        "max_line_length" to "off",
+                        "code_style" to "android",
                         "disabled_rules" to "no-wildcard-imports",
+                        "max_line_length" to "off",
+                        "ij_kotlin_allow_trailing_comma" to true,
+                        "ij_kotlin_allow_trailing_comma_on_call_site" to true,
                     )
                 )
         }
         kotlinGradle {
             target("**/*.gradle.kts")
-            ktlint(Versions.ktlint)
+            ktlint()
                 .editorConfigOverride(
                     mapOf(
-                        "ktlint_code_style" to "android",
-                        "max_line_length" to "off",
-                        "disabled_rules" to "no-wildcard-imports",
+                        "ij_kotlin_allow_trailing_comma" to true,
+                        "ij_kotlin_allow_trailing_comma_on_call_site" to true,
                     )
                 )
         }

@@ -50,7 +50,7 @@ class GSATest {
             null,
             10.1,
             12.2,
-            14.4
+            14.4,
         )
 
         assertEquals("\$GPGSA,M,3,,,22,,,85,,,14,23,,,10.1,12.2,14.4*07", gsa.message)

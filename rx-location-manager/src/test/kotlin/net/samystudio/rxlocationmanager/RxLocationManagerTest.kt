@@ -48,7 +48,7 @@ class RxLocationManagerTest {
         listener.callback.onGnssMeasurementsReceived(gnssMeasurementsEvent)
         assertEquals(
             gnssMeasurementsEvent,
-            observer.values()[0] as GnssMeasurementsEvent
+            observer.values()[0] as GnssMeasurementsEvent,
         )
         observer.onComplete()
     }
@@ -60,7 +60,7 @@ class RxLocationManagerTest {
         listener.callback.onGnssNavigationMessageReceived(gnssNavigationMessage)
         assertEquals(
             gnssNavigationMessage,
-            observer.values()[0] as GnssNavigationMessage
+            observer.values()[0] as GnssNavigationMessage,
         )
         observer.onComplete()
     }
@@ -72,12 +72,12 @@ class RxLocationManagerTest {
         listener.callback.onFirstFix(10)
         assertEquals(
             10,
-            (observer.values()[0] as GnssStatusState.StateFirstFix).ttffMillis
+            (observer.values()[0] as GnssStatusState.StateFirstFix).ttffMillis,
         )
         listener.callback.onSatelliteStatusChanged(gnssStatus)
         assertEquals(
             gnssStatus,
-            (observer.values()[1] as GnssStatusState.StateChanged).status
+            (observer.values()[1] as GnssStatusState.StateChanged).status,
         )
         listener.callback.onStarted()
         observer.assertValueAt(2, GnssStatusState.StateStarted)
@@ -95,17 +95,17 @@ class RxLocationManagerTest {
         listener.onLocationChanged(location)
         assertEquals(
             location,
-            (observer.values()[0] as LocationUpdatesState.StateLocationChanged).location
+            (observer.values()[0] as LocationUpdatesState.StateLocationChanged).location,
         )
         listener.onProviderDisabled(providerName)
         assertEquals(
             provider,
-            (observer.values()[1] as LocationUpdatesState.StateProviderDisabled).provider
+            (observer.values()[1] as LocationUpdatesState.StateProviderDisabled).provider,
         )
         listener.onProviderEnabled(providerName)
         assertEquals(
             provider,
-            (observer.values()[2] as LocationUpdatesState.StateProviderEnabled).provider
+            (observer.values()[2] as LocationUpdatesState.StateProviderEnabled).provider,
         )
         observer.onComplete()
     }

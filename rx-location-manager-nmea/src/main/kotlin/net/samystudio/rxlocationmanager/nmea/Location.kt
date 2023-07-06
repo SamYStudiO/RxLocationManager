@@ -40,7 +40,8 @@ enum class Cardinal(internal val cardinalDirection: CardinalDirection) {
     N(CardinalDirection.NORTH_SOUTH),
     S(CardinalDirection.NORTH_SOUTH),
     E(CardinalDirection.WEST_EAST),
-    W(CardinalDirection.WEST_EAST);
+    W(CardinalDirection.WEST_EAST),
+    ;
 
     companion object {
         @JvmStatic
@@ -56,7 +57,7 @@ enum class Cardinal(internal val cardinalDirection: CardinalDirection) {
 
 internal enum class CardinalDirection {
     NORTH_SOUTH,
-    WEST_EAST
+    WEST_EAST,
 }
 
 /**
@@ -76,7 +77,7 @@ private fun convert(coordinate: Double): String {
         "###.#####",
         DecimalFormatSymbols.getInstance().apply {
             decimalSeparator = '.'
-        }
+        },
     )
     val degrees = floor(c).toInt()
     sb.append(degrees)

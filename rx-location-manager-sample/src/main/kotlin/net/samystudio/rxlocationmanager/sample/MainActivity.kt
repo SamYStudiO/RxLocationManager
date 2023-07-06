@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("Nmea", it.message)
-                }
+                },
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         Log.d("GnssMeasurementsEvent", it.toString())
-                    }
+                    },
             )
 
             // GnssNavigationMessage ---------------------------------------------------------------
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         Log.d("GnssNavMesEvent", it.toString())
-                    }
+                    },
             )
         }
 
@@ -73,22 +73,22 @@ class MainActivity : AppCompatActivity() {
                     when (it) {
                         is GnssStatusState.StateStarted -> Log.d(
                             "GnssStatusStarted1",
-                            it.toString()
+                            it.toString(),
                         )
                         is GnssStatusState.StateStopped -> Log.d(
                             "GnssStatusStopped1",
-                            it.toString()
+                            it.toString(),
                         )
                         is GnssStatusState.StateFirstFix -> Log.d(
                             "GnssStatusFirstFix1",
-                            it.toString()
+                            it.toString(),
                         )
                         is GnssStatusState.StateChanged -> Log.d(
                             "GnssStatusChanged1",
-                            it.toString()
+                            it.toString(),
                         )
                     }
-                }
+                },
         )
 
         compositeDisposable.add(
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("GnssStatusStarted2", it.toString())
-                }
+                },
         )
 
         compositeDisposable.add(
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("GnssStatusStopped2", it.toString())
-                }
+                },
         )
 
         compositeDisposable.add(
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("GnssStatusFirstFix2", it.toString())
-                }
+                },
         )
 
         compositeDisposable.add(
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("GnssStatusChanged2", it.toString())
-                }
+                },
         )
 
         // GnssNavigationMessage -------------------------------------------------------------------
@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
                         Provider.GPS,
                         LocationRequestCompat.Builder(1000)
                             .setMinUpdateDistanceMeters(10f)
-                            .build()
+                            .build(),
                     )
                 }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -153,18 +153,18 @@ class MainActivity : AppCompatActivity() {
                     when (it) {
                         is LocationUpdatesState.StateLocationChanged -> Log.d(
                             "LocUpdLocationChanged",
-                            it.toString()
+                            it.toString(),
                         )
                         is LocationUpdatesState.StateProviderEnabled -> Log.d(
                             "LocUpdProviderEnabled",
-                            it.toString()
+                            it.toString(),
                         )
                         is LocationUpdatesState.StateProviderDisabled -> Log.d(
                             "LocUpdProviderDisabled",
-                            it.toString()
+                            it.toString(),
                         )
                     }
-                }
+                },
         )
 
         compositeDisposable.add(
@@ -176,13 +176,13 @@ class MainActivity : AppCompatActivity() {
                         Provider.GPS,
                         LocationRequestCompat.Builder(1000)
                             .setMinUpdateDistanceMeters(10f)
-                            .build()
+                            .build(),
                     )
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("LocUpdLocationChanged2", it.toString())
-                }
+                },
         )
 
         compositeDisposable.add(
@@ -194,13 +194,13 @@ class MainActivity : AppCompatActivity() {
                         Provider.GPS,
                         LocationRequestCompat.Builder(1000)
                             .setMinUpdateDistanceMeters(10f)
-                            .build()
+                            .build(),
                     )
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("LocUpdProviderEnabled2", it.toString())
-                }
+                },
         )
 
         compositeDisposable.add(
@@ -212,13 +212,13 @@ class MainActivity : AppCompatActivity() {
                         Provider.GPS,
                         LocationRequestCompat.Builder(1000)
                             .setMinUpdateDistanceMeters(10f)
-                            .build()
+                            .build(),
                     )
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("LocUpdProviderDisabled2", it.toString())
-                }
+                },
         )
     }
 

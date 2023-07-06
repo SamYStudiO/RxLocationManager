@@ -9,25 +9,25 @@ class LocationTest {
         assertEquals(
             48.864716,
             convertNmeaLocation("4851.88296", Cardinal.N)!!,
-            PRECISION
+            PRECISION,
         )
 
         assertEquals(
             2.349014,
             convertNmeaLocation("00220.94084", Cardinal.E)!!,
-            PRECISION
+            PRECISION,
         )
 
         assertEquals(
             -48.864716,
             convertNmeaLocation("4851.88296", Cardinal.S)!!,
-            PRECISION
+            PRECISION,
         )
 
         assertEquals(
             -2.349014,
             convertNmeaLocation("00220.94084", Cardinal.W)!!,
-            PRECISION
+            PRECISION,
         )
 
         assertEquals(null, convertNmeaLocation("", Cardinal.W))

@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                 .filter { it }
                 .flatMap { RxLocationManagerAltitude.observeGpsEllipsoidalAltitudeUpdates() }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { Log.d("GpsEllipsoidalAltitude", it.toString()) }
+                .subscribe { Log.d("GpsEllipsoidalAltitude", it.toString()) },
         )
 
         compositeDisposable.add(
@@ -37,34 +37,34 @@ class MainActivity : AppCompatActivity() {
                 .filter { it }
                 .flatMap { RxLocationManagerAltitude.observeGpsGeoidalAltitudeUpdates() }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { Log.d("GpsGeoidalAltitude", it.toString()) }
+                .subscribe { Log.d("GpsGeoidalAltitude", it.toString()) },
         )
 
         compositeDisposable.add(
             RxLocationManagerAltitude.observeBarometricAltitudeUpdates(
                 1000,
-                SensorManager.PRESSURE_STANDARD_ATMOSPHERE
+                SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
             )
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { Log.d("BarometricAltitude", it.toString()) }
+                .subscribe { Log.d("BarometricAltitude", it.toString()) },
         )
 
         compositeDisposable.add(
             RxLocationManagerAltitude.getRemoteServiceAltitude(
                 GoogleElevationApi("your_google_api_key"),
                 48.866667,
-                2.333333
+                2.333333,
             ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
                         Log.d(
                             "RemoteServiceAltitude",
-                            it.toString()
+                            it.toString(),
                         )
                     },
-                    { Log.d("RemoteServiceAltitude", "Error getting remote altitude") }
-                )
+                    { Log.d("RemoteServiceAltitude", "Error getting remote altitude") },
+                ),
         )
     }
 

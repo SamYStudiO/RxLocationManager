@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                     } catch (e: NmeaException) {
                         Log.w("observeNmea", e.message ?: "")
                     }
-                }
+                },
         )
     }
 

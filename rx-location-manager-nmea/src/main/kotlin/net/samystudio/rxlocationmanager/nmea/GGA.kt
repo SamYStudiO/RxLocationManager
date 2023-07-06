@@ -8,13 +8,13 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[2],
-            Cardinal.valueOf(data[3], Cardinal.N)!!
+            Cardinal.valueOf(data[3], Cardinal.N)!!,
         )
     }
     val longitude: Double? by lazy {
         convertNmeaLocation(
             data[4],
-            Cardinal.valueOf(data[5], Cardinal.E)!!
+            Cardinal.valueOf(data[5], Cardinal.E)!!,
         )
     }
     val quality: Quality by lazy {
@@ -44,7 +44,7 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
         altitude: Double? = null,
         ellipsoidalOffset: Double? = null,
         differentialGpsAge: Double? = null,
-        differentialGpsStationId: String = ""
+        differentialGpsStationId: String = "",
     ) : this(
         "$%sGGA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
             type.uppercase(Locale.ROOT),
@@ -63,8 +63,8 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
             ellipsoidalOffset ?: "",
             ellipsoidalOffset?.let { 'M' } ?: "",
             differentialGpsAge ?: "",
-            differentialGpsStationId
-        ).let { "%s*%s".format(it, computeChecksum(it)) }
+            differentialGpsStationId,
+        ).let { "%s*%s".format(it, computeChecksum(it)) },
     )
 
     override fun getTokenValidators(): Array<TokenValidator> {
@@ -83,7 +83,7 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
                 Cardinal.values()
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
                     .map { it.name.single() }.toCharArray(),
-                true
+                true,
             ),
             // longitude ddddmm.ssss
             LongitudeValidator(true),
@@ -92,12 +92,12 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
                 Cardinal.values()
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
                     .map { it.name.single() }.toCharArray(),
-                true
+                true,
             ),
             // quality
             EnumValidator(
                 Quality.values().map { it.value.toString().single() }.toCharArray(),
-                true
+                true,
             ),
             // satellite count
             IntValidator(true, 0, 99),
@@ -114,7 +114,7 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
             // age of differential GPS data (seconds)
             optionalDoubleValidator,
             // station
-            StringValidator(true)
+            StringValidator(true),
         )
     }
 
@@ -127,6 +127,6 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
         REAL_TIME_KINEMATIC_FLOAT(5),
         ESTIMATED(6),
         MANUAL_INPUT_MODE(7),
-        SIMULATION_MODE(8)
+        SIMULATION_MODE(8),
     }
 }

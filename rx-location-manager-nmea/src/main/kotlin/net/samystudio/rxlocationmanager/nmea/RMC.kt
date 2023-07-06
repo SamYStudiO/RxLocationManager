@@ -15,13 +15,13 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[3],
-            Cardinal.valueOf(data[4], Cardinal.N)!!
+            Cardinal.valueOf(data[4], Cardinal.N)!!,
         )
     }
     val longitude: Double? by lazy {
         convertNmeaLocation(
             data[5],
-            Cardinal.valueOf(data[6], Cardinal.E)!!
+            Cardinal.valueOf(data[6], Cardinal.E)!!,
         )
     }
     val speed: Double? by lazy { data[7].toDoubleOrNull() }
@@ -62,7 +62,7 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
         magneticVariation: Double? = null,
         magneticVariationDirection: Cardinal? = null,
         faaMode: FAAMode = FAAMode.N,
-        navigationalStatus: NavigationalStatus = NavigationalStatus.V
+        navigationalStatus: NavigationalStatus = NavigationalStatus.V,
     ) : this(
         "$%sRMC,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
             type.uppercase(Locale.ROOT),
@@ -80,8 +80,8 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
             magneticVariation ?: "",
             magneticVariationDirection?.name ?: "",
             faaMode.name,
-            navigationalStatus.name
-        ).let { "%s*%s".format(it, computeChecksum(it)) }
+            navigationalStatus.name,
+        ).let { "%s*%s".format(it, computeChecksum(it)) },
     )
 
     override fun getTokenValidators(): Array<TokenValidator> {
@@ -101,7 +101,7 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
                 Cardinal.values()
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
                     .map { it.name.single() }.toCharArray(),
-                true
+                true,
             ),
             // longitude ddddmm.ssss
             LongitudeValidator(true),
@@ -110,7 +110,7 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
                 Cardinal.values()
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
                     .map { it.name.single() }.toCharArray(),
-                true
+                true,
             ),
             // speed
             optionalDoubleValidator,
@@ -125,12 +125,12 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
                 Cardinal.values()
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
                     .map { it.name.single() }.toCharArray(),
-                true
+                true,
             ),
             // FFA mode
             EnumValidator(FAAMode.values().map { it.name.single() }.toCharArray(), false),
             // navigational status
-            EnumValidator(NavigationalStatus.values().map { it.name.single() }.toCharArray(), false)
+            EnumValidator(NavigationalStatus.values().map { it.name.single() }.toCharArray(), false),
         )
     }
 

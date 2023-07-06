@@ -28,7 +28,7 @@ abstract class Nmea constructor(val message: String, throwIfContentInvalid: Bool
             if (index > data.size - 1 || !tokenValidator.validate(data[index])) {
                 throw NmeaException(
                     getParseErrorMessage(index, tokenValidator::class.java.simpleName, message),
-                    index
+                    index,
                 )
             }
         }
@@ -40,8 +40,8 @@ abstract class Nmea constructor(val message: String, throwIfContentInvalid: Bool
             throw NmeaException(
                 getChecksumErrorMessage(
                     checksum,
-                    computeChecksum()
-                )
+                    computeChecksum(),
+                ),
             )
         }
     }
@@ -93,12 +93,12 @@ abstract class Nmea constructor(val message: String, throwIfContentInvalid: Bool
         internal fun getParseErrorMessage(
             index: Int,
             validatorClassName: String,
-            message: String
+            message: String,
         ) = CANNOT_PARSE_INDEX_ERROR_MESSAGE.format(index, validatorClassName, message)
 
         internal fun getChecksumErrorMessage(
             expectedChecksum: String,
-            actualChecksum: String
+            actualChecksum: String,
         ) = CHECKSUM_ERROR_MESSAGE.format(expectedChecksum, actualChecksum)
     }
 }

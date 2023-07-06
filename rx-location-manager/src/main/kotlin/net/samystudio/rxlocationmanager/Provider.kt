@@ -21,5 +21,5 @@ enum class Provider {
     /**
      * @see [LocationManager.FUSED_PROVIDER]
      */
-    FUSED
+    FUSED,
 }

@@ -48,7 +48,7 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
             satellite9,
             satellite10,
             satellite11,
-            satellite12
+            satellite12,
         ).count()
     }
 
@@ -70,7 +70,7 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
         satellite12: Int? = null,
         horizontalDilutionOfPrecision: Double? = null,
         positionDilutionOfPrecision: Double? = null,
-        verticalDilutionOfPrecision: Double? = null
+        verticalDilutionOfPrecision: Double? = null,
     ) : this(
         "$%sGSA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
             type.uppercase(Locale.ROOT),
@@ -90,8 +90,8 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
             satellite12 ?: "",
             horizontalDilutionOfPrecision ?: "",
             positionDilutionOfPrecision ?: "",
-            verticalDilutionOfPrecision ?: ""
-        ).let { "%s*%s".format(it, computeChecksum(it)) }
+            verticalDilutionOfPrecision ?: "",
+        ).let { "%s*%s".format(it, computeChecksum(it)) },
     )
 
     override fun getTokenValidators(): Array<TokenValidator> {
@@ -134,7 +134,7 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
             // horizontal dilution of precision
             optionalDoubleValidator,
             // vertical dilution of precision
-            optionalDoubleValidator
+            optionalDoubleValidator,
         )
     }
 
@@ -143,7 +143,7 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
      * M=Manual
      */
     enum class SelectionMode {
-        A, M;
+        A, M
     }
 
     enum class Fix(val value: Int) {

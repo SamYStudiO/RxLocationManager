@@ -9,7 +9,7 @@ interface TokenValidator {
 class IntValidator(
     private val optional: Boolean = false,
     private val min: Int = Int.MIN_VALUE,
-    private val max: Int = Int.MAX_VALUE
+    private val max: Int = Int.MAX_VALUE,
 ) : TokenValidator {
     override fun validate(token: String): Boolean {
         if (token.isBlank() && optional) return true
@@ -21,7 +21,7 @@ class IntValidator(
 class DoubleValidator(
     private val optional: Boolean = false,
     private val min: Double = -Double.MAX_VALUE,
-    private val max: Double = Double.MAX_VALUE
+    private val max: Double = Double.MAX_VALUE,
 ) : TokenValidator {
     override fun validate(token: String): Boolean {
         if (token.isBlank() && optional) return true
@@ -76,7 +76,7 @@ class DateValidator(private val optional: Boolean = false) : TokenValidator {
 class StringValidator(
     private val optional: Boolean = false,
     private val min: Int = Int.MIN_VALUE,
-    private val max: Int = Int.MAX_VALUE
+    private val max: Int = Int.MAX_VALUE,
 ) : TokenValidator {
     override fun validate(token: String): Boolean {
         if (token.isBlank() && optional) return true

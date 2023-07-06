@@ -38,12 +38,12 @@ class RMCTest {
             9.3,
             Cardinal.W,
             FAAMode.A,
-            RMC.NavigationalStatus.S
+            RMC.NavigationalStatus.S,
         )
 
         assertEquals(
             "\$GNRMC,191613.43,A,3342.6618,N,11751.3858,W,5.0,10.2,100520,9.3,W,A,S*6E",
-            rmc.message
+            rmc.message,
         )
     }
 

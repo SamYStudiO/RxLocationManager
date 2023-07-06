@@ -10,7 +10,7 @@ class GoogleElevationApiTest {
     fun getUrl() {
         assertEquals(
             "https://maps.googleapis.com/maps/api/elevation/json?locations=20.1,10.2&key=123456789",
-            googleElevationApi.getUrl(20.1, 10.2)
+            googleElevationApi.getUrl(20.1, 10.2),
         )
     }
 }
