@@ -1,16 +1,17 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
-apply(from = rootProject.file(".buildscript/configure_maven_publish.gradle"))
+project.findProperty("GROUP")?.let { group = it }
+project.findProperty("VERSION_NAME")?.let { version = it }
 
 android {
     namespace = "net.samystudio.rxlocationmanager"
-    compileSdk = Versions.compileSdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.minSdk
+        minSdk = libs.versions.minSdk.get().toInt()
     }
 
     sourceSets {
@@ -33,7 +34,8 @@ android {
 }
 
 dependencies {
-    base()
-    reactive()
-    test()
+    implementation(libs.bundles.base)
+    implementation(libs.bundles.reactive)
+    implementation(libs.bundles.debug)
+    testImplementation(libs.bundles.test)
 }

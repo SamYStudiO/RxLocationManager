@@ -142,6 +142,9 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
      * V=Void
      */
     enum class NavigationalStatus {
-        S, C, U, V
+        S,
+        C,
+        U,
+        V,
     }
 }

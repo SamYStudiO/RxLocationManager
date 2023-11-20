@@ -12,5 +12,13 @@ package net.samystudio.rxlocationmanager.nmea
  * S=Simulated
  */
 enum class FAAMode {
-    A, D, E, F, M, N, P, R, S
+    A,
+    D,
+    E,
+    F,
+    M,
+    N,
+    P,
+    R,
+    S,
 }

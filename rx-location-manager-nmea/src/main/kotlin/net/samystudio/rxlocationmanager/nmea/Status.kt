@@ -5,5 +5,6 @@ package net.samystudio.rxlocationmanager.nmea
  * V=Void/Invalid
  */
 enum class Status {
-    A, V
+    A,
+    V,
 }

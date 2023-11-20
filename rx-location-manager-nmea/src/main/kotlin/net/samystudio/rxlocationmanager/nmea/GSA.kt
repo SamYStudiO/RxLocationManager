@@ -143,10 +143,13 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
      * M=Manual
      */
     enum class SelectionMode {
-        A, M
+        A,
+        M,
     }
 
     enum class Fix(val value: Int) {
-        NO_FIX(1), FIX_2D(2), FIX_3D(3)
+        NO_FIX(1),
+        FIX_2D(2),
+        FIX_3D(3),
     }
 }

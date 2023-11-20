@@ -1,16 +1,17 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
-apply(from = rootProject.file(".buildscript/configure_maven_publish.gradle"))
+project.findProperty("GROUP")?.let { group = it }
+project.findProperty("VERSION_NAME")?.let { version = it }
 
 android {
     namespace = "net.samystudio.rxlocationmanager.altitude"
-    compileSdk = Versions.compileSdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = Versions.minSdk
+        minSdk = libs.versions.minSdk.get().toInt()
     }
 
     sourceSets {
@@ -35,7 +36,7 @@ android {
 dependencies {
     implementation(project(":rx-location-manager"))
     api(project(":rx-location-manager-nmea"))
-    base()
-    reactive()
-    test()
+    implementation(libs.bundles.base)
+    implementation(libs.bundles.reactive)
+    testImplementation(libs.bundles.test)
 }
