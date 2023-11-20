@@ -1,11 +1,13 @@
-0.7.0
+0.7.1 (2023-11-20)
+--------------
+- Add observeBarometricAltitudeAndAccuracyUpdates to get barometric altitude along with accuracy state + allow observeBarometricAltitudeUpdates to specify minimum accuracy to filters events
+- Bump libraries
+
+
+0.7.0 (2022-10-19)
 --------------
 - Add Nmea throwIfContentInvalid parameter to allow more flexibility when parsing nmea by not throwing any error when content is mal formatted
 - Fix parsing some gga
-
-
-0.7.0-SNAPSHOT
---------------
 - Add synchronized when adding nmea listener as it may lead to ConcurrentException
 - Add FUSED_PROVIDER from Provider enum
 - Fix parsing nmea with some locale not using dot as decimal separator + get rid of android Location class dependency (better for testing)
