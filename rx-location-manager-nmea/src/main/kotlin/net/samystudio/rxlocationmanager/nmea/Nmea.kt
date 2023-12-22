@@ -41,7 +41,7 @@ abstract class Nmea(val message: String, throwIfContentInvalid: Boolean = true) 
                 getChecksumErrorMessage(
                     checksum,
                     computeChecksum(),
-                    message
+                    message,
                 ),
             )
         }

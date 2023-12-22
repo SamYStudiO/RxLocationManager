@@ -16,13 +16,13 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.util.concurrent.atomic.AtomicBoolean
 import net.samystudio.rxlocationmanager.ContextProvider
 import net.samystudio.rxlocationmanager.RxLocationManager
 import net.samystudio.rxlocationmanager.nmea.GGA
 import net.samystudio.rxlocationmanager.nmea.NmeaException
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Reactive helpers to get altitude using GPS, barometric sensor or remote service.
