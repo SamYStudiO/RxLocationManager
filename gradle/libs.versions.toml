@@ -4,12 +4,12 @@ minSdk = "21"
 targetSdk = "34"
 
 # kotlin
-kotlin = "1.9.20"
+kotlin = "1.9.21"
 
 # plugins
-android = "8.1.3"
+android = "8.2.0"
 gradleMavenPublish = "0.25.3"
-spotless = "6.19.0"
+spotless = "6.23.3"
 
 # base
 core = "1.12.0"
@@ -19,7 +19,7 @@ appcompat = "1.6.1"
 # ractive
 rxjava = "3.1.8"
 rxandroid = "3.0.2"
-rxlocationmanager = "0.7.0"
+rxlocationmanager = "0.7.1"
 
 #misc
 rxpermissions = "0.12"

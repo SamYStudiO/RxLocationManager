@@ -93,12 +93,12 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
             // UTC time hhmmss(.sss)
             TimeValidator(true),
             // Status
-            EnumValidator(Status.values().map { it.name.single() }.toCharArray(), false),
+            EnumValidator(Status.entries.map { it.name.single() }.toCharArray(), false),
             // latitude ddmm.ssss
             LatitudeValidator(true),
             // N or S
             EnumValidator(
-                Cardinal.values()
+                Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
                     .map { it.name.single() }.toCharArray(),
                 true,
@@ -122,15 +122,15 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
             optionalDoubleValidator,
             // magneticVariationDirection
             EnumValidator(
-                Cardinal.values()
+                Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
                     .map { it.name.single() }.toCharArray(),
                 true,
             ),
             // FFA mode
-            EnumValidator(FAAMode.values().map { it.name.single() }.toCharArray(), false),
+            EnumValidator(FAAMode.entries.map { it.name.single() }.toCharArray(), false),
             // navigational status
-            EnumValidator(NavigationalStatus.values().map { it.name.single() }.toCharArray(), false),
+            EnumValidator(NavigationalStatus.entries.map { it.name.single() }.toCharArray(), false),
         )
     }
 

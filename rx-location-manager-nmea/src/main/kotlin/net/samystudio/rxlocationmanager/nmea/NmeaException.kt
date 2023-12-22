@@ -8,9 +8,7 @@ class NmeaException(message: String, val index: Int = -1) : Exception(message) {
         other as NmeaException
 
         if (message != other.message) return false
-        if (index != other.index) return false
-
-        return true
+        return index == other.index
     }
 
     override fun hashCode(): Int {

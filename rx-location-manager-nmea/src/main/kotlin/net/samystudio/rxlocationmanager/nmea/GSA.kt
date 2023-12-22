@@ -13,7 +13,7 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
     }
     val fix: Fix by lazy {
         try {
-            return@lazy Fix.values().find { it.value == data[2].toInt() }
+            return@lazy Fix.entries.find { it.value == data[2].toInt() }
                 ?: Fix.NO_FIX
         } catch (_: NumberFormatException) {
         } catch (_: ArrayIndexOutOfBoundsException) {
@@ -102,9 +102,9 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
             // type $__GSA
             TypeValidator("GSA"),
             // selection mode
-            EnumValidator(SelectionMode.values().map { it.name.single() }.toCharArray(), true),
+            EnumValidator(SelectionMode.entries.map { it.name.single() }.toCharArray(), true),
             // fix
-            EnumValidator(Fix.values().map { it.value.toString().single() }.toCharArray(), true),
+            EnumValidator(Fix.entries.map { it.value.toString().single() }.toCharArray(), true),
             // satellite 1
             satelliteValidator,
             // satellite 2

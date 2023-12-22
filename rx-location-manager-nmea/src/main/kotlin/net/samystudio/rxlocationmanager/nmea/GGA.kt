@@ -19,7 +19,7 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
     }
     val quality: Quality by lazy {
         try {
-            return@lazy Quality.values().find { it.value == data[6].toInt() }
+            return@lazy Quality.entries.find { it.value == data[6].toInt() }
                 ?: Quality.FIX_NOT_AVAILABLE
         } catch (_: NumberFormatException) {
         } catch (_: ArrayIndexOutOfBoundsException) {
@@ -80,7 +80,7 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
             LatitudeValidator(true),
             // N or S
             EnumValidator(
-                Cardinal.values()
+                Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
                     .map { it.name.single() }.toCharArray(),
                 true,
@@ -89,14 +89,14 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
             LongitudeValidator(true),
             // W or E
             EnumValidator(
-                Cardinal.values()
+                Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
                     .map { it.name.single() }.toCharArray(),
                 true,
             ),
             // quality
             EnumValidator(
-                Quality.values().map { it.value.toString().single() }.toCharArray(),
+                Quality.entries.map { it.value.toString().single() }.toCharArray(),
                 true,
             ),
             // satellite count

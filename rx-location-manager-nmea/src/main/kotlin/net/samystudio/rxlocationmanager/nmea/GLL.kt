@@ -62,7 +62,7 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
             LatitudeValidator(true),
             // N or S
             EnumValidator(
-                Cardinal.values()
+                Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
                     .map { it.name.single() }.toCharArray(),
                 true,
@@ -71,7 +71,7 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
             LongitudeValidator(true),
             // W or E
             EnumValidator(
-                Cardinal.values()
+                Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
                     .map { it.name.single() }.toCharArray(),
                 true,
@@ -79,9 +79,9 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
             // UTC time hhmmss(.sss)
             TimeValidator(true),
             // status
-            EnumValidator(Status.values().map { it.name.single() }.toCharArray(), true),
+            EnumValidator(Status.entries.map { it.name.single() }.toCharArray(), true),
             // FFA mode
-            EnumValidator(FAAMode.values().map { it.name.single() }.toCharArray(), false),
+            EnumValidator(FAAMode.entries.map { it.name.single() }.toCharArray(), false),
         )
     }
 }
