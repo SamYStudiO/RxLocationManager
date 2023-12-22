@@ -6,7 +6,7 @@ import org.junit.Test
 class GSATest {
     @Test
     fun validate() {
-        val gsa = GSA("\$GNGSA,A,3,2,6,9,14,17,19,20,24,28,,,,0.8,0.5,0.6,1*32")
+        val gsa = GSA("\$GPGSA,M,3,,,22,,,85,,,14,23,,,10.1,12.2,14.4*07")
 
         assertEquals("GPGSA", gsa.type)
         assertEquals(GSA.SelectionMode.M, gsa.selectionMode)

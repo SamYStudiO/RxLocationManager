@@ -10,7 +10,7 @@ android {
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        applicationId = "net.samystudio.rxlocationmanager.altitude"
+        applicationId = "net.samystudio.rxlocationmanager.nmea"
         versionCode = 1
         versionName = "1.0"
     }
