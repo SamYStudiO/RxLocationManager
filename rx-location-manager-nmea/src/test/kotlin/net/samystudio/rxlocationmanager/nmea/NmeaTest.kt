@@ -1,6 +1,7 @@
 package net.samystudio.rxlocationmanager.nmea
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class NmeaTest {
@@ -21,11 +22,11 @@ class NmeaTest {
 
     @Test
     fun blankError() {
-        val expected = NmeaException(Nmea.BLANK_ERROR_MESSAGE)
-        var result: NmeaException? = null
-        try {
-            object :
-                Nmea(" \n\t") {
+        val message = " \n\t"
+        val errorMessage = Nmea.BLANK_ERROR_MESSAGE
+
+        assertThrows(errorMessage, NmeaException::class.java) {
+            object : Nmea(message) {
                 override fun getTokenValidators(): Array<TokenValidator> {
                     return arrayOf(object : TokenValidator {
                         override fun validate(token: String): Boolean {
@@ -34,17 +35,15 @@ class NmeaTest {
                     })
                 }
             }
-        } catch (e: NmeaException) {
-            result = e
         }
-        assertEquals(expected, result)
     }
 
     @Test
     fun dollarMissingError() {
-        val expected = NmeaException(Nmea.MISSING_DOLLAR_ERROR_MESSAGE, 0)
-        var result: NmeaException? = null
-        try {
+        val message = "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,00005E"
+        val errorMessage = Nmea.getMissingDollarErrorMessage(message)
+
+        assertThrows(errorMessage, NmeaException::class.java) {
             object :
                 Nmea("GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,00005E") {
                 override fun getTokenValidators(): Array<TokenValidator> {
@@ -55,17 +54,15 @@ class NmeaTest {
                     })
                 }
             }
-        } catch (e: NmeaException) {
-            result = e
         }
-        assertEquals(expected, result)
     }
 
     @Test
     fun checksumMissingError() {
-        val expected = NmeaException(Nmea.CANNOT_FIND_CHECKSUM_ERROR_MESSAGE)
-        var result: NmeaException? = null
-        try {
+        val message = "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000"
+        val errorMessage = Nmea.getCannotFindChecksumErrorMessage(message)
+
+        assertThrows(errorMessage, NmeaException::class.java) {
             object :
                 Nmea("\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000") {
                 override fun getTokenValidators(): Array<TokenValidator> {
@@ -76,19 +73,16 @@ class NmeaTest {
                     })
                 }
             }
-        } catch (e: NmeaException) {
-            result = e
         }
-        assertEquals(expected, result)
     }
 
     @Test
     fun checksumDoesNotNotMatchError() {
-        val expected = NmeaException(Nmea.getChecksumErrorMessage("55", "5E"))
-        var result: NmeaException? = null
-        try {
-            object :
-                Nmea("\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*55") {
+        val message = "\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*55"
+        val errorMessage = Nmea.getChecksumErrorMessage("55", "5E", message)
+
+        assertThrows(errorMessage, NmeaException::class.java) {
+            object : Nmea(message) {
                 override fun getTokenValidators(): Array<TokenValidator> {
                     return arrayOf(object : TokenValidator {
                         override fun validate(token: String): Boolean {
@@ -97,9 +91,6 @@ class NmeaTest {
                     })
                 }
             }
-        } catch (e: NmeaException) {
-            result = e
         }
-        assertEquals(expected, result)
     }
 }
