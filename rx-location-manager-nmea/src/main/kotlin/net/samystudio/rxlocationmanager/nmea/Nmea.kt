@@ -19,7 +19,7 @@ abstract class Nmea(val message: String, throwIfContentInvalid: Boolean = true) 
             throw NmeaException(BLANK_ERROR_MESSAGE)
         }
         if (!message.startsWith("$")) {
-            throw NmeaException(MISSING_DOLLAR_ERROR_MESSAGE, 0)
+            throw NmeaException(getMissingDollarErrorMessage(message), 0)
         }
 
         val validators =
@@ -34,13 +34,14 @@ abstract class Nmea(val message: String, throwIfContentInvalid: Boolean = true) 
         }
 
         if (!message.contains("*")) {
-            throw NmeaException(CANNOT_FIND_CHECKSUM_ERROR_MESSAGE)
+            throw NmeaException(getCannotFindChecksumErrorMessage(message))
         }
         if (computeChecksum() != checksum) {
             throw NmeaException(
                 getChecksumErrorMessage(
                     checksum,
                     computeChecksum(),
+                    message
                 ),
             )
         }
@@ -71,10 +72,13 @@ abstract class Nmea(val message: String, throwIfContentInvalid: Boolean = true) 
     companion object {
         private const val CANNOT_PARSE_INDEX_ERROR_MESSAGE =
             "Cannot parse message at index %s with validator %s from source %s"
-        private const val CHECKSUM_ERROR_MESSAGE = "Message checksum %s doesn't match %s"
+        private const val CHECKSUM_ERROR_MESSAGE =
+            "Message checksum %s doesn't match %s from source %s"
         internal const val BLANK_ERROR_MESSAGE = "Message is blank"
-        internal const val MISSING_DOLLAR_ERROR_MESSAGE = "Message should stat with $"
-        internal const val CANNOT_FIND_CHECKSUM_ERROR_MESSAGE = "Cannot find checksum from message"
+        internal const val MISSING_DOLLAR_ERROR_MESSAGE =
+            "Message should stat with $ from source %s"
+        internal const val CANNOT_FIND_CHECKSUM_ERROR_MESSAGE =
+            "Cannot find checksum from source %s"
 
         internal fun computeChecksum(message: String): String {
             val data = message.split("*")[0]
@@ -97,6 +101,15 @@ abstract class Nmea(val message: String, throwIfContentInvalid: Boolean = true) 
         internal fun getChecksumErrorMessage(
             expectedChecksum: String,
             actualChecksum: String,
-        ) = CHECKSUM_ERROR_MESSAGE.format(expectedChecksum, actualChecksum)
+            message: String,
+        ) = CHECKSUM_ERROR_MESSAGE.format(expectedChecksum, actualChecksum, message)
+
+        internal fun getMissingDollarErrorMessage(
+            message: String,
+        ) = MISSING_DOLLAR_ERROR_MESSAGE.format(message)
+
+        internal fun getCannotFindChecksumErrorMessage(
+            message: String,
+        ) = CANNOT_FIND_CHECKSUM_ERROR_MESSAGE.format(message)
     }
 }

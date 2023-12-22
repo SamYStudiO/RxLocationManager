@@ -1,8 +1,12 @@
+0.7.2
+--------------
+- Add original nmea message to all kind of error, this makes errors easier to analyze
+- Bump libraries
+
 0.7.1 (2023-11-20)
 --------------
 - Add observeBarometricAltitudeAndAccuracyUpdates to get barometric altitude along with accuracy state + allow observeBarometricAltitudeUpdates to specify minimum accuracy to filters events
 - Bump libraries
-
 
 0.7.0 (2022-10-19)
 --------------
