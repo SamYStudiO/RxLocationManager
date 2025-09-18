@@ -1,6 +1,6 @@
 package net.samystudio.rxlocationmanager.nmea.sample
 
-//import com.tbruyelle.rxpermissions3.RxPermissions
+// import com.tbruyelle.rxpermissions3.RxPermissions
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
