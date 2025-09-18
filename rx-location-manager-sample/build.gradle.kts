@@ -78,5 +78,4 @@ dependencies {
     implementation(libs.bundles.base)
     implementation(libs.bundles.reactive)
     implementation(project(":rx-location-manager"))
-    implementation(libs.rxpermissions)
 }

@@ -1,19 +1,9 @@
 package net.samystudio.rxlocationmanager.sample
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.location.LocationRequestCompat
-import com.tbruyelle.rxpermissions3.RxPermissions
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import net.samystudio.rxlocationmanager.GnssStatusState
-import net.samystudio.rxlocationmanager.LocationUpdatesState
-import net.samystudio.rxlocationmanager.Provider
-import net.samystudio.rxlocationmanager.RxLocationManager
 
 class MainActivity : AppCompatActivity() {
     private val compositeDisposable = CompositeDisposable()
@@ -22,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val rxPermissions = RxPermissions(this)
+        /*val rxPermissions = RxPermissions(this)
 
         // Nmea ------------------------------------------------------------------------------------
         compositeDisposable.add(
@@ -226,7 +216,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribe {
                     Log.d("LocUpdProviderDisabled2", it.toString())
                 },
-        )
+        )*/
     }
 
     override fun onDestroy() {

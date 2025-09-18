@@ -1,17 +1,9 @@
 package net.samystudio.rxlocationmanager.altitude.sample
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.tbruyelle.rxpermissions3.RxPermissions
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import net.samystudio.rxlocationmanager.altitude.GoogleElevationApi
-import net.samystudio.rxlocationmanager.altitude.RxLocationManagerAltitude
 
 class MainActivity : AppCompatActivity() {
     private val compositeDisposable = CompositeDisposable()
@@ -20,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val rxPermissions = RxPermissions(this)
+        /*val rxPermissions = RxPermissions(this)
 
         compositeDisposable.add(
             rxPermissions
@@ -66,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                     },
                     { Log.d("RemoteServiceAltitude", "Error getting remote altitude") },
                 ),
-        )
+        )*/
     }
 
     override fun onDestroy() {

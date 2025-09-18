@@ -22,9 +22,6 @@ rxjava = "3.1.11"
 rxandroid = "3.0.2"
 rxlocationmanager = "0.7.1"
 
-#misc
-rxpermissions = "0.12"
-
 # debug
 timber = "5.0.1"
 
@@ -43,9 +40,6 @@ rxjava = { group = "io.reactivex.rxjava3", name = "rxjava", version.ref = "rxjav
 rxandroid = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rxandroid" }
 rxlocationmanager = { group = "net.samystudio.rxlocationmanager", name = "rxlocationmanager", version.ref = "rxlocationmanager" }
 rxlocationmanager-altitude = { group = "net.samystudio.rxlocationmanager", name = "rxlocationmanager-altitude", version.ref = "rxlocationmanager" }
-
-#misc
-rxpermissions = { group = "com.github.tbruyelle", name = "rxpermissions", version.ref = "rxpermissions" }
 
 # debug
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }

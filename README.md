@@ -48,7 +48,7 @@ implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.7.2-SN
 
 Usage
 -----
-Check `xxx-sample` directories. A lot of samples showcase [RxPermissions](https://github.com/tbruyelle/RxPermissions) library as well to easily request location permission for callbacks that require it.
+Check `xxx-sample` directories.
 
 Publishing
 -----

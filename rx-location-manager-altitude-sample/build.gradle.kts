@@ -79,5 +79,4 @@ dependencies {
     implementation(libs.bundles.reactive)
     implementation(project(":rx-location-manager"))
     implementation(project(":rx-location-manager-altitude"))
-    implementation(libs.rxpermissions)
 }

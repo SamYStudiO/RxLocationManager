@@ -1,16 +1,10 @@
 package net.samystudio.rxlocationmanager.nmea.sample
 
-import android.Manifest
+//import com.tbruyelle.rxpermissions3.RxPermissions
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.tbruyelle.rxpermissions3.RxPermissions
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import net.samystudio.rxlocationmanager.RxLocationManager
-import net.samystudio.rxlocationmanager.nmea.GGA
-import net.samystudio.rxlocationmanager.nmea.NmeaException
 
 class MainActivity : AppCompatActivity() {
     private val compositeDisposable = CompositeDisposable()
@@ -19,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        compositeDisposable.add(
+        /*compositeDisposable.add(
             RxPermissions(this)
                 .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .filter { it }
@@ -33,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                         Log.w("observeNmea", e.message ?: "")
                     }
                 },
-        )
+        )*/
     }
 
     override fun onDestroy() {
