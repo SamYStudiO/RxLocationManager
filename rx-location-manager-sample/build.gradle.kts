@@ -1,6 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.spotless)
+}
+
+kotlin {
+    jvmToolchain(
+        libs.versions.jvmToolchain
+            .get()
+            .toInt(),
+    )
+    compilerOptions {
+        allWarningsAsErrors = true
+    }
 }
 
 android {
@@ -31,12 +43,25 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+}
 
-    kotlinOptions {
-        jvmTarget = "11"
+spotless {
+    kotlin {
+        target("src/**/*.kt")
+        ktlint()
+            .editorConfigOverride(
+                mapOf(
+                    "ktlint_code_style" to "ktlint_official",
+                    "max_line_length" to "off",
+                ),
+            )
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
     }
 }
 

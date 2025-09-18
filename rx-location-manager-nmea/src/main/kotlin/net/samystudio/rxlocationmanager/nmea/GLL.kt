@@ -20,7 +20,7 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
     val status: Status? by lazy {
         try {
             Status.valueOf(data[6])
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             null
         }
     }

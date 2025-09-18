@@ -1,6 +1,7 @@
 0.7.2
 --------------
 - Add original nmea message to all kind of error, this makes errors easier to analyze
+- Migrate to new sonatype repository
 - Bump libraries
 
 0.7.1 (2023-11-20)

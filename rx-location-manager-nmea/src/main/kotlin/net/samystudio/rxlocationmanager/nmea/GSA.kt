@@ -7,7 +7,7 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
     val selectionMode: SelectionMode by lazy {
         try {
             SelectionMode.valueOf(data[1])
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             SelectionMode.A
         }
     }

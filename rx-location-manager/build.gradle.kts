@@ -1,18 +1,36 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.spotless)
     alias(libs.plugins.gradleMavenPublish)
 }
 
 project.findProperty("GROUP")?.let { group = it }
 project.findProperty("VERSION_NAME")?.let { version = it }
 
+kotlin {
+    jvmToolchain(
+        libs.versions.jvmToolchain
+            .get()
+            .toInt(),
+    )
+    compilerOptions {
+        allWarningsAsErrors = true
+    }
+}
+
 android {
     namespace = "net.samystudio.rxlocationmanager"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
     }
 
     sourceSets {
@@ -25,12 +43,25 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+}
 
-    kotlinOptions {
-        jvmTarget = "11"
+spotless {
+    kotlin {
+        target("src/**/*.kt")
+        ktlint()
+            .editorConfigOverride(
+                mapOf(
+                    "ktlint_code_style" to "ktlint_official",
+                    "max_line_length" to "off",
+                ),
+            )
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
     }
 }
 

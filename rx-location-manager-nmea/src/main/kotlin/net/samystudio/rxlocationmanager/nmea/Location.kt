@@ -21,7 +21,7 @@ fun convertNmeaLocation(token: String, direction: Cardinal): Double? {
 
     return try {
         convert(formattedLocation)
-    } catch (e: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
         null
     }
 }
@@ -32,7 +32,7 @@ fun convertNmeaLocation(token: String, direction: Cardinal): Double? {
 fun convertLocationNmea(coordinate: Double) =
     try {
         convert(abs(coordinate)).replace(":", "")
-    } catch (e: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
         ""
     }
 
@@ -48,7 +48,7 @@ enum class Cardinal(internal val cardinalDirection: CardinalDirection) {
         fun valueOf(value: String, defaultValue: Cardinal?): Cardinal? {
             return try {
                 valueOf(value)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 defaultValue
             }
         }
@@ -139,7 +139,7 @@ private fun convert(coordinate: String): Double {
         value = deg * 3600.0 + min * 60.0 + sec
         value /= 3600.0
         if (negative) -value else value
-    } catch (nfe: NumberFormatException) {
+    } catch (_: NumberFormatException) {
         throw java.lang.IllegalArgumentException("coordinate=$c")
     }
 }

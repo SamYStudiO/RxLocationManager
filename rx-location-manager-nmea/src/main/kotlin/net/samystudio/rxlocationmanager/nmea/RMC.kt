@@ -107,7 +107,7 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
             LongitudeValidator(true),
             // W or E
             EnumValidator(
-                Cardinal.values()
+                Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
                     .map { it.name.single() }.toCharArray(),
                 true,

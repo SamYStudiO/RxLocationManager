@@ -7,7 +7,14 @@ import androidx.core.location.GnssStatusCompat
  */
 sealed class GnssStatusState {
     data object StateStarted : GnssStatusState()
+
     data object StateStopped : GnssStatusState()
-    data class StateFirstFix(val ttffMillis: Int? = null) : GnssStatusState()
-    data class StateChanged(val status: GnssStatusCompat? = null) : GnssStatusState()
+
+    data class StateFirstFix(
+        val ttffMillis: Int? = null,
+    ) : GnssStatusState()
+
+    data class StateChanged(
+        val status: GnssStatusCompat? = null,
+    ) : GnssStatusState()
 }

@@ -4,7 +4,6 @@ package net.samystudio.rxlocationmanager
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.annotation.TargetApi
 import android.location.GnssMeasurementsEvent
 import android.location.GnssNavigationMessage
 import android.location.GpsStatus
@@ -29,7 +28,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import net.samystudio.rxlocationmanager.RxLocationManager.observeGnssStatus
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -59,28 +58,29 @@ object RxLocationManager {
         provider: Provider,
         cancellationSignal: CancellationSignal? = null,
         looper: Looper = Looper.myLooper() ?: Looper.getMainLooper(),
-    ): Maybe<Location> = Maybe.create { emitter ->
-        cancellationSignal?.setOnCancelListener {
-            emitter.onComplete()
-        }
-
-        try {
-            LocationManagerCompat.getCurrentLocation(
-                locationManager,
-                provider.name.lowercase(),
-                cancellationSignal,
-                ExecutorCompat.create(Handler(looper)),
-            ) {
-                when {
-                    cancellationSignal?.isCanceled == true -> emitter.onComplete()
-                    it == null -> emitter.onComplete()
-                    else -> emitter.onSuccess(it)
-                }
+    ): Maybe<Location> =
+        Maybe.create { emitter ->
+            cancellationSignal?.setOnCancelListener {
+                emitter.onComplete()
             }
-        } catch (e: Exception) {
-            emitter.tryOnError(e)
+
+            try {
+                LocationManagerCompat.getCurrentLocation(
+                    locationManager,
+                    provider.name.lowercase(),
+                    cancellationSignal,
+                    ExecutorCompat.create(Handler(looper)),
+                ) {
+                    when {
+                        cancellationSignal?.isCanceled == true -> emitter.onComplete()
+                        it == null -> emitter.onComplete()
+                        else -> emitter.onSuccess(it)
+                    }
+                }
+            } catch (e: Exception) {
+                emitter.tryOnError(e)
+            }
         }
-    }
 
     /**
      * @see [LocationManager.addNmeaListener]
@@ -89,8 +89,7 @@ object RxLocationManager {
     @JvmStatic
     fun observeNmea(
         looper: Looper = Looper.myLooper() ?: Looper.getMainLooper(),
-    ): Observable<NmeaEvent> =
-        NmeaObservable(locationManager, looper)
+    ): Observable<NmeaEvent> = NmeaObservable(locationManager, looper)
 
     /**
      * @see [LocationManager.registerGnssMeasurementsCallback]
@@ -102,8 +101,7 @@ object RxLocationManager {
     @JvmStatic
     fun observeGnssMeasurements(
         looper: Looper = Looper.myLooper() ?: Looper.getMainLooper(),
-    ): Observable<GnssMeasurementsEvent> =
-        GnssMeasurementsObservable(locationManager, looper)
+    ): Observable<GnssMeasurementsEvent> = GnssMeasurementsObservable(locationManager, looper)
 
     /**
      * @see [LocationManager.registerGnssNavigationMessageCallback]
@@ -115,8 +113,7 @@ object RxLocationManager {
     @JvmStatic
     fun observeGnssNavigationMessage(
         looper: Looper = Looper.myLooper() ?: Looper.getMainLooper(),
-    ): Observable<GnssNavigationMessage> =
-        GnssNavigationMessageObservable(locationManager, looper)
+    ): Observable<GnssNavigationMessage> = GnssNavigationMessageObservable(locationManager, looper)
 
     /**
      * @see [LocationManager.registerGnssStatusCallback]
@@ -130,8 +127,7 @@ object RxLocationManager {
     @JvmStatic
     fun observeGnssStatus(
         looper: Looper = Looper.myLooper() ?: Looper.getMainLooper(),
-    ): Observable<GnssStatusState> =
-        GnssStatusObservable(locationManager, looper)
+    ): Observable<GnssStatusState> = GnssStatusObservable(locationManager, looper)
 
     /**
      * Prior to [Build.VERSION_CODES.N] [GnssStatusState.StateChanged.status] will always be null.
@@ -271,6 +267,7 @@ object RxLocationManager {
 
     internal abstract class AtomicDisposable : Disposable {
         private val disposed = AtomicBoolean()
+
         override fun isDisposed() = disposed.get()
 
         override fun dispose() {
@@ -306,34 +303,42 @@ object RxLocationManager {
         class Listener(
             private val observer: Observer<in NmeaEvent>,
             private val locationManager: LocationManager?,
-        ) : AtomicDisposable(), GpsStatus.NmeaListener {
+        ) : AtomicDisposable(),
+            GpsStatus.NmeaListener {
             override fun onDispose() {
                 locationManager?.removeNmeaListener(this)
             }
 
             @Deprecated("Deprecated in Java")
-            override fun onNmeaReceived(timestamp: Long, nmea: String) {
+            override fun onNmeaReceived(
+                timestamp: Long,
+                nmea: String,
+            ) {
                 observer.onNext(NmeaEvent(nmea, timestamp))
             }
         }
 
-        @TargetApi(Build.VERSION_CODES.N)
+        @RequiresApi(Build.VERSION_CODES.N)
         class NListener(
             private val observer: Observer<in NmeaEvent>,
             private val locationManager: LocationManager?,
-        ) : AtomicDisposable(), OnNmeaMessageListener {
+        ) : AtomicDisposable(),
+            OnNmeaMessageListener {
             override fun onDispose() {
                 locationManager?.removeNmeaListener(this)
             }
 
-            override fun onNmeaMessage(message: String, timestamp: Long) {
+            override fun onNmeaMessage(
+                message: String,
+                timestamp: Long,
+            ) {
                 observer.onNext(NmeaEvent(message, timestamp))
             }
         }
     }
 
     @VisibleForTesting
-    @TargetApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.N)
     internal class GnssMeasurementsObservable(
         private val locationManager: LocationManager?,
         private val looper: Looper,
@@ -348,11 +353,12 @@ object RxLocationManager {
             private val observer: Observer<in GnssMeasurementsEvent>,
             private val locationManager: LocationManager?,
         ) : AtomicDisposable() {
-            val callback = object : GnssMeasurementsEvent.Callback() {
-                override fun onGnssMeasurementsReceived(eventArgs: GnssMeasurementsEvent) {
-                    observer.onNext(eventArgs)
+            val callback =
+                object : GnssMeasurementsEvent.Callback() {
+                    override fun onGnssMeasurementsReceived(eventArgs: GnssMeasurementsEvent) {
+                        observer.onNext(eventArgs)
+                    }
                 }
-            }
 
             override fun onDispose() {
                 locationManager?.unregisterGnssMeasurementsCallback(callback)
@@ -361,7 +367,7 @@ object RxLocationManager {
     }
 
     @VisibleForTesting
-    @TargetApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.N)
     internal class GnssNavigationMessageObservable(
         private val locationManager: LocationManager?,
         private val looper: Looper,
@@ -379,11 +385,12 @@ object RxLocationManager {
             private val observer: Observer<in GnssNavigationMessage>,
             private val locationManager: LocationManager?,
         ) : AtomicDisposable() {
-            val callback = object : GnssNavigationMessage.Callback() {
-                override fun onGnssNavigationMessageReceived(event: GnssNavigationMessage) {
-                    observer.onNext(event)
+            val callback =
+                object : GnssNavigationMessage.Callback() {
+                    override fun onGnssNavigationMessageReceived(event: GnssNavigationMessage) {
+                        observer.onNext(event)
+                    }
                 }
-            }
 
             override fun onDispose() {
                 locationManager?.unregisterGnssNavigationMessageCallback(callback)
@@ -412,23 +419,24 @@ object RxLocationManager {
             private val observer: Observer<in GnssStatusState>,
             private val locationManager: LocationManager?,
         ) : AtomicDisposable() {
-            val callback = object : GnssStatusCompat.Callback() {
-                override fun onSatelliteStatusChanged(status: GnssStatusCompat) {
-                    observer.onNext(GnssStatusState.StateChanged(status))
-                }
+            val callback =
+                object : GnssStatusCompat.Callback() {
+                    override fun onSatelliteStatusChanged(status: GnssStatusCompat) {
+                        observer.onNext(GnssStatusState.StateChanged(status))
+                    }
 
-                override fun onStarted() {
-                    observer.onNext(GnssStatusState.StateStarted)
-                }
+                    override fun onStarted() {
+                        observer.onNext(GnssStatusState.StateStarted)
+                    }
 
-                override fun onFirstFix(ttffMillis: Int) {
-                    observer.onNext(GnssStatusState.StateFirstFix(ttffMillis))
-                }
+                    override fun onFirstFix(ttffMillis: Int) {
+                        observer.onNext(GnssStatusState.StateFirstFix(ttffMillis))
+                    }
 
-                override fun onStopped() {
-                    observer.onNext(GnssStatusState.StateStopped)
+                    override fun onStopped() {
+                        observer.onNext(GnssStatusState.StateStopped)
+                    }
                 }
-            }
 
             override fun onDispose() {
                 locationManager?.let {
@@ -439,7 +447,7 @@ object RxLocationManager {
     }
 
     @VisibleForTesting
-    internal class LocationUpdatesObservable constructor(
+    internal class LocationUpdatesObservable(
         private val locationManager: LocationManager?,
         private val provider: Provider,
         private val locationRequestCompat: LocationRequestCompat,
@@ -467,8 +475,8 @@ object RxLocationManager {
         class Listener(
             private val observer: Observer<in LocationUpdatesState>,
             private val locationManager: LocationManager?,
-        ) : AtomicDisposable(), LocationListenerCompat {
-
+        ) : AtomicDisposable(),
+            LocationListenerCompat {
             override fun onDispose() {
                 locationManager?.removeUpdates(this)
             }
@@ -481,7 +489,7 @@ object RxLocationManager {
                 observer.onNext(
                     LocationUpdatesState.StateProviderEnabled(
                         Provider.valueOf(
-                            provider.toUpperCase(
+                            provider.uppercase(
                                 Locale.getDefault(),
                             ),
                         ),
@@ -493,7 +501,7 @@ object RxLocationManager {
                 observer.onNext(
                     LocationUpdatesState.StateProviderDisabled(
                         Provider.valueOf(
-                            provider.toUpperCase(
+                            provider.uppercase(
                                 Locale.getDefault(),
                             ),
                         ),
