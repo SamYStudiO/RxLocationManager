@@ -7,16 +7,16 @@ import org.junit.Test
 class NmeaTest {
     @Test
     fun computeChecksum() {
-        val nmea = object :
-            Nmea("\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E") {
-            override fun getTokenValidators(): Array<TokenValidator> {
-                return arrayOf(object : TokenValidator {
-                    override fun validate(token: String): Boolean {
-                        return true
-                    }
-                })
+        val nmea =
+            object :
+                Nmea("\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000*5E") {
+                override fun getTokenValidators(): Array<TokenValidator> =
+                    arrayOf(
+                        object : TokenValidator {
+                            override fun validate(token: String): Boolean = true
+                        },
+                    )
             }
-        }
         assertEquals("5E", nmea.computeChecksum())
     }
 
@@ -27,13 +27,12 @@ class NmeaTest {
 
         assertThrows(errorMessage, NmeaException::class.java) {
             object : Nmea(message) {
-                override fun getTokenValidators(): Array<TokenValidator> {
-                    return arrayOf(object : TokenValidator {
-                        override fun validate(token: String): Boolean {
-                            return true
-                        }
-                    })
-                }
+                override fun getTokenValidators(): Array<TokenValidator> =
+                    arrayOf(
+                        object : TokenValidator {
+                            override fun validate(token: String): Boolean = true
+                        },
+                    )
             }
         }
     }
@@ -46,13 +45,12 @@ class NmeaTest {
         assertThrows(errorMessage, NmeaException::class.java) {
             object :
                 Nmea("GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,00005E") {
-                override fun getTokenValidators(): Array<TokenValidator> {
-                    return arrayOf(object : TokenValidator {
-                        override fun validate(token: String): Boolean {
-                            return true
-                        }
-                    })
-                }
+                override fun getTokenValidators(): Array<TokenValidator> =
+                    arrayOf(
+                        object : TokenValidator {
+                            override fun validate(token: String): Boolean = true
+                        },
+                    )
             }
         }
     }
@@ -65,13 +63,12 @@ class NmeaTest {
         assertThrows(errorMessage, NmeaException::class.java) {
             object :
                 Nmea("\$GPGGA,002153.000,3342.6618,N,11751.3858,W,1,10,1.2,27.0,M,-34.2,M,,0000") {
-                override fun getTokenValidators(): Array<TokenValidator> {
-                    return arrayOf(object : TokenValidator {
-                        override fun validate(token: String): Boolean {
-                            return true
-                        }
-                    })
-                }
+                override fun getTokenValidators(): Array<TokenValidator> =
+                    arrayOf(
+                        object : TokenValidator {
+                            override fun validate(token: String): Boolean = true
+                        },
+                    )
             }
         }
     }
@@ -83,13 +80,12 @@ class NmeaTest {
 
         assertThrows(errorMessage, NmeaException::class.java) {
             object : Nmea(message) {
-                override fun getTokenValidators(): Array<TokenValidator> {
-                    return arrayOf(object : TokenValidator {
-                        override fun validate(token: String): Boolean {
-                            return true
-                        }
-                    })
-                }
+                override fun getTokenValidators(): Array<TokenValidator> =
+                    arrayOf(
+                        object : TokenValidator {
+                            override fun validate(token: String): Boolean = true
+                        },
+                    )
             }
         }
     }

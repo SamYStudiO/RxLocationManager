@@ -17,11 +17,20 @@ kotlin {
 
 android {
     namespace = "net.samystudio.rxlocationmanager.sample"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.targetSdk
+                .get()
+                .toInt()
         applicationId = "net.samystudio.rxlocationmanager"
         versionCode = 1
         versionName = "1.0"

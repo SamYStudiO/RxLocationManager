@@ -1,9 +1,11 @@
 package net.samystudio.rxlocationmanager.nmea
 
-import java.util.*
+import java.util.Locale
 
-class GSA(message: String, throwIfContentInvalid: Boolean = true) :
-    Nmea(message, throwIfContentInvalid) {
+class GSA(
+    message: String,
+    throwIfContentInvalid: Boolean = true,
+) : Nmea(message, throwIfContentInvalid) {
     val selectionMode: SelectionMode by lazy {
         try {
             SelectionMode.valueOf(data[1])
@@ -72,26 +74,27 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
         positionDilutionOfPrecision: Double? = null,
         verticalDilutionOfPrecision: Double? = null,
     ) : this(
-        "$%sGSA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
-            type.uppercase(Locale.ROOT),
-            selectionMode.name,
-            fix.value,
-            satellite1 ?: "",
-            satellite2 ?: "",
-            satellite3 ?: "",
-            satellite4 ?: "",
-            satellite5 ?: "",
-            satellite6 ?: "",
-            satellite7 ?: "",
-            satellite8 ?: "",
-            satellite9 ?: "",
-            satellite10 ?: "",
-            satellite11 ?: "",
-            satellite12 ?: "",
-            horizontalDilutionOfPrecision ?: "",
-            positionDilutionOfPrecision ?: "",
-            verticalDilutionOfPrecision ?: "",
-        ).let { "%s*%s".format(it, computeChecksum(it)) },
+        "$%sGSA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s"
+            .format(
+                type.uppercase(Locale.ROOT),
+                selectionMode.name,
+                fix.value,
+                satellite1 ?: "",
+                satellite2 ?: "",
+                satellite3 ?: "",
+                satellite4 ?: "",
+                satellite5 ?: "",
+                satellite6 ?: "",
+                satellite7 ?: "",
+                satellite8 ?: "",
+                satellite9 ?: "",
+                satellite10 ?: "",
+                satellite11 ?: "",
+                satellite12 ?: "",
+                horizontalDilutionOfPrecision ?: "",
+                positionDilutionOfPrecision ?: "",
+                verticalDilutionOfPrecision ?: "",
+            ).let { "%s*%s".format(it, computeChecksum(it)) },
     )
 
     override fun getTokenValidators(): Array<TokenValidator> {
@@ -147,7 +150,9 @@ class GSA(message: String, throwIfContentInvalid: Boolean = true) :
         M,
     }
 
-    enum class Fix(val value: Int) {
+    enum class Fix(
+        val value: Int,
+    ) {
         NO_FIX(1),
         FIX_2D(2),
         FIX_3D(3),

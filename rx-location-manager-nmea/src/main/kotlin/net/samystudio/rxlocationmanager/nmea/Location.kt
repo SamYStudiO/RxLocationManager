@@ -2,14 +2,17 @@ package net.samystudio.rxlocationmanager.nmea
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.*
+import java.util.StringTokenizer
 import kotlin.math.abs
 import kotlin.math.floor
 
 /**
  * Convert Nmea latitude/longitude token to [Double]. Return null if conversion failed.
  */
-fun convertNmeaLocation(token: String, direction: Cardinal): Double? {
+fun convertNmeaLocation(
+    token: String,
+    direction: Cardinal,
+): Double? {
     if (!LatitudeValidator().validate(token) && !LongitudeValidator().validate(token)) return null
 
     val sign =
@@ -36,7 +39,9 @@ fun convertLocationNmea(coordinate: Double) =
         ""
     }
 
-enum class Cardinal(internal val cardinalDirection: CardinalDirection) {
+enum class Cardinal(
+    internal val cardinalDirection: CardinalDirection,
+) {
     N(CardinalDirection.NORTH_SOUTH),
     S(CardinalDirection.NORTH_SOUTH),
     E(CardinalDirection.WEST_EAST),
@@ -45,13 +50,15 @@ enum class Cardinal(internal val cardinalDirection: CardinalDirection) {
 
     companion object {
         @JvmStatic
-        fun valueOf(value: String, defaultValue: Cardinal?): Cardinal? {
-            return try {
+        fun valueOf(
+            value: String,
+            defaultValue: Cardinal?,
+        ): Cardinal? =
+            try {
                 valueOf(value)
             } catch (_: IllegalArgumentException) {
                 defaultValue
             }
-        }
     }
 }
 
@@ -73,12 +80,13 @@ private fun convert(coordinate: Double): String {
         sb.append('-')
         c = -c
     }
-    val df = DecimalFormat(
-        "###.#####",
-        DecimalFormatSymbols.getInstance().apply {
-            decimalSeparator = '.'
-        },
-    )
+    val df =
+        DecimalFormat(
+            "###.#####",
+            DecimalFormatSymbols.getInstance().apply {
+                decimalSeparator = '.'
+            },
+        )
     val degrees = floor(c).toInt()
     sb.append(degrees)
     sb.append(':')
@@ -121,8 +129,11 @@ private fun convert(coordinate: String): Double {
         } else {
             min = minutes.toDouble()
         }
-        val isNegative180 = negative && deg == 180 &&
-            min == 0.0 && sec == 0.0
+        val isNegative180 =
+            negative &&
+                deg == 180 &&
+                min == 0.0 &&
+                sec == 0.0
 
         // deg must be in [0, 179] except for the case of -180 degrees
         require(!(deg < 0.0 || deg > 179 && !isNegative180)) { "coordinate=$c" }

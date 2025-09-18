@@ -1,6 +1,9 @@
 package net.samystudio.rxlocationmanager.nmea
 
-class NmeaException(message: String, val index: Int = -1) : Exception(message) {
+class NmeaException(
+    message: String,
+    val index: Int = -1,
+) : Exception(message) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

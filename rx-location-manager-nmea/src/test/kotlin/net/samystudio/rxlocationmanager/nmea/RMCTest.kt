@@ -26,20 +26,21 @@ class RMCTest {
 
     @Test
     fun validateAlternateConstructor() {
-        val rmc = RMC(
-            "GN",
-            "191613.43",
-            Status.A,
-            33.71103,
-            -117.85643,
-            5.0,
-            10.2,
-            "100520",
-            9.3,
-            Cardinal.W,
-            FAAMode.A,
-            RMC.NavigationalStatus.S,
-        )
+        val rmc =
+            RMC(
+                "GN",
+                "191613.43",
+                Status.A,
+                33.71103,
+                -117.85643,
+                5.0,
+                10.2,
+                "100520",
+                9.3,
+                Cardinal.W,
+                FAAMode.A,
+                RMC.NavigationalStatus.S,
+            )
 
         assertEquals(
             "\$GNRMC,191613.43,A,3342.6618,N,11751.3858,W,5.0,10.2,100520,9.3,W,A,S*6E",

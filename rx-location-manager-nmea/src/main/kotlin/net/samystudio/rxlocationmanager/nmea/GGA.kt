@@ -1,9 +1,11 @@
 package net.samystudio.rxlocationmanager.nmea
 
-import java.util.*
+import java.util.Locale
 
-class GGA(message: String, throwIfContentInvalid: Boolean = true) :
-    Nmea(message, throwIfContentInvalid) {
+class GGA(
+    message: String,
+    throwIfContentInvalid: Boolean = true,
+) : Nmea(message, throwIfContentInvalid) {
     val time: String by lazy { data[1] }
     val latitude: Double? by lazy {
         convertNmeaLocation(
@@ -46,25 +48,26 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
         differentialGpsAge: Double? = null,
         differentialGpsStationId: String = "",
     ) : this(
-        "$%sGGA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
-            type.uppercase(Locale.ROOT),
-            time,
-            latitude?.let { convertLocationNmea(it) } ?: "",
-            latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
-                ?: "",
-            longitude?.let { convertLocationNmea(it) } ?: "",
-            longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
-                ?: "",
-            quality.value,
-            satelliteCount,
-            horizontalDilutionOfPrecision ?: "",
-            altitude ?: "",
-            altitude?.let { 'M' } ?: "",
-            ellipsoidalOffset ?: "",
-            ellipsoidalOffset?.let { 'M' } ?: "",
-            differentialGpsAge ?: "",
-            differentialGpsStationId,
-        ).let { "%s*%s".format(it, computeChecksum(it)) },
+        "$%sGGA,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s"
+            .format(
+                type.uppercase(Locale.ROOT),
+                time,
+                latitude?.let { convertLocationNmea(it) } ?: "",
+                latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
+                    ?: "",
+                longitude?.let { convertLocationNmea(it) } ?: "",
+                longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
+                    ?: "",
+                quality.value,
+                satelliteCount,
+                horizontalDilutionOfPrecision ?: "",
+                altitude ?: "",
+                altitude?.let { 'M' } ?: "",
+                ellipsoidalOffset ?: "",
+                ellipsoidalOffset?.let { 'M' } ?: "",
+                differentialGpsAge ?: "",
+                differentialGpsStationId,
+            ).let { "%s*%s".format(it, computeChecksum(it)) },
     )
 
     override fun getTokenValidators(): Array<TokenValidator> {
@@ -82,7 +85,8 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
             EnumValidator(
                 Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
-                    .map { it.name.single() }.toCharArray(),
+                    .map { it.name.single() }
+                    .toCharArray(),
                 true,
             ),
             // longitude ddddmm.ssss
@@ -91,7 +95,8 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
             EnumValidator(
                 Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
-                    .map { it.name.single() }.toCharArray(),
+                    .map { it.name.single() }
+                    .toCharArray(),
                 true,
             ),
             // quality
@@ -118,7 +123,9 @@ class GGA(message: String, throwIfContentInvalid: Boolean = true) :
         )
     }
 
-    enum class Quality(val value: Int) {
+    enum class Quality(
+        val value: Int,
+    ) {
         FIX_NOT_AVAILABLE(0),
         GPS_FIX(1),
         DIFFERENTIAL_GPS_FIX(2),

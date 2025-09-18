@@ -9,7 +9,10 @@ package net.samystudio.rxlocationmanager.nmea
  * parse data with [getTokenValidators]. THis will still throw an error even if set to `false` if
  * message is not the right type or checksum is invalid.
  */
-abstract class Nmea(val message: String, throwIfContentInvalid: Boolean = true) {
+abstract class Nmea(
+    val message: String,
+    throwIfContentInvalid: Boolean = true,
+) {
     val data: List<String> by lazy { message.substring(1).split("*")[0].split(",") }
     val type: String by lazy { data[0] }
     val checksum: String by lazy { message.split("*")[1].trimEnd() }

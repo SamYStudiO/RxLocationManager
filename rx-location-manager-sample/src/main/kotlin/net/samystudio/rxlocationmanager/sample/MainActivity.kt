@@ -71,22 +71,26 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     when (it) {
-                        is GnssStatusState.StateStarted -> Log.d(
-                            "GnssStatusStarted1",
-                            it.toString(),
-                        )
-                        is GnssStatusState.StateStopped -> Log.d(
-                            "GnssStatusStopped1",
-                            it.toString(),
-                        )
-                        is GnssStatusState.StateFirstFix -> Log.d(
-                            "GnssStatusFirstFix1",
-                            it.toString(),
-                        )
-                        is GnssStatusState.StateChanged -> Log.d(
-                            "GnssStatusChanged1",
-                            it.toString(),
-                        )
+                        is GnssStatusState.StateStarted ->
+                            Log.d(
+                                "GnssStatusStarted1",
+                                it.toString(),
+                            )
+                        is GnssStatusState.StateStopped ->
+                            Log.d(
+                                "GnssStatusStopped1",
+                                it.toString(),
+                            )
+                        is GnssStatusState.StateFirstFix ->
+                            Log.d(
+                                "GnssStatusFirstFix1",
+                                it.toString(),
+                            )
+                        is GnssStatusState.StateChanged ->
+                            Log.d(
+                                "GnssStatusChanged1",
+                                it.toString(),
+                            )
                     }
                 },
         )
@@ -143,26 +147,29 @@ class MainActivity : AppCompatActivity() {
                 .flatMap {
                     RxLocationManager.observeLocationUpdatesState(
                         Provider.GPS,
-                        LocationRequestCompat.Builder(1000)
+                        LocationRequestCompat
+                            .Builder(1000)
                             .setMinUpdateDistanceMeters(10f)
                             .build(),
                     )
-                }
-                .observeOn(AndroidSchedulers.mainThread())
+                }.observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     when (it) {
-                        is LocationUpdatesState.StateLocationChanged -> Log.d(
-                            "LocUpdLocationChanged",
-                            it.toString(),
-                        )
-                        is LocationUpdatesState.StateProviderEnabled -> Log.d(
-                            "LocUpdProviderEnabled",
-                            it.toString(),
-                        )
-                        is LocationUpdatesState.StateProviderDisabled -> Log.d(
-                            "LocUpdProviderDisabled",
-                            it.toString(),
-                        )
+                        is LocationUpdatesState.StateLocationChanged ->
+                            Log.d(
+                                "LocUpdLocationChanged",
+                                it.toString(),
+                            )
+                        is LocationUpdatesState.StateProviderEnabled ->
+                            Log.d(
+                                "LocUpdProviderEnabled",
+                                it.toString(),
+                            )
+                        is LocationUpdatesState.StateProviderDisabled ->
+                            Log.d(
+                                "LocUpdProviderDisabled",
+                                it.toString(),
+                            )
                     }
                 },
         )
@@ -174,12 +181,12 @@ class MainActivity : AppCompatActivity() {
                 .flatMap {
                     RxLocationManager.observeLocationChanged(
                         Provider.GPS,
-                        LocationRequestCompat.Builder(1000)
+                        LocationRequestCompat
+                            .Builder(1000)
                             .setMinUpdateDistanceMeters(10f)
                             .build(),
                     )
-                }
-                .observeOn(AndroidSchedulers.mainThread())
+                }.observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("LocUpdLocationChanged2", it.toString())
                 },
@@ -192,12 +199,12 @@ class MainActivity : AppCompatActivity() {
                 .flatMap {
                     RxLocationManager.observeLocationProviderEnabled(
                         Provider.GPS,
-                        LocationRequestCompat.Builder(1000)
+                        LocationRequestCompat
+                            .Builder(1000)
                             .setMinUpdateDistanceMeters(10f)
                             .build(),
                     )
-                }
-                .observeOn(AndroidSchedulers.mainThread())
+                }.observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("LocUpdProviderEnabled2", it.toString())
                 },
@@ -210,12 +217,12 @@ class MainActivity : AppCompatActivity() {
                 .flatMap {
                     RxLocationManager.observeLocationProviderDisabled(
                         Provider.GPS,
-                        LocationRequestCompat.Builder(1000)
+                        LocationRequestCompat
+                            .Builder(1000)
                             .setMinUpdateDistanceMeters(10f)
                             .build(),
                     )
-                }
-                .observeOn(AndroidSchedulers.mainThread())
+                }.observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.d("LocUpdProviderDisabled2", it.toString())
                 },

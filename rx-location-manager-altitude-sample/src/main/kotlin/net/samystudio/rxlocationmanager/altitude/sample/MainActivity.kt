@@ -41,20 +41,21 @@ class MainActivity : AppCompatActivity() {
         )
 
         compositeDisposable.add(
-            RxLocationManagerAltitude.observeBarometricAltitudeUpdates(
-                1000,
-                SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
-            )
-                .observeOn(AndroidSchedulers.mainThread())
+            RxLocationManagerAltitude
+                .observeBarometricAltitudeUpdates(
+                    1000,
+                    SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
+                ).observeOn(AndroidSchedulers.mainThread())
                 .subscribe { Log.d("BarometricAltitude", it.toString()) },
         )
 
         compositeDisposable.add(
-            RxLocationManagerAltitude.getRemoteServiceAltitude(
-                GoogleElevationApi("your_google_api_key"),
-                48.866667,
-                2.333333,
-            ).subscribeOn(Schedulers.io())
+            RxLocationManagerAltitude
+                .getRemoteServiceAltitude(
+                    GoogleElevationApi("your_google_api_key"),
+                    48.866667,
+                    2.333333,
+                ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {

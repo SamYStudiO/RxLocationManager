@@ -1,9 +1,11 @@
 package net.samystudio.rxlocationmanager.nmea
 
-import java.util.*
+import java.util.Locale
 
-class GLL(message: String, throwIfContentInvalid: Boolean = true) :
-    Nmea(message, throwIfContentInvalid) {
+class GLL(
+    message: String,
+    throwIfContentInvalid: Boolean = true,
+) : Nmea(message, throwIfContentInvalid) {
     val latitude: Double? by lazy {
         convertNmeaLocation(
             data[1],
@@ -40,22 +42,23 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
         status: Status? = null,
         faaMode: FAAMode = FAAMode.N,
     ) : this(
-        "$%sGLL,%s,%s,%s,%s,%s,%s,%s".format(
-            type.uppercase(Locale.ROOT),
-            latitude?.let { convertLocationNmea(it) } ?: "",
-            latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
-                ?: "",
-            longitude?.let { convertLocationNmea(it) } ?: "",
-            longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
-                ?: "",
-            time,
-            status?.name ?: "",
-            faaMode.name,
-        ).let { "%s*%s".format(it, computeChecksum(it)) },
+        "$%sGLL,%s,%s,%s,%s,%s,%s,%s"
+            .format(
+                type.uppercase(Locale.ROOT),
+                latitude?.let { convertLocationNmea(it) } ?: "",
+                latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
+                    ?: "",
+                longitude?.let { convertLocationNmea(it) } ?: "",
+                longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
+                    ?: "",
+                time,
+                status?.name ?: "",
+                faaMode.name,
+            ).let { "%s*%s".format(it, computeChecksum(it)) },
     )
 
-    override fun getTokenValidators(): Array<TokenValidator> {
-        return arrayOf(
+    override fun getTokenValidators(): Array<TokenValidator> =
+        arrayOf(
             // type $__GLL
             TypeValidator("GLL"),
             // latitude ddmm.ssss
@@ -64,7 +67,8 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
             EnumValidator(
                 Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
-                    .map { it.name.single() }.toCharArray(),
+                    .map { it.name.single() }
+                    .toCharArray(),
                 true,
             ),
             // longitude ddddmm.ssss
@@ -73,7 +77,8 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
             EnumValidator(
                 Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
-                    .map { it.name.single() }.toCharArray(),
+                    .map { it.name.single() }
+                    .toCharArray(),
                 true,
             ),
             // UTC time hhmmss(.sss)
@@ -83,5 +88,4 @@ class GLL(message: String, throwIfContentInvalid: Boolean = true) :
             // FFA mode
             EnumValidator(FAAMode.entries.map { it.name.single() }.toCharArray(), false),
         )
-    }
 }

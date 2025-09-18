@@ -1,9 +1,11 @@
 package net.samystudio.rxlocationmanager.nmea
 
-import java.util.*
+import java.util.Locale
 
-open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
-    Nmea(message, throwIfContentInvalid) {
+open class RMC(
+    message: String,
+    throwIfContentInvalid: Boolean = true,
+) : Nmea(message, throwIfContentInvalid) {
     val time: String by lazy { data[1] }
     val status: Status by lazy {
         try {
@@ -64,24 +66,25 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
         faaMode: FAAMode = FAAMode.N,
         navigationalStatus: NavigationalStatus = NavigationalStatus.V,
     ) : this(
-        "$%sRMC,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".format(
-            type.uppercase(Locale.ROOT),
-            time,
-            status.name,
-            latitude?.let { convertLocationNmea(it) } ?: "",
-            latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
-                ?: "",
-            longitude?.let { convertLocationNmea(it) } ?: "",
-            longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
-                ?: "",
-            speed ?: "",
-            angle ?: "",
-            date,
-            magneticVariation ?: "",
-            magneticVariationDirection?.name ?: "",
-            faaMode.name,
-            navigationalStatus.name,
-        ).let { "%s*%s".format(it, computeChecksum(it)) },
+        "$%sRMC,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s"
+            .format(
+                type.uppercase(Locale.ROOT),
+                time,
+                status.name,
+                latitude?.let { convertLocationNmea(it) } ?: "",
+                latitude?.let { if (it < 0) Cardinal.S.name else Cardinal.N.name }
+                    ?: "",
+                longitude?.let { convertLocationNmea(it) } ?: "",
+                longitude?.let { if (it < 0) Cardinal.W.name else Cardinal.E.name }
+                    ?: "",
+                speed ?: "",
+                angle ?: "",
+                date,
+                magneticVariation ?: "",
+                magneticVariationDirection?.name ?: "",
+                faaMode.name,
+                navigationalStatus.name,
+            ).let { "%s*%s".format(it, computeChecksum(it)) },
     )
 
     override fun getTokenValidators(): Array<TokenValidator> {
@@ -100,7 +103,8 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
             EnumValidator(
                 Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.NORTH_SOUTH }
-                    .map { it.name.single() }.toCharArray(),
+                    .map { it.name.single() }
+                    .toCharArray(),
                 true,
             ),
             // longitude ddddmm.ssss
@@ -109,7 +113,8 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
             EnumValidator(
                 Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
-                    .map { it.name.single() }.toCharArray(),
+                    .map { it.name.single() }
+                    .toCharArray(),
                 true,
             ),
             // speed
@@ -124,7 +129,8 @@ open class RMC(message: String, throwIfContentInvalid: Boolean = true) :
             EnumValidator(
                 Cardinal.entries
                     .filter { it.cardinalDirection == CardinalDirection.WEST_EAST }
-                    .map { it.name.single() }.toCharArray(),
+                    .map { it.name.single() }
+                    .toCharArray(),
                 true,
             ),
             // FFA mode
