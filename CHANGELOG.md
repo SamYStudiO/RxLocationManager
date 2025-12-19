@@ -1,4 +1,4 @@
-0.7.2
+0.7.2 (2025-12-19)
 --------------
 - Add original nmea message to all kind of error, this makes errors easier to analyze
 - Migrate to new sonatype repository

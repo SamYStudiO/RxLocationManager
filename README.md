@@ -17,15 +17,15 @@ You can easily add you own parser, just inherit from `net.samystudio.rxlocationm
 Download
 --------
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.7.1'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.7.2'
 ```
 If you need altitude helpers observables add this as well:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.7.1'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.7.2'
 ```
 If you want to easily parse nmea messages you can use this standalone artifact (note this is already include if you added rxlocationmanager-altitude dependency):
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.7.1'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.7.2'
 ```
 
 Snapshots are available from [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots/).
@@ -41,9 +41,9 @@ allprojects {
 ```
 and change versions:
 ```groovy
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.7.2-SNAPSHOT'
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.7.2-SNAPSHOT'
-implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.7.2-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager:0.7.3-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-altitude:0.7.3-SNAPSHOT'
+implementation 'net.samystudio.rxlocationmanager:rxlocationmanager-nmea:0.7.3-SNAPSHOT'
 ```
 
 Usage

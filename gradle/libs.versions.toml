@@ -27,7 +27,7 @@ timber = "5.0.1"
 
 # test
 junit = "4.13.2"
-mockk = "1.13.5" # Keep 1.13.3 while https://github.com/mockk/mockk/issues/1033
+mockk = "1.13.5"
 
 [libraries]
 # base
